@@ -1,0 +1,27 @@
+{
+	"name": "pond",
+	"version": "1.0.0",
+	"description": "CS-546 Final Project",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js",
+		"dev": "nodemon app.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/JInsalaco/CS546_Group5.git"
+	},
+	"author": "CS-546-C Group 5: Javier Diaz | Joseph Insalaco | Riya Kharbanda | Shihao Xiong",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/JInsalaco/CS546_Group5/issues"
+	},
+	"homepage": "https://github.com/JInsalaco/CS546_Group5#readme",
+	"dependencies": {
+		"express": "^4.17.1",
+		"express-handlebars": "^5.3.4",
+		"mongodb": "^4.1.4",
+		"nodemon": "^2.0.14",
+		"xss": "^1.0.10"
+	}
+}
