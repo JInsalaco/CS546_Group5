@@ -5,18 +5,6 @@ html,
 body {
 	margin: 0;
 	padding: 0;
-
-	--font-color-grey: #d4d4d6;
-	--primary-color: #b30838;
-	--primary-color-deep: #9d1535;
-	--bg-grey: #f9f9f9;
-
-	--font-xs: 12px;
-	--font-s: 14px;
-	--font-default: 16px;
-	--font-large: 20px;
-	--font-xl: 20px;
-	--font-xxl: 28px;
 }
 
 ::-webkit-scrollbar {
@@ -28,7 +16,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
 	height: 2px;
-	border-radius: 10px;
+	border-radius: var(--radius-s);
 	background: #dadce0;
 	cursor: pointer;
 }
@@ -75,9 +63,7 @@ div {
 .header-container {
 	width: 100%;
 	padding: 0 50px;
-	display: flex;
 	align-items: center;
-	flex-flow: row nowrap;
 	background-color: #fff;
 	height: 70px;
 }
@@ -105,15 +91,7 @@ div {
 }
 
 .header__avatar {
-	border-radius: 50%;
+	border-radius: var(--radius-circle);
 	height: 40px;
 	width: 40px;
-}
-
-.aside-h + .aside-h {
-	margin-left: 10px;
-}
-
-.aside-v + .aside-v {
-	margin-top: 15px;
 }
