@@ -1,13 +1,10 @@
 <main class="page__authorize flex">
   <div id="animate"></div>
-  <form action="" method="post">
-    <label for="form-email">Email</label>
-    <input type="email" class="form-control" name="email" id="form-email" placeholder="username@example.edu">
 
-    <label for="form-email">Password</label>
-    <input type="password" class="form-control" name="password" id="form-password">
-
-    <input class="btn btn-primary btn-submit" type="submit" value="{{action}}">
-  </form>
+  {{#if isSignIn}}
+    {{> authorize/SignInForm}}
+  {{else}}
+    {{> authorize/SignUpForm}}
+  {{/if}}
 </main>
 <script type="module" src="../public/js/authorize.js"></script>

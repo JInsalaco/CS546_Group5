@@ -1,12 +1,20 @@
 <header class="header-container flex">
   <span class="header__logo">
-    <img src="../../public/static/logo_white.svg" alt="">
+    <img src="../../public/static/logo_white.svg" alt="" />
   </span>
-  <input class="form-control header__input" placeholder="Type to search" type="text" />
+  <input
+    class="form-control header__input"
+    placeholder="Type to search"
+    type="text"
+  />
   {{#if logged}}
-  <img class="header__avatar" src="../../public/static/avatar.png" alt="">
+    <img class="header__avatar" src="../../public/static/avatar.png" alt="" />
   {{else}}
-  <a class="btn btn-outline-primary" href="/authorize/signup">Sign up</a>
-  <a class="btn btn-link" href="/authorize/signin">Sign in</a>
+    <a class="btn btn-outline-primary" href="/authorize/signup">
+      Sign up
+    </a>
+    <a class="btn btn-link" href="/authorize/signin">
+      Sign in
+    </a>
   {{/if}}
 </header>

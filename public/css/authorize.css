@@ -10,13 +10,9 @@
 
 .page__authorize form {
 	margin: auto;
-	width: 300px;
+	width: 500px;
 }
 
-.page__authorize .btn-submit {
-	width: 100%;
-}
-
-.page__authorize form input:not(:last-child) {
-	margin-bottom: 15px;
+.page__authorize form > div {
+	box-sizing: border-box;
 }
