@@ -1,8 +1,8 @@
-const main = require('./main');
+const home = require('./home');
 const authorize = require('./authorize');
 
 module.exports = app => {
-	app.use('/', main);
+	app.use('/', home);
 	app.use('/authorize', authorize);
 
 	app.use('*', (_, res) => {

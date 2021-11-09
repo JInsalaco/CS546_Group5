@@ -5,6 +5,7 @@ html,
 body {
 	margin: 0;
 	padding: 0;
+	color: #696c72;
 }
 
 ::-webkit-scrollbar {
@@ -52,6 +53,10 @@ body::after {
 
 * {
 	z-index: 1;
+}
+
+ul {
+	list-style: none;
 }
 
 div {

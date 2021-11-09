@@ -11,9 +11,8 @@
 }
 
 .post__list-item {
-	list-style: none;
 	background-color: #fff;
-	border-radius: var(--radius-s);
+	border-radius: var(--radius-default);
 	width: 100%;
 	padding: 35px 30px;
 	box-sizing: border-box;
@@ -123,7 +122,11 @@
 	box-shadow: var(--box-shadow);
 }
 
-.info__icon {
+.info__contact-container > li {
+	padding: 10px 5px;
+	color: var(--font-color-grey);
+}
+.info__contact-container > li > i[class^='iconfont'] {
 	display: inline-block;
 	width: 30px;
 	height: 30px;
@@ -135,24 +138,16 @@
 	margin-right: 10px;
 }
 
-.info__contact-container > li {
-	list-style: none;
-	padding: 10px 5px;
-	color: var(--font-color-grey);
-}
-
 .btn-collapse {
 	border: none;
 	outline: none;
 	background: transparent;
 	color: grey;
 }
-
 .icon-down {
 	display: inline-block;
 	transition: all 0.5s;
 }
-
 .btn-collapse[aria-expanded='true'] .icon-down {
 	transform: rotate(180deg);
 }
@@ -164,7 +159,6 @@
 }
 
 .info__friends-list {
-	list-style: none;
 	margin: 0;
 	padding: 20px 0 0;
 	overflow: hidden;
@@ -237,4 +231,36 @@
 }
 .create__btn-container:hover .create__text {
 	opacity: 0;
+}
+
+.nav__menu {
+	padding: 30px 0;
+}
+.nav__menu-item {
+	align-items: center;
+	font-size: var(--font-large);
+	padding: 10px;
+	cursor: pointer;
+	border-radius: var(--radius-s);
+	transition: all 0.5s;
+}
+.nav__menu-item:hover {
+	background-color: rgba(255, 255, 255, 0.5);
+	color: var(--primary-color);
+}
+.nav__menu-item:hover i[class^='iconfont'] {
+	color: #fff;
+	background-color: var(--primary-color);
+}
+.nav__menu-item i[class^='iconfont'] {
+	display: inline-block;
+	height: 30px;
+	width: 30px;
+	line-height: 30px;
+	text-align: center;
+	border-radius: var(--radius-s);
+	color: var(--primary-color);
+	background-color: #fff;
+	margin-right: 20px;
+	transition: all 0.5s;
 }
