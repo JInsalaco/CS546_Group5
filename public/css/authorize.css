@@ -1,0 +1,24 @@
+.page__authorize {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-flow: row nowrap;
+}
+
+#animate {
+	width: 60%;
+	height: 100%;
+}
+
+.page__authorize form {
+	margin: auto;
+	width: 300px;
+}
+
+.page__authorize .btn-submit {
+	width: 100%;
+}
+
+.page__authorize form input:not(:last-child) {
+	margin-bottom: 15px;
+}
