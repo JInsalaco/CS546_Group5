@@ -16,3 +16,9 @@
 .page__authorize form > div {
 	box-sizing: border-box;
 }
+
+.btn-back {
+	position: absolute;
+	top: 16px;
+	right: 50px;
+}

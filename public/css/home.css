@@ -248,19 +248,97 @@
 	background-color: rgba(255, 255, 255, 0.5);
 	color: var(--primary-color);
 }
-.nav__menu-item:hover i[class^='iconfont'] {
+.nav__menu-item:hover i[class^='iconfont'],
+.btn__create-topic:hover .icon-add {
 	color: #fff;
 	background-color: var(--primary-color);
 }
 .nav__menu-item i[class^='iconfont'] {
+	color: var(--primary-color);
+}
+
+.menu__topic-list > li > .icon-point,
+.nav__menu-item i[class^='iconfont'],
+.btn__create-topic .icon-add {
 	display: inline-block;
 	height: 30px;
 	width: 30px;
 	line-height: 30px;
 	text-align: center;
 	border-radius: var(--radius-s);
-	color: var(--primary-color);
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.5);
 	margin-right: 20px;
 	transition: all 0.5s;
+}
+
+.nav__categaries {
+	flex-grow: 1;
+	height: 0;
+	padding-bottom: 40px;
+}
+.nav__categaries-title {
+	font-size: 26px;
+}
+.menu__topic-list {
+	padding: 20px 0 0;
+	height: calc(100% - 26px);
+	overflow: hidden;
+}
+.menu__topic-list:hover {
+	overflow-y: overlay;
+}
+.menu__topic-list > li {
+	padding: 15px;
+	border-radius: var(--radius-s);
+	transition: all 0.5s;
+	cursor: pointer;
+	position: relative;
+	margin-right: 15px;
+}
+.menu__topic-list > li > .icon-point {
+	font-size: var(--font-xs);
+}
+.menu__topic-list > li:first-child > .icon-point {
+	color: red;
+}
+.menu__topic-list > li:nth-child(2) > .icon-point {
+	color: orange;
+}
+.menu__topic-list > li:nth-child(3) > .icon-point {
+	color: yellow;
+}
+.menu__topic-list > li:nth-child(4) > .icon-point {
+	color: green;
+}
+.menu__topic-list > li:nth-child(5) > .icon-point {
+	color: lightseagreen;
+}
+.menu__topic-list > li:nth-child(6) > .icon-point {
+	color: blue;
+}
+.menu__topic-list > li:nth-child(7) > .icon-point {
+	color: purple;
+}
+.menu__topic-list > li:hover {
+	background-color: #fff;
+	box-shadow: var(--box-shadow);
+}
+
+.btn__create-topic {
+	background-color: var(--primary-color);
+	color: #fff;
+	font-weight: bold;
+	text-align: left;
+	padding: 20px 12px;
+	outline: none;
+	border: 2px solid var(--primary-color);
+	border-radius: var(--radius-default);
+	margin-top: auto;
+	margin-bottom: 5em;
+	transition: all 0.5s;
+}
+
+.btn__create-topic:hover {
+	background: transparent;
+	color: var(--primary-color);
 }

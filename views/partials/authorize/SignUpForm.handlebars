@@ -1,26 +1,26 @@
 <form action='' method='post' id='from-authorize' class='row g-3 needs-validation' novalidate>
 	<div class='col-12'>
-		<label for='form-email' class='form-label'> Email </label>
+		<label for='form-email' class='form-label required'> Email </label>
 		<input type='email' class='form-control' name='email' id='form-email' placeholder='username@example.edu' />
 	</div>
 	<div class='col-12'>
-		<label for='form-password' class='form-label'> Password </label>
+		<label for='form-password' class='form-label required'> Password </label>
 		<input type='password' class='form-control' name='password' id='form-password' />
 	</div>
 	<div class='col-6'>
-		<label for='form-firstname' class='form-label'> Firstname </label>
+		<label for='form-firstname' class='form-label required'> Firstname </label>
 		<input type='text' class='form-control' name='firstname' id='form-firstname' placeholder='firstname' />
 	</div>
 	<div class='col-6'>
-		<label for='form-lastname' class='form-label'> Lastname </label>
+		<label for='form-lastname' class='form-label required'> Lastname </label>
 		<input type='text' class='form-control' name='lastname' id='form-lastname' placeholder='lastname' />
 	</div>
 	<div class='col-12'>
-		<label for='form-phone-number' class='form-label'> Phone Number </label>
+		<label for='form-phone-number' class='form-label required'> Phone Number </label>
 		<input type='text' class='form-control' name='phoneNumber' id='form-phone-number' placeholder='10 digits' />
 	</div>
 
 	<div class='col-12'>
-		<input class='btn btn-primary btn-submit col-12' type='submit' value='{{title}}' />
+		<input class='btn btn-danger btn-submit col-12' type='submit' value='{{title}}' />
 	</div>
 </form>

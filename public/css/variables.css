@@ -41,3 +41,8 @@ body {
 	display: flex;
 	flex-direction: row;
 }
+
+.required::after {
+	content: ' *';
+	color: red;
+}
