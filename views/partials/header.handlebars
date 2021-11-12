@@ -2,15 +2,15 @@
 	<span class='header__logo'>
 		<img src='../../public/static/logo_white.svg' alt='' />
 	</span>
-	<input class='form-control header__input' placeholder='Type to search' type='text' />
+	<el-input class='header__input' placeholder='Type to search' type='text'></el-input>
 	{{#if logged}}
 		<img class='header__avatar' src='../../public/static/avatar.png' alt='' />
 	{{else}}
-		<a class='aside-h btn btn-danger' href='/authorize/signup'>
-			Sign up
+		<a href='/authorize/signup' class='aside-h'>
+			<el-button type='primary'>Sign up</el-button>
 		</a>
-		<a class='aside-h btn btn-outline-danger' href='/authorize/signin'>
-			Sign in
+		<a href='/authorize/signin' class='aside-h'>
+			<el-button type='text'>Sign in</el-button>
 		</a>
 	{{/if}}
 </header>

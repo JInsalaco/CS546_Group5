@@ -138,17 +138,11 @@
 	margin-right: 10px;
 }
 
-.btn-collapse {
-	border: none;
-	outline: none;
-	background: transparent;
-	color: grey;
-}
 .icon-down {
 	display: inline-block;
 	transition: all 0.5s;
 }
-.btn-collapse[aria-expanded='true'] .icon-down {
+.btn-collapse[data-show-list='true'] .icon-down {
 	transform: rotate(180deg);
 }
 
@@ -159,10 +153,10 @@
 }
 
 .info__friends-list {
-	margin: 0;
-	padding: 20px 0 0;
+	margin: 20px 0 0;
+	padding: 0;
 	overflow: hidden;
-	max-height: calc(100% - 26px);
+	max-height: calc(100% - 62px);
 }
 
 .info__friends-list:hover {
@@ -198,7 +192,7 @@
 	border-radius: 20px;
 	padding: 10px 15px;
 	position: relative;
-	height: 40px;
+	height: 60px;
 	line-height: 40px;
 	cursor: pointer;
 	margin: 0 var(--side-width);
