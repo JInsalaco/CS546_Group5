@@ -1,101 +1,43 @@
-<section class="body__content flex-c">
-  <div class="create__btn-container">
-    <span class="create__text">Create a new Post</span>
-    <button class="btn__create flex">
-      <i class="iconfont icon-add" style="margin: auto;"></i>
-    </button>
-  </div>
+<section class='body__content flex-c'>
+	<div class='create__btn-container'>
+		<span class='create__text'>Create a new Post</span>
+		<a href='/posts/create'>
+			<button class='btn__create flex'>
+				<i class='iconfont icon-add' style='margin: auto;'></i>
+			</button>
+		</a>
+	</div>
 
-  <ul class="post__list-container">
-    <li class="post__list-item">
-      <h1 class="post__title">Lecture Rescheduling</h1>
-      <div class="post__info-container flex">
-        <img class="post__avatar-img" src="../public/static/avatar.png" alt="" />
-        <span class="post__user-info">
-          <div class="user-info__username">Eliseabeth May</div>
-          <div class="user-info__time">6h ago</div>
-        </span>
-        <span class="post__tag">Accounting</span>
-      </div>
-      <article class="post__content">
-        Hi mates,<br />
-        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably
-        notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for
-        additional lecture where we can study more dfficult excercise
-        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably
-        notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for
-        additional lecture where we can study more dfficult excercise
-        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably
-        notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for
-        additional lecture where we can study more dfficult excercise
-      </article>
-      <div class="post__operation-container flex">
-        <span class="aside-h operation__btn-response">Detail</span>
-        <span class="aside-h operation__btn-response">Add Response</span>
-      </div>
-    </li>
-
-    <li class="post__list-item">
-      <h1 class="post__title">Lecture Rescheduling</h1>
-      <div class="post__info-container flex">
-        <img class="post__avatar-img" src="../public/static/avatar.png" alt="" />
-        <span class="post__user-info">
-          <div class="user-info__username">Eliseabeth May</div>
-          <div class="user-info__time">6h ago</div>
-        </span>
-        <span class="post__tag">Accounting</span>
-      </div>
-      <article class="post__content">
-        Hi mates,<br />
-        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably
-        notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for
-        additional lecture where we can study more dfficult excercise
-      </article>
-      <div class="post__operation-container  flex">
-        <span class="operation__btn-response">Add Response</span>
-      </div>
-    </li>
-
-    <li class="post__list-item">
-      <h1 class="post__title">Lecture Rescheduling</h1>
-      <div class="post__info-container flex">
-        <img class="post__avatar-img" src="../public/static/avatar.png" alt="" />
-        <span class="post__user-info">
-          <div class="user-info__username">Eliseabeth May</div>
-          <div class="user-info__time">6h ago</div>
-        </span>
-        <span class="post__tag">Accounting</span>
-      </div>
-      <article class="post__content">
-        Hi mates,<br />
-        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably
-        notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for
-        additional lecture where we can study more dfficult excercise
-      </article>
-      <div class="post__operation-container flex">
-        <span class="operation__btn-response">Add Response</span>
-      </div>
-    </li>
-
-    <li class="post__list-item">
-      <h1 class="post__title">Lecture Rescheduling</h1>
-      <div class="post__info-container flex">
-        <img class="post__avatar-img" src="../public/static/avatar.png" alt="" />
-        <span class="post__user-info">
-          <div class="user-info__username">Eliseabeth May</div>
-          <div class="user-info__time">6h ago</div>
-        </span>
-        <span class="post__tag">Accounting</span>
-      </div>
-      <article class="post__content">
-        Hi mates,<br />
-        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably
-        notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for
-        additional lecture where we can study more dfficult excercise
-      </article>
-      <div class="post__operation-container flex">
-        <span class="operation__btn-response">Add Response</span>
-      </div>
-    </li>
-  </ul>
+	<ul class='post__list-container'>
+		<li v-for='item in 5' :key='item' class='post__list-item'>
+			<h1 class='post__title'>Lecture Rescheduling</h1>
+			<div class='post__info-container flex'>
+				<img class='post__avatar-img' src='../public/static/avatar.png' alt='' />
+				<span class='post__user-info'>
+					<div class='user-info__username'>Eliseabeth May</div>
+					<div class='user-info__time'>6h ago</div>
+				</span>
+				<span class='post__tag'>Accounting</span>
+			</div>
+			<article class='post__content omit'>
+				<p>Hi mates</p>
+				<p>
+					soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably notice
+					that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for additional
+					lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her ilner we need
+					to reschedule upcoming Lecture.
+				</p>
+				<p>
+					You propably notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend
+					for additional lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her
+					ilner we need to reschedule upcoming Lecture. You propably notice that this lecture is the last before exam so
+					Dr Hellen asked us also if we want to attend for additional lecture where we can study more dfficult excercise
+				</p>
+			</article>
+			<div class='post__operation-container flex'>
+				<span class='aside-h operation__btn-response'>Detail</span>
+				<span class='aside-h operation__btn-response'>Add Response</span>
+			</div>
+		</li>
+	</ul>
 </section>

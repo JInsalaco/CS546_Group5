@@ -62,6 +62,8 @@
 
 .post__content {
 	margin: 20px 0;
+}
+.post__content.omit {
 	display: -webkit-box;
 	-webkit-line-clamp: 5;
 	-webkit-box-orient: vertical;
@@ -213,6 +215,7 @@
 	margin: auto;
 	background-color: var(--primary-color);
 	transition: width 0.5s ease;
+	cursor: pointer;
 }
 
 .create__btn-container:hover .btn__create {
