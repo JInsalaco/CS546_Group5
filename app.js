@@ -5,6 +5,7 @@ const configRoutes = require('./routes');
 const static = express.static(__dirname + '/public');
 
 app.use('/public', static);
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main', partialsDir: 'views/partials' }));
