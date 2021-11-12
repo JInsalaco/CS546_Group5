@@ -21,7 +21,7 @@
 		"express": "^4.17.1",
 		"express-handlebars": "^5.3.4",
 		"mongodb": "^4.1.4",
-		"nodemon": "^2.0.14",
+		"nodemon": "^2.0.15",
 		"xss": "^1.0.10"
 	}
 }

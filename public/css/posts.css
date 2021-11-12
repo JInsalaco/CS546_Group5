@@ -1,0 +1,32 @@
+.page__posts-create {
+	flex: 1;
+	height: 100vh;
+}
+
+.posts__form {
+	width: 25%;
+	min-width: 500px;
+	margin: auto;
+}
+.post__body-input > textarea {
+	min-height: 200px !important;
+}
+
+.posts__preview {
+	position: relative;
+	padding: 30px 50px;
+	width: 30%;
+	min-width: 600px;
+	margin: auto;
+	border-radius: var(--radius-default);
+	background-color: rgba(255, 255, 255, 0.7);
+}
+.posts__preview::after {
+	content: '';
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: absolute;
+	filter: blur(2px);
+}

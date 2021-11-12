@@ -1,26 +1,30 @@
-<form action='' method='post' id='from-authorize' class='row g-3 needs-validation' novalidate>
-	<div class='col-12'>
-		<label for='form-email' class='form-label required'> Email </label>
-		<input type='email' class='form-control' name='email' id='form-email' placeholder='username@example.edu' />
-	</div>
-	<div class='col-12'>
-		<label for='form-password' class='form-label required'> Password </label>
-		<input type='password' class='form-control' name='password' id='form-password' />
-	</div>
-	<div class='col-6'>
-		<label for='form-firstname' class='form-label required'> Firstname </label>
-		<input type='text' class='form-control' name='firstname' id='form-firstname' placeholder='firstname' />
-	</div>
-	<div class='col-6'>
-		<label for='form-lastname' class='form-label required'> Lastname </label>
-		<input type='text' class='form-control' name='lastname' id='form-lastname' placeholder='lastname' />
-	</div>
-	<div class='col-12'>
-		<label for='form-phone-number' class='form-label required'> Phone Number </label>
-		<input type='text' class='form-control' name='phoneNumber' id='form-phone-number' placeholder='10 digits' />
-	</div>
+<el-form ref='signUpForm' :model='form' label-position='top' :rules='rules'>
+	<el-form-item label='Email' prop='email'>
+		<el-input v-model='form.email' placeholder='example@stevens.edu'></el-input>
+	</el-form-item>
 
-	<div class='col-12'>
-		<input class='btn btn-danger btn-submit col-12' type='submit' value='{{title}}' />
-	</div>
-</form>
+	<el-form-item label='Password' prop='password'>
+		<el-input v-model='form.password' type='password' placeholder='Input your password'></el-input>
+	</el-form-item>
+
+	<el-row :gutter='20'>
+		<el-col :span='12'>
+			<el-form-item label='Firstname' prop='firstname'>
+				<el-input v-model='form.firstname' placeholder='firstname'></el-input>
+			</el-form-item>
+		</el-col>
+		<el-col :span='12'>
+			<el-form-item label='Lastname' prop='lastname'>
+				<el-input v-model='form.lastname' placeholder='lastname'></el-input>
+			</el-form-item>
+		</el-col>
+	</el-row>
+
+	<el-form-item label='Phone' prop='phoneNumber'>
+		<el-input v-model='form.phoneNumber' placeholder='(xxx)xxx-xxxx'></el-input>
+	</el-form-item>
+
+	<el-form-item>
+		<el-button type='primary' @click="handleSubmit('signUpForm')">Sign Up</el-button>
+	</el-form-item>
+</el-form>

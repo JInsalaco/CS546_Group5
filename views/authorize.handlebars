@@ -1,4 +1,4 @@
-<main class="page__authorize flex">
+<main class="page__authorize flex" id="authorize">
   <div id="animate"></div>
 
   {{#if isSignIn}}
@@ -7,6 +7,14 @@
     {{> authorize/SignUpForm}}
   {{/if}}
 
-  <a class="btn btn-danger btn-back" href="/">Back to Home</a>
+  <a class="btn-back" href="/">
+    <el-button type="primary">Back to Home</el-button>
+  </a>
 </main>
-<script type="module" src="../public/js/authorize.js"></script>
+
+<script type="module" src="../public/js/authorize/authorize.js"></script>
+{{#if isSignIn}}
+  <script src='../../../public/js/authorize/signin.js'></script>
+{{else}}
+  <script src='../../../public/js/authorize/signup.js'></script>
+{{/if}}

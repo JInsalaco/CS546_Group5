@@ -1,11 +1,16 @@
 /* This file contains mutiple css variables and common class that can be used in the page. */
 
-body {
+:root {
 	/* color */
 	--font-color-grey: #d4d4d6;
 	--primary-color: #b30838;
 	--primary-color-deep: #9d1535;
+	--primary-color-light: #ca5273;
 	--bg-grey: #f9f9f9;
+
+	--demo: rgba(179, 8, 56, 0.8);
+
+	--el-color-primary: #b30838;
 
 	/* font-size */
 	--font-xs: 12px;
@@ -22,6 +27,18 @@ body {
 	--radius-s: 10px;
 	--radius-default: 15px;
 	--radius-circle: 50%;
+}
+
+.el-button--primary {
+	--el-button-background-color: var(--primary-color);
+	--el-button-border-color: var(--primary-color);
+	--el-button-hover-color: var(--primary-color-light);
+	--el-button-active-background-color: var(--primary-color-deep);
+	--el-button-active-border-color: var(--primary-color-deep);
+}
+.el-button--text:focus,
+.el-button--text:hover {
+	color: var(--primary-color-deep);
 }
 
 .aside-h + .aside-h {
