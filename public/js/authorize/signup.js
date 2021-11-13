@@ -1,4 +1,5 @@
 const { ref, reactive } = Vue;
+const { ElMessage, ElLoading } = ElementPlus;
 
 const rules = {
 	email: [
@@ -6,13 +7,23 @@ const rules = {
 			required: true,
 			trigger: 'change',
 			message: 'Eamil is required!'
+		},
+		{
+			pattern: /^\S+@[a-z]+\.com|edu$/,
+			trigger: 'change',
+			message: 'Invalid email format!'
 		}
 	],
-	password: [
+	hashedPwd: [
 		{
 			required: true,
 			trigger: 'change',
 			message: 'Password is required!'
+		},
+		{
+			min: 6,
+			trigger: 'change',
+			message: 'The length of password is at lease 6!'
 		}
 	],
 	firstname: [
@@ -34,6 +45,16 @@ const rules = {
 			required: true,
 			trigger: 'change',
 			message: 'PhoneNumber is required!'
+		},
+		{
+			len: 10,
+			trigger: 'change',
+			message: 'The phone number should be 10 digits!'
+		},
+		{
+			pattern: /[0-9]{10}/,
+			trigger: 'change',
+			message: 'The phone number should be number!'
 		}
 	]
 };
@@ -43,7 +64,7 @@ Vue.createApp({
 		const signUpForm = ref();
 		const form = reactive({
 			email: '',
-			password: '',
+			hashedPwd: '',
 			firstname: '',
 			lastname: '',
 			phoneNumber: ''
@@ -52,9 +73,16 @@ Vue.createApp({
 		const handleSubmit = () => {
 			signUpForm.value.validate(valid => {
 				if (valid) {
-					alert('submit!');
+					http
+						.post('/authorize/signup', form)
+						.then(msg => {
+							ElMessage.success(msg);
+							setInterval(() => {
+								window.location.replace('/authorize/signin');
+							}, 1000);
+						})
+						.catch(err => ElMessage.error(err));
 				} else {
-					console.log('error submit!!');
 					return false;
 				}
 			});
