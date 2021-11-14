@@ -17,33 +17,15 @@
 	<div class='nav__categaries'>
 		<div class='nav__categaries-title'>Topics</div>
 		<ul class='menu__topic-list'>
-			<li class='aside-v flex'>
+			<li
+				v-for='item in topics'
+				:key='item'
+				class='aside-v flex'
+				:class="{'is-checked': item === currentTopic}"
+				@click='currentTopic = item'
+			>
 				<span class='iconfont icon-point'></span>
-				Public Finance
-			</li>
-			<li class='aside-v flex'>
-				<span class='iconfont icon-point'></span>
-				Accouting
-			</li>
-			<li class='aside-v flex'>
-				<span class='iconfont icon-point'></span>
-				Corporate law
-			</li>
-			<li class='aside-v flex'>
-				<span class='iconfont icon-point'></span>
-				Controlling
-			</li>
-			<li class='aside-v flex'>
-				<span class='iconfont icon-point'></span>
-				Aquisition
-			</li>
-			<li class='aside-v flex'>
-				<span class='iconfont icon-point'></span>
-				Aquisition
-			</li>
-			<li class='aside-v flex'>
-				<span class='iconfont icon-point'></span>
-				Aquisition
+				\{{item}}
 			</li>
 		</ul>
 	</div>
