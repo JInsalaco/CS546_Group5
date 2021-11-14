@@ -7,7 +7,7 @@ const composition = {
 			showPostDialog: false,
 			showTagDialog: false
 		});
-		const form = reactive(new Posts());
+		const postForm = reactive(new Posts());
 		const content = ref('');
 
 		const handleInputBody = value => {
@@ -22,13 +22,12 @@ const composition = {
 		const topicsNum = ref(5); // CLEAR
 		const loadMorePost = () => {
 			topicsNum.value += 2;
-			console.log(1111);
 		};
 
 		return {
 			showFriendsList,
 			...toRefs(showDialog),
-			form,
+			postForm,
 			handleInputBody,
 			content,
 			time: getTime(),

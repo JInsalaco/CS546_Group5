@@ -51,7 +51,7 @@
 		<div>
 			<h3>Preview</h3>
 			<div class='posts__preview'>
-				<h1 class='post__title'>\{{form.title}}</h1>
+				<h1 class='post__title'>\{{postForm.title}}</h1>
 				<div class='post__info-container flex'>
 					<img class='post__avatar-img' src='/public/static/avatar.png' alt='' />
 					<span class='post__user-info'>
@@ -59,7 +59,7 @@
 						<div class='user-info__time'>\{{time}}</div>
 					</span>
 					<div class="tag-container">
-						<span v-for="item in form.topics" :key="item" class='post__tag aside-h'>\{{item}}</span>
+						<span v-for="item in postForm.topics" :key="item" class='post__tag aside-h'>\{{item}}</span>
 					</div>
 				</div>
 				<article class='post__content' v-html='content'>
