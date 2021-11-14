@@ -1,11 +1,16 @@
 @import './authorize.css';
 @import './home.css';
+@import './post.css';
 
 html,
 body {
 	margin: 0;
 	padding: 0;
 	color: #696c72;
+}
+
+a {
+	text-decoration: none;
 }
 
 ::-webkit-scrollbar {

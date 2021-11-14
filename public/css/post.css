@@ -1,0 +1,23 @@
+.page__post-detail {
+	width: 60%;
+	margin: auto;
+	padding: 50px 60px 0;
+}
+
+.page__post-detail .post-container {
+	background-color: #fff;
+	border-radius: var(--radius-default);
+}
+
+.form__comment {
+	width: 100%;
+}
+
+.form-item__input {
+	flex-grow: 1;
+}
+.form-item__input .el-input__inner {
+	background: var(--bg-grey);
+	border: none;
+	border-radius: 50px;
+}

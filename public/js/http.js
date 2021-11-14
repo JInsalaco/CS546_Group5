@@ -4,6 +4,7 @@
  */
 
 const METHODS = ['get', 'post', 'put', 'delete'];
+const { message } = ElementPlus;
 
 // Global config
 const DEFAULT_CONFIG = {
@@ -17,7 +18,11 @@ const instance = axios.create(DEFAULT_CONFIG);
  */
 instance.interceptors.response.use(
 	res => (res.status == 200 ? res.data : Promise.reject('Request error, please try again later!')),
-	err => Promise.reject(err.response.data)
+	err => {
+		const msg = err.response.data;
+		message.error(msg);
+		Promise.reject(msg);
+	}
 );
 
 const http = METHODS.reduce((pre, key) => {
