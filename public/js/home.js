@@ -1,4 +1,5 @@
-const { ref, reactive, toRefs } = Vue;
+const { ref, reactive, toRefs, computed, nextTick } = Vue;
+const { ElNotification } = ElementPlus;
 
 const composition = {
 	setup() {
@@ -7,15 +8,16 @@ const composition = {
 			showPostDialog: false,
 			showTagDialog: false
 		});
-		const postForm = reactive(new Posts());
-		const content = ref('');
+		const postsForm = ref();
+		const postForm = reactive(new Posts({ title: 'This is a demo', topics: ['School'], body: 'demo demo demo' })); // CLEAR
 
-		const handleInputBody = value => {
-			content.value = value
+		const article = computed(() =>
+			postForm.body
 				.split('\n')
 				.map(item => `<p>${item}</p>`)
-				.join('');
-		};
+				.join('')
+		);
+
 		const topics = ['Public Finance', 'Accouting', 'Corporate', 'Controlling', 'Aquisition', 'Science', 'School']; // CLEAR
 		const currentTopic = ref(topics[0]);
 
@@ -24,17 +26,35 @@ const composition = {
 			topicsNum.value += 2;
 		};
 
+		/**
+		 * add the new post
+		 */
+		const handlePublish = () => {
+			postsForm.value.validate(valid => {
+				if (valid) {
+					http.post('/posts/add', postForm).then(msg => {
+						ElNotification({ title: 'Success', message: msg, type: 'success' });
+						postsForm.value.resetFields();
+						showDialog.showPostDialog = false;
+					});
+				} else {
+					return false;
+				}
+			});
+		};
+
 		return {
 			showFriendsList,
 			...toRefs(showDialog),
+			postsForm,
 			postForm,
-			handleInputBody,
-			content,
+			article,
 			time: getTime(),
 			topics,
 			currentTopic,
 			topicsNum,
-			loadMorePost
+			loadMorePost,
+			handlePublish
 		};
 	}
 };

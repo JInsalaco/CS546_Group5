@@ -73,15 +73,12 @@ Vue.createApp({
 		const handleSubmit = () => {
 			signUpForm.value.validate(valid => {
 				if (valid) {
-					http
-						.post('/authorize/signup', form)
-						.then(msg => {
-							ElMessage.success(msg);
-							setInterval(() => {
-								window.location.replace('/authorize/signin');
-							}, 1000);
-						})
-						.catch(err => ElMessage.error(err));
+					http.post('/authorize/signup', form).then(msg => {
+						ElMessage.success(msg);
+						setInterval(() => {
+							window.location.replace('/authorize/signin');
+						}, 1000);
+					});
 				} else {
 					return false;
 				}

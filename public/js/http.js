@@ -4,7 +4,7 @@
  */
 
 const METHODS = ['get', 'post', 'put', 'delete'];
-const { message } = ElementPlus;
+const { ElMessage } = ElementPlus;
 
 // Global config
 const DEFAULT_CONFIG = {
@@ -20,8 +20,9 @@ instance.interceptors.response.use(
 	res => (res.status == 200 ? res.data : Promise.reject('Request error, please try again later!')),
 	err => {
 		const msg = err.response.data;
-		message.error(msg);
-		Promise.reject(msg);
+		console.log('error: ' + msg);
+		ElMessage.error(msg);
+		return Promise.reject(msg);
 	}
 );
 

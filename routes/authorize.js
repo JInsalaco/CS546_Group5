@@ -9,13 +9,13 @@ router.get('/:type', (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-	let userInfo = req.body;
+	const userInfo = req.body;
 
 	try {
-		const newUser = await userData.addUser(userInfo);
-		res.json(newUser);
-	} catch (e) {
-		res.status(500).send(e);
+		const result = await userData.addUser(userInfo);
+		res.json(result);
+	} catch (error) {
+		res.status(500).send(error);
 	}
 });
 
