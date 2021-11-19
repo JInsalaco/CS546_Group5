@@ -21,7 +21,7 @@
 	</el-row>
 
 	<el-form-item label='Phone' prop='phoneNumber'>
-		<el-input v-model='form.phoneNumber' placeholder='(xxx)xxx-xxxx'></el-input>
+		<el-input v-model='form.phoneNumber' placeholder='(xxx)xxx-xxxx' @input="handlePhoneInput"></el-input>
 	</el-form-item>
 
 	<el-form-item>

@@ -47,12 +47,12 @@ const rules = {
 			message: 'PhoneNumber is required!'
 		},
 		{
-			len: 10,
+			len: 13,
 			trigger: 'change',
 			message: 'The phone number should be 10 digits!'
 		},
 		{
-			pattern: /[0-9]{10}/,
+			pattern: /[\(\)\-0-9]{10}/,
 			trigger: 'change',
 			message: 'The phone number should be number!'
 		}
@@ -69,6 +69,10 @@ Vue.createApp({
 			lastname: '',
 			phoneNumber: ''
 		});
+
+		const handlePhoneInput = value => {
+			form.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
+		};
 
 		const handleSubmit = () => {
 			signUpForm.value.validate(valid => {
@@ -89,7 +93,8 @@ Vue.createApp({
 			form,
 			rules,
 			handleSubmit,
-			signUpForm
+			signUpForm,
+			handlePhoneInput
 		};
 	}
 })
