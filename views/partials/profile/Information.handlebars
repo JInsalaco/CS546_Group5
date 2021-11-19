@@ -6,20 +6,20 @@
   <i v-else class="iconfont icon-add user__avatar-icon"></i>
 </el-upload>
 
-<el-form :model="userForm" label-width="120px" class="user-info__form" :disabled="userFormDisable">
+<el-form :rules="rules" :model="userForm" label-width="120px" class="user-info__form" :disabled="userFormDisable">
   <el-form-item label="Username" prop='userName'>
     <el-input v-model="userForm.userName"></el-input>
   </el-form-item>
 
   <el-row :gutter='20'>
     <el-col :span='12'>
-      <el-form-item label='Firstname' prop='firstName'>
-        <el-input v-model='userForm.firstName' placeholder='firstname'></el-input>
+      <el-form-item label='Firstname' prop='firstname'>
+        <el-input v-model='userForm.firstname' placeholder='firstname'></el-input>
       </el-form-item>
     </el-col>
     <el-col :span='12'>
-      <el-form-item label='Lastname' prop='lastName'>
-        <el-input v-model='userForm.lastName' placeholder='lastname'></el-input>
+      <el-form-item label='Lastname' prop='lastname'>
+        <el-input v-model='userForm.lastname' placeholder='lastname'></el-input>
       </el-form-item>
     </el-col>
   </el-row>
@@ -41,7 +41,7 @@
   </el-row>
 
   <el-form-item label="PhoneNumber" prop='phoneNumber'>
-    <el-input v-model="userForm.phoneNumber"></el-input>
+    <el-input v-model="userForm.phoneNumber" @input="handlePhoneInput"></el-input>
   </el-form-item>
 
   <el-form-item label="Email" prop='email'>
@@ -53,7 +53,7 @@
   </el-form-item>
 
   <el-form-item v-show="!userFormDisable">
-    <el-button style="width: 100%;" type="primary" @click="onSubmit"> Save </el-button>
+    <el-button style="width: 100%;" type="primary" @click="handleSubmit"> Save </el-button>
   </el-form-item>
 </el-form>
 
