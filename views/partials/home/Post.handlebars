@@ -36,19 +36,18 @@
 			</article>
 			<div class='post__operation-container flex'>
 				<a href="/posts/detail" class='aside-h operation__btn-response'>Detail</a>
-				<span class='aside-h operation__btn-response'>Add Response</span>
 			</div>
 		</li>
 	</ul>
 </section>
 
-<el-dialog v-model='showPostDialog' title='Create yout Post' width='50%'>
+<el-dialog v-model='showPostDialog' title='Create yout Post' width='auto'>
 	<main class='dialog__create'>
 		<div>
 			{{> home/PostForm}}
 		</div>
 
-		<div>
+		<div style="margin-left: 20px;">
 			<h3>Preview</h3>
 			<div class='posts__preview'>
 				<h1 class='post__title'>\{{postForm.title}}</h1>

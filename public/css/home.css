@@ -333,7 +333,7 @@
 	border: 2px solid var(--primary-color);
 	border-radius: var(--radius-default);
 	margin-top: auto;
-	margin-bottom: 5em;
+	margin-bottom: 1em;
 	transition: all 0.5s;
 }
 
@@ -357,7 +357,6 @@
 
 .dialog__create {
 	display: flex;
-	justify-content: space-around;
 }
 .posts__preview {
 	position: relative;
