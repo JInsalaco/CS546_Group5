@@ -3,11 +3,9 @@
 <main class="page__profile">
   <aside class="profile__aside">
     <el-menu :default-active="activeMenu" class="el-menu-vertical-demo">
-      <a :href="`/profile/${item.text.toLowerCase()}`" v-for="item in profileMenu" :key="item">
-        <el-menu-item :index="item.index">
-          <span>\{{item.text}}</span>
-        </el-menu-item>
-      </a>
+      <el-menu-item v-for="item in profileMenu" :key="item" :index="item.index" @click="activeMenu = item.index">
+        <span>\{{item.text}}</span>
+      </el-menu-item>
     </el-menu>
   </aside>
   <div v-if="activeMenu == 1" class="profile__content-container">

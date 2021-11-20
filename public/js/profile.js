@@ -68,8 +68,8 @@ Vue.createApp({
 		const userFormDisable = ref(true);
 
 		onMounted(() => {
-			const current = location.href.match(/\/(\w+)$/)[1];
-			activeMenu.value = profileMenu.find(item => item.text.toLocaleLowerCase() === current).index;
+			const current = location.href.match(/entry=(\d)/)[1];
+			activeMenu.value = current;
 		});
 
 		const uploading = ref(false);

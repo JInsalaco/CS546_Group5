@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { formidable } = require('formidable');
 const fs = require('fs');
 
-router.get('/:part', (_, res) => {
+router.get('/', (_, res) => {
 	res.render('profile', { title: 'Profile' });
 });
 
