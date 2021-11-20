@@ -11,7 +11,7 @@ router.get('/:type', (req, res) => {
 	const actions = `Sign ${type.match(/^sign(\S+)$/)[1]}`;
 	res.render('authorize', { title: actions, isSignIn: type === 'signin' });
 });
-	router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res) => {
 	try{
 	let userInfo = req.body;
 	let firstname= userInfo.firstname;
@@ -19,31 +19,13 @@ router.get('/:type', (req, res) => {
 	let email= userInfo.email;
 	let phoneNumber= userInfo.phoneNumber;
 	let password= userInfo.password;
-
-	try{
 	userData.checkUserData(email,password,firstname,lastname,phoneNumber);
+	var newUser = await userData.addUser(email,password,firstname,lastname,phoneNumber);
+	if(newUser)
+		res.status(200).send('Signed up successfully');	//Need to redirect here to private session/home login
 	}
 	catch(e){
-		res.status(400).send(e);
-		return;
-	  }
-
-  	(async function() {
-		  try{
-		var newUser = await userData.addUser(email,password,firstname,lastname,phoneNumber);
-		if(newUser)
-			res.status(200).send('Signed up successfully');	//Need to redirect here to private session/home login
-		else 
-			throw "Error signing up";
-		  }
-		  catch(e){
-			res.status(400).send(e);   //render signup page
-		  }
-	})();  
-	
-	}
-	catch(e){
-		res.status(500).json({error:e});
+		res.status(400).send(e); //need to render 
 	}
 });
 
