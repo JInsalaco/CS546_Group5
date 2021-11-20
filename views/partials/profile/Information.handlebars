@@ -1,7 +1,7 @@
 <h2>Information</h2>
 
-<el-upload class="user__avatar" action="" :show-file-list="false" :before-upload="handleImageUpload"
-           :class="{'hide-border': !userForm.profilePicture}">
+<el-upload v-loading="uploading" class="user__avatar" action="" :show-file-list="false"
+           :before-upload="handleImageUpload" :class="{'hide-border': !userForm.profilePicture}">
   <img v-if="userForm.profilePicture" :src="userForm.profilePicture" class="user__avatar-image" />
   <i v-else class="iconfont icon-add user__avatar-icon"></i>
 </el-upload>

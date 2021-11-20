@@ -72,12 +72,19 @@ Vue.createApp({
 			activeMenu.value = profileMenu.find(item => item.text.toLocaleLowerCase() === current).index;
 		});
 
+		const uploading = ref(false);
 		const handleImageUpload = file => {
+			uploading.value = true;
+			const formData = new FormData();
+			formData.append('avatar', file);
+			http
+				.post('/profile/upload', formData)
+				.then(res => (userForm.profilePicture = res.path))
+				.finally(() => setTimeout(() => (uploading.value = false), 1000));
 			return false;
 		};
 
 		const handleSubmit = () => {
-			console.log(111);
 			userFormDisable.value = true;
 		};
 
@@ -93,7 +100,8 @@ Vue.createApp({
 			handleImageUpload,
 			handleSubmit,
 			handlePhoneInput,
-			rules
+			rules,
+			uploading
 		};
 	}
 })
