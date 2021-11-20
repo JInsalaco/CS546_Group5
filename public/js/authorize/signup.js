@@ -9,7 +9,7 @@ const rules = {
 			message: 'Eamil is required!'
 		},
 		{
-			pattern: /^\S+@[a-z]+\.com|edu$/,
+			pattern: /[a-z][a-z0-9]+@stevens\.edu/,    //^\S+@[a-z]+\.com|edu$
 			trigger: 'change',
 			message: 'Invalid email format!'
 		}

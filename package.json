@@ -18,9 +18,12 @@
 	},
 	"homepage": "https://github.com/JInsalaco/CS546_Group5#readme",
 	"dependencies": {
+		"bcrypt": "^5.0.1",
 		"blueimp-md5": "^2.19.0",
+		"cookie-parser": "^1.4.6",
 		"express": "^4.17.1",
 		"express-handlebars": "^5.3.4",
+		"express-session": "^1.17.2",
 		"formidable": "^2.0.1",
 		"mongodb": "^4.1.4",
 		"nodemon": "^2.0.15",

@@ -3,7 +3,7 @@ const authorize = require('./authorize');
 const posts = require('./posts');
 const profile = require('./profile');
 
-module.exports = app => {
+const constructorMethod = app => {
 	app.use('/', home);
 	app.use('/authorize', authorize);
 	app.use('/posts', posts);
@@ -13,3 +13,6 @@ module.exports = app => {
 		res.status(404).json({ error: 'No APIs' });
 	});
 };
+
+
+module.exports = constructorMethod;

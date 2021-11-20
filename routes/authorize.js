@@ -1,21 +1,31 @@
-const router = require('express').Router();
+const express = require('express');
+const { ExplainVerbosity } = require('mongodb');
+const router = express.Router();
+const mongoCollections = require('../config/mongoCollections');
+const users = mongoCollections.users;
 const data = require('../data');
-const userData = data.users;
+const userData =  require('../data/users');
 
 router.get('/:type', (req, res) => {
 	const { type } = req.params;
 	const actions = `Sign ${type.match(/^sign(\S+)$/)[1]}`;
 	res.render('authorize', { title: actions, isSignIn: type === 'signin' });
 });
-
 router.post('/signup', async (req, res) => {
-	const userInfo = req.body;
-
-	try {
-		const result = await userData.addUser(userInfo);
-		res.json(result);
-	} catch (error) {
-		res.status(500).send(error);
+	try{
+	let userInfo = req.body;
+	let firstname= userInfo.firstname;
+	let lastname= userInfo.lastname;
+	let email= userInfo.email;
+	let phoneNumber= userInfo.phoneNumber;
+	let password= userInfo.password;
+	userData.checkUserData(email,password,firstname,lastname,phoneNumber);
+	var newUser = await userData.addUser(email,password,firstname,lastname,phoneNumber);
+	if(newUser)
+		res.status(200).send('Signed up successfully');	//Need to redirect here to private session/home login
+	}
+	catch(e){
+		res.status(400).send(e); //need to render 
 	}
 });
 
