@@ -1,4 +1,4 @@
-const { ref, reactive, onMounted } = Vue;
+const { ref, reactive, onMounted, onBeforeUnmount } = Vue;
 const profileMenu = [
 	{ text: 'Information', index: '1' },
 	{ text: 'Active', index: '2' },
@@ -70,6 +70,10 @@ Vue.createApp({
 		onMounted(() => {
 			const current = location.href.match(/entry=(\d)/)[1];
 			activeMenu.value = current;
+		});
+
+		onBeforeUnmount(() => {
+			console.log(1);
 		});
 
 		const uploading = ref(false);

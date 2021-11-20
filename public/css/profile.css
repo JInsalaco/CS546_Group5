@@ -11,8 +11,7 @@
 	width: 20%;
 	position: absolute;
 	left: 2.5%;
-	height: 300px;
-	padding-top: 20px;
+	padding: 20px 0;
 }
 
 .page__profile .profile__content-container {

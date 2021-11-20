@@ -9,21 +9,27 @@ const rules = {
 			message: 'Eamil is required!'
 		},
 		{
-			pattern: /[a-z][a-z0-9]+@stevens\.edu/,    //^\S+@[a-z]+\.com|edu$
+			pattern: /[a-z0-9]+@stevens\.edu$/,
 			trigger: 'change',
 			message: 'Invalid email format!'
 		}
 	],
-	hashedPwd: [
+	password: [
 		{
 			required: true,
 			trigger: 'change',
 			message: 'Password is required!'
 		},
 		{
-			min: 6,
+			min: 8,
+			max: 15,
 			trigger: 'change',
-			message: 'The length of password is at lease 6!'
+			message: 'The length of password is at lease 8 and no more than 15!'
+		},
+		{
+			pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,15}$/,
+			trigger: 'change',
+			message: 'The password must contain at least one number, one uppercase and one lowercase letter!'
 		}
 	],
 	firstname: [
@@ -64,7 +70,7 @@ Vue.createApp({
 		const signUpForm = ref();
 		const form = reactive({
 			email: '',
-			hashedPwd: '',
+			password: '',
 			firstname: '',
 			lastname: '',
 			phoneNumber: ''
@@ -77,12 +83,16 @@ Vue.createApp({
 		const handleSubmit = () => {
 			signUpForm.value.validate(valid => {
 				if (valid) {
-					http.post('/authorize/signup', form).then(msg => {
-						ElMessage.success(msg);
-						setInterval(() => {
-							window.location.replace('/authorize/signin');
-						}, 1000);
-					});
+					const loadingInstance = ElLoading.service();
+					http
+						.post('/authorize/signup', form)
+						.then(msg => {
+							ElMessage.success(msg);
+							setTimeout(() => {
+								window.location.replace('/authorize/signin');
+							}, 1000);
+						})
+						.finally(() => loadingInstance.close());
 				} else {
 					return false;
 				}

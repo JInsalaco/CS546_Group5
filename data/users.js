@@ -17,7 +17,7 @@ function checkUserData(email, password, firstname, lastname, phoneNumber) {
 		throw 'Please input valid data in the required fields';
 	if (email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1) throw 'Please enter your stevens.edu id for signing up';
 	if (password.length < 8 || password.length > 15) throw 'Your Password should have min 8 to maximum 15 characters';
-	if (password.search(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/) === -1)
+	if (password.search(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/) === -1)
 		throw 'your password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters';
 	if (phoneNumber.search(/^\((\d{3})\)(\d{3})-(\d{4})$/) === -1)
 		throw 'please input your phoneNumber in (xxx)xxx-xxxx format';
