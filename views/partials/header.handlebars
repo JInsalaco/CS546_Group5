@@ -4,13 +4,15 @@
 	</span>
 	<el-input class='header__input' placeholder='Type to search' type='text'></el-input>
 	{{#if logged}}
+	<a href="/profile/information">
 		<img class='header__avatar' src='../../public/static/avatar.png' alt='' />
+	</a>
 	{{else}}
-		<a href='/authorize/signup' class='aside-h'>
-			<el-button type='primary'>Sign up</el-button>
-		</a>
-		<a href='/authorize/signin' class='aside-h'>
-			<el-button type='text'>Sign in</el-button>
-		</a>
+	<a href='/authorize/signup' class='aside-h'>
+		<el-button type='primary'>Sign up</el-button>
+	</a>
+	<a href='/authorize/signin' class='aside-h'>
+		<el-button type='text'>Sign in</el-button>
+	</a>
 	{{/if}}
 </header>

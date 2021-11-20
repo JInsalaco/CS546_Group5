@@ -1,14 +1,13 @@
 .post__list-container {
-	overflow: hidden;
+	overflow: auto;
 	margin-top: 30px;
 	margin-right: 10px;
-	flex-grow: 1;
 	padding: 0 calc(var(--side-width) - 10px) 0 var(--side-width);
 }
 
-.post__list-container:hover {
+/* .post__list-container:hover {
 	overflow-y: overlay;
-}
+} */
 
 .post__list-item {
 	background-color: #fff;
@@ -44,8 +43,10 @@
 	color: var(--font-color-grey);
 }
 
-.post__tag {
+.tag-container {
 	margin-left: auto;
+}
+.post__tag {
 	padding: 5px 10px;
 	color: #9773ff;
 	font-size: 12px;
@@ -316,7 +317,8 @@
 .menu__topic-list > li:nth-child(7) > .icon-point {
 	color: purple;
 }
-.menu__topic-list > li:hover {
+.menu__topic-list > li:hover,
+.menu__topic-list > li.is-checked {
 	background-color: #fff;
 	box-shadow: var(--box-shadow);
 }
@@ -331,11 +333,49 @@
 	border: 2px solid var(--primary-color);
 	border-radius: var(--radius-default);
 	margin-top: auto;
-	margin-bottom: 5em;
+	margin-bottom: 1em;
 	transition: all 0.5s;
 }
 
 .btn__create-topic:hover {
 	background: transparent;
 	color: var(--primary-color);
+}
+
+.posts__form {
+	width: 25%;
+	min-width: 500px;
+	margin: auto;
+	height: 100%;
+}
+.posts__form > .el-form-item:last-child {
+	margin-bottom: 0;
+}
+.post__body-input > textarea {
+	min-height: 200px !important;
+}
+
+.dialog__create {
+	display: flex;
+}
+.posts__preview {
+	position: relative;
+	padding: 30px 50px;
+	width: 30%;
+	min-width: 600px;
+	margin: auto;
+	border-radius: var(--radius-default);
+	background-color: rgba(255, 255, 255, 0.7);
+	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+	height: calc(100% - 2em - 21px);
+}
+.posts__preview .post__content {
+	max-height: 200px;
+	overflow-y: overlay;
+}
+.el-select__tags {
+	--el-index-normal: 9;
+}
+.posts__form .el-select .el-select__tags > span {
+	display: flex;
 }

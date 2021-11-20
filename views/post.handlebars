@@ -1,0 +1,46 @@
+{{> header}}
+
+<main class='page__post-detail'>
+  <div class="post-container post__list-item">
+    <h1 class='post__title'>Lecture Rescheduling</h1>
+    <div class='post__info-container flex'>
+      <img class='post__avatar-img' src='../public/static/avatar.png' alt='' />
+      <span class='post__user-info'>
+        <div class='user-info__username'>Eliseabeth May</div>
+        <div class='user-info__time'>6h ago</div>
+      </span>
+      <div class="tag-container">
+        <span class='post__tag'>Accounting</span>
+      </div>
+    </div>
+    <article class='post__content'>
+      <p>Hi mates</p>
+      <p>
+        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably notice
+        that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for additional
+        lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her ilner we need
+        to reschedule upcoming Lecture.
+      </p>
+      <p>
+        You propably notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend
+        for additional lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her
+        ilner we need to reschedule upcoming Lecture. You propably notice that this lecture is the last before exam so
+        Dr Hellen asked us also if we want to attend for additional lecture where we can study more dfficult excercise
+      </p>
+    </article>
+    <div class='post__operation-container flex'>
+      <el-form :inline="true" :model="comment" class="form__comment flex">
+        <el-form-item class="form-item__input">
+          <el-input v-model="comment.body" placeholder="Add a comment"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmitComment" circle>
+            <i class="iconfont icon-send"></i>
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
+</main>
+
+<script src="../public/js/posts.js"></script>

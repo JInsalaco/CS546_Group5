@@ -1,7 +1,4 @@
-const mongoCollections = require('../config/mongoCollections');
-const users = mongoCollections.users;
-// const uuid = require('uuid/v4');
-let { ObjectId } = require('mongodb');
+const { users } = require('../config/mongoCollections');
 const User = require('../utils/collections/User');
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
@@ -54,7 +51,7 @@ const saltRounds = 16;
         return "inserted successfully";
         }
         catch(e){
-            console.log(e);
+            // console.log(e);
             throw e;
         }
 }

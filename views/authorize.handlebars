@@ -13,8 +13,9 @@
 </main>
 
 <script type="module" src="../public/js/authorize/authorize.js"></script>
+{{!-- <script src="../public/js/http.js"></script> --}}
 {{#if isSignIn}}
-  <script src='../../../public/js/authorize/signin.js'></script>
+  <script src='../public/js/authorize/signin.js'></script>
 {{else}}
-  <script src='../../../public/js/authorize/signup.js'></script>
+  <script type="module" src='../public/js/authorize/signup.js'></script>
 {{/if}}
