@@ -27,25 +27,23 @@ router.post('/signup', async (req, res) => {
 		res.status(400).send(e); //need to render
 	}
 });
+
 router.post('/signin', async (req, res) => {
 	try {
 		let email = req.body.email;
 		let password = req.body.password;
-		if(!email || !password)
-        	throw "You must supply both username and password";
-    	if(email === " " || password === " ")
-        	throw "You must supply valid username or password";
-    	if(!(typeof email === 'string') || !(typeof password === 'string'))
-        	throw "You must supply valid username or password";
-    	if(email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1)
-        	throw "You must supply valid username or password";
-    	if (password.length < 8 || password.length > 15)
-        	throw "You must supply valid username or password";
-		let user = await userData.authenticateUser(email,password);
-		if(user){
-			res.status(200).send("Signed in successfully");
+		if (!email || !password) throw 'You must supply both email and password';
+		if (email === ' ' || password === ' ') throw 'You must supply valid username or password';
+		if (!(typeof email === 'string') || !(typeof password === 'string'))
+			throw 'You must supply valid username or password';
+		if (email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1) throw 'You must supply valid username or password';
+		if (password.length < 8 || password.length > 15) throw 'You must supply valid username or password';
+		let user = await userData.authenticateUser(email, password);
+		if (user) {
+			// TODO: need to return json {username, firstname, lastname, profilePic}
+			// res.json({}) // use this
+			res.status(200).send('Signed in successfully');
 		}
-
 	} catch (e) {
 		res.status(400).send(e); //need to render
 	}
