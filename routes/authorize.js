@@ -43,7 +43,9 @@ router.post('/signin', async (req, res) => {
         	throw "You must supply valid username or password";
 		let user = await userData.authenticateUser(email,password);
 		if(user){
-			res.status(200).send("Signed in successfully");
+
+			res.status(200).json({username: user.user.userName, firstname: user.user.firstname, lastname: user.user.lastname, profilePic : user.user.profilePic});
+			// res.status(200).send("Signed in successfully");
 		}
 
 	} catch (e) {

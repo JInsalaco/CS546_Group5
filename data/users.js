@@ -72,7 +72,7 @@ async function authenticateUser(email,password){
         let match = await bcrypt.compare(password, user.hashedPwd);
     if(match)
         {
-            return {authenticated:true}
+            return {authenticated:true, user: user}
         }
     }
     throw "Invalid Username or password";
