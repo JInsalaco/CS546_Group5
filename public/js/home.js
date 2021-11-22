@@ -1,8 +1,12 @@
-const { ref, reactive, toRefs, computed, nextTick } = Vue;
+const { ref, reactive, toRefs, computed, nextTick, onMounted } = Vue;
 const { ElNotification } = ElementPlus;
 
 const composition = {
 	setup() {
+		const userAuth = reactive({
+			auth: false,
+			userInfo: null
+		});
 		const showFriendsList = ref(true);
 		const showDialog = reactive({
 			showPostDialog: false,
@@ -26,6 +30,14 @@ const composition = {
 			topicsNum.value += 2;
 		};
 
+		onMounted(() => {
+			const USER_INFO = sessionStorage.getItem('USER_INFO');
+			if (USER_INFO) {
+				userAuth.auth = true;
+				userAuth.userInfo = JSON.parse(USER_INFO);
+			}
+		});
+
 		/**
 		 * add the new post
 		 */
@@ -44,6 +56,7 @@ const composition = {
 		};
 
 		return {
+			...toRefs(userAuth),
 			showFriendsList,
 			...toRefs(showDialog),
 			postsForm,

@@ -1,14 +1,14 @@
 <h2>Information</h2>
 
 <el-upload v-loading="uploading" class="user__avatar" action="" :show-file-list="false"
-           :before-upload="handleImageUpload" :class="{'hide-border': !userForm.profilePicture}">
-  <img v-if="userForm.profilePicture" :src="userForm.profilePicture" class="user__avatar-image" />
+           :before-upload="handleImageUpload" :class="{'hide-border': !userForm.profilePic}">
+  <img v-if="userForm.profilePic" :src="userForm.profilePic" class="user__avatar-image" />
   <i v-else class="iconfont icon-add user__avatar-icon"></i>
 </el-upload>
 
 <el-form :rules="rules" :model="userForm" label-width="120px" class="user-info__form" :disabled="userFormDisable">
-  <el-form-item label="Username" prop='userName'>
-    <el-input v-model="userForm.userName"></el-input>
+  <el-form-item label="Username" prop='username'>
+    <el-input v-model="userForm.username"></el-input>
   </el-form-item>
 
   <el-row :gutter='20'>

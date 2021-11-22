@@ -1,18 +1,22 @@
 <header class='header-container flex'>
-	<span class='header__logo'>
+	<span class='aside-h header__logo'>
 		<img src='../../public/static/logo_white.svg' alt='' />
 	</span>
+	<a class="aside-h" href="/">
+		<h1 class="header__title">The Pond</h1>
+	</a>
 	<el-input class='header__input' placeholder='Type to search' type='text'></el-input>
-	{{#if logged}}
-	<a href="/profile?entry=1">
-		<img class='header__avatar' src='../../public/static/avatar.png' alt='' />
+
+	<a v-if="auth" href="/profile?entry=1">
+		<img class='header__avatar' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
 	</a>
-	{{else}}
-	<a href='/authorize/signup' class='aside-h'>
-		<el-button type='primary'>Sign up</el-button>
-	</a>
-	<a href='/authorize/signin' class='aside-h'>
-		<el-button type='text'>Sign in</el-button>
-	</a>
-	{{/if}}
+
+	<div v-else>
+		<a href='/authorize/signup' class='aside-h'>
+			<el-button type='primary'>Sign up</el-button>
+		</a>
+		<a href='/authorize/signin' class='aside-h'>
+			<el-button type='text'>Sign in</el-button>
+		</a>
+	</div>
 </header>

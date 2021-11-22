@@ -1,4 +1,5 @@
 const { ref, reactive } = Vue;
+const { ElLoading } = ElementPlus;
 
 const rules = {
 	email: [
@@ -41,7 +42,14 @@ Vue.createApp({
 		const handleSubmit = () => {
 			signInForm.value.validate(valid => {
 				if (valid) {
-					alert('submit!');
+					const loadingInstance = ElLoading.service();
+					http
+						.post('/authorize/signin', form)
+						.then(res => {
+							sessionStorage['USER_INFO'] = JSON.stringify(res);
+							location.replace('/'), 1000;
+						})
+						.finally(() => loadingInstance.close());
 				} else {
 					console.log('error submit!!');
 					return false;

@@ -41,7 +41,7 @@
 	width: 100px;
 	height: 100px;
 	margin: auto;
-	border-radius: var(--radius-default);
+	border-radius: var(--radius-circle);
 }
 .user__avatar-image {
 	box-shadow: var(--box-shadow);

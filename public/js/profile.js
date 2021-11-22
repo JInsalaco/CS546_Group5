@@ -1,4 +1,4 @@
-const { ref, reactive, onMounted, onBeforeUnmount } = Vue;
+const { ref, reactive, onMounted, toRefs } = Vue;
 const profileMenu = [
 	{ text: 'Information', index: '1' },
 	{ text: 'Active', index: '2' },
@@ -53,27 +53,33 @@ const rules = {
 
 Vue.createApp({
 	setup() {
+		const userAuth = reactive({
+			auth: false,
+			userInfo: null
+		});
 		const activeMenu = ref('');
-		const userForm = reactive({
-			firstname: 'Shihao',
-			lastname: 'Xiong',
-			phoneNumber: '(551)556-4100',
-			email: 'shihao.xiong@stevens.edu',
+		const userForm = ref({
+			firstname: '',
+			lastname: '',
+			phoneNumber: '',
+			email: '',
 			gender: 'Male',
 			age: 0,
-			userName: 'TSXFP',
+			username: '',
 			bio: '',
-			profilePicture: '/public/static/avatar.png'
+			profilePic: ''
 		});
 		const userFormDisable = ref(true);
 
 		onMounted(() => {
 			const current = location.href.match(/entry=(\d)/)[1];
 			activeMenu.value = current;
-		});
-
-		onBeforeUnmount(() => {
-			console.log(1);
+			const USER_INFO = sessionStorage['USER_INFO'];
+			if (USER_INFO) {
+				userAuth.auth = true;
+				userAuth.userInfo = JSON.parse(USER_INFO);
+				userForm.value = { ...userForm.value, ...userAuth.userInfo };
+			}
 		});
 
 		const uploading = ref(false);
@@ -83,7 +89,12 @@ Vue.createApp({
 			formData.append('avatar', file);
 			http
 				.post('/profile/upload', formData)
-				.then(res => (userForm.profilePicture = res.path))
+				.then(res => {
+					userForm.value.profilePic = res.path;
+					const USER_INFO = JSON.parse(sessionStorage['USER_INFO']);
+					USER_INFO.profilePic = res.path;
+					sessionStorage['USER_INFO'] = JSON.stringify(USER_INFO);
+				})
 				.finally(() => setTimeout(() => (uploading.value = false), 1000));
 			return false;
 		};
@@ -93,10 +104,11 @@ Vue.createApp({
 		};
 
 		const handlePhoneInput = value => {
-			userForm.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
+			userForm.value.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
 		};
 
 		return {
+			...toRefs(userAuth),
 			profileMenu,
 			activeMenu,
 			userForm,

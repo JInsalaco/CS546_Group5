@@ -1,20 +1,21 @@
 <nav class="nav-side nav-container__right flex-c">
   <h2 class="info__title">Account</h2>
-  <img class="info__avatar" src="../public/static/avatar.png" alt="">
-  <div class="info__username">Shihao Xiong</div>
+  <img class="info__avatar" :src="userInfo?.profilePic ?? '/public/img/default.png'" alt="">
+  <div class="info__username">\{{userInfo?.username || `${userInfo?.firstname} ${userInfo?.lastname}` || '---'}}</div>
   <ul class="info__contact-container">
     <li>
       <i class="iconfont icon-phone"></i>
-      (xxx)xxx-xxxx
+      \{{userInfo?.phoneNumber ?? '(xxx)xxx-xxxx'}}
     </li>
     <li>
       <i class="iconfont icon-email"></i>
-      example@stevens.edu
+      \{{userInfo?.email ?? 'example@stevens.edu'}}
     </li>
   </ul>
 
   <div class='info__friends-list-container'>
-    <el-button class="btn-collapse" type="text" :data-show-list="showFriendsList" @click="showFriendsList = !showFriendsList">
+    <el-button class="btn-collapse" type="text" :data-show-list="showFriendsList"
+               @click="showFriendsList = !showFriendsList">
       Friends
       <i class="iconfont icon-down"></i>
     </el-button>

@@ -88,9 +88,7 @@ Vue.createApp({
 						.post('/authorize/signup', form)
 						.then(msg => {
 							ElMessage.success(msg);
-							setTimeout(() => {
-								window.location.replace('/authorize/signin');
-							}, 1000);
+							setTimeout(() => location.replace('/authorize/signin'), 1000);
 						})
 						.finally(() => loadingInstance.close());
 				} else {
