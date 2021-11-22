@@ -54,23 +54,28 @@ async function addUser(email, password, firstname, lastname, phoneNumber) {
 	if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
 	return 'Inserted successfully!';
 }
-async function authenticateUser(email, password) {
-	if (!email || !password) throw 'You must supply both username and password';
-	if (email === ' ' || password === ' ') throw 'You must supply valid username or password';
-	if (!(typeof email === 'string') || !(typeof password === 'string'))
-		throw 'You must supply valid username or password';
-	if (email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1) throw 'You must supply valid username or password';
-	if (password.length < 8 || password.length > 15) throw 'You must supply valid username or password';
-	email = email.toLowerCase();
-	const userCollection = await users();
-	const user = await userCollection.findOne({ email: email });
-	if (user) {
-		let match = await bcrypt.compare(password, user.hashedPwd);
-		if (match) {
-			return { authenticated: true };
-		}
-	}
-	throw 'Invalid Username or password';
+async function authenticateUser(email,password){
+    if(!email || !password)
+        throw "You must supply both username and password";
+    if(email === " " || password === " ")
+        throw "You must supply valid username or password";
+    if(!(typeof email === 'string') || !(typeof password === 'string'))
+        throw "You must supply valid username or password";
+    if(email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1)
+        throw "You must supply valid username or password";
+    if (password.length < 8 || password.length > 15)
+        throw "You must supply valid username or password";
+    email = email.toLowerCase();
+    const userCollection = await users();
+    const user = await userCollection.findOne({ email: email });
+    if(user){
+        let match = await bcrypt.compare(password, user.hashedPwd);
+    if(match)
+        {
+            return {authenticated:true, user: user}
+        }
+    }
+    throw "Invalid Username or password";
 }
 module.exports = {
 	addUser,
