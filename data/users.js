@@ -80,5 +80,5 @@ async function authenticateUser(email,password){
 module.exports = {
 	addUser,
 	checkUserData,
-    authenticateUser
+	authenticateUser
 };

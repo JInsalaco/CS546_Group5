@@ -27,6 +27,7 @@ router.post('/signup', async (req, res) => {
 		res.status(400).send(e); //need to render
 	}
 });
+
 router.post('/signin', async (req, res) => {
 	try {
 		let email = req.body.email;
@@ -47,7 +48,6 @@ router.post('/signin', async (req, res) => {
 			res.status(200).json({username: user.user.userName, firstname: user.user.firstname, lastname: user.user.lastname, profilePic : user.user.profilePic});
 			// res.status(200).send("Signed in successfully");
 		}
-
 	} catch (e) {
 		res.status(400).send(e); //need to render
 	}

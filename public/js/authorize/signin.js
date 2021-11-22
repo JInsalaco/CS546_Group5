@@ -6,6 +6,11 @@ const rules = {
 			required: true,
 			trigger: 'change',
 			message: 'Eamil is required!'
+		},
+		{
+			pattern: /[a-z0-9]+@stevens\.edu$/,
+			trigger: 'change',
+			message: 'Invalid email format!'
 		}
 	],
 	password: [
@@ -13,6 +18,17 @@ const rules = {
 			required: true,
 			trigger: 'change',
 			message: 'Password is required!'
+		},
+		{
+			min: 8,
+			max: 15,
+			trigger: 'change',
+			message: 'The length of password is at lease 8 and no more than 15!'
+		},
+		{
+			pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,15}$/,
+			trigger: 'change',
+			message: 'The password must contain at least one number, one uppercase and one lowercase letter!'
 		}
 	]
 };
