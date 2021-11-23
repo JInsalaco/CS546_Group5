@@ -37,6 +37,11 @@ const composition = {
 				userAuth.userInfo = JSON.parse(USER_INFO);
 			}
 		});
+		const displayName = computed(() => {
+			return (
+				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
+			);
+		});
 
 		/**
 		 * add the new post
@@ -67,7 +72,8 @@ const composition = {
 			currentTopic,
 			topicsNum,
 			loadMorePost,
-			handlePublish
+			handlePublish,
+			displayName
 		};
 	}
 };

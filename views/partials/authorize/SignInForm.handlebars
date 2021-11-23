@@ -1,4 +1,4 @@
-<el-form ref='signInForm' :model='form' label-position='top' :rules='rules'>
+<el-form ref='signInForm' :model='form' label-position='top' :rules='rules' @keyup.enter.native="handleSubmit">
 	<el-form-item label='Email' prop='email'>
 		<el-input v-model='form.email' placeholder='example@stevens.edu'></el-input>
 	</el-form-item>
@@ -8,6 +8,6 @@
 	</el-form-item>
 
 	<el-form-item>
-		<el-button type='primary' @click="handleSubmit('signUpForm')">Sign In</el-button>
+		<el-button type='primary' @click="handleSubmit">Sign In</el-button>
 	</el-form-item>
 </el-form>

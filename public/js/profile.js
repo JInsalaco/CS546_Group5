@@ -63,8 +63,8 @@ Vue.createApp({
 			lastname: '',
 			phoneNumber: '',
 			email: '',
-			gender: 'Male',
-			age: 0,
+			gender: '',
+			DOB: '',
 			username: '',
 			bio: '',
 			profilePic: ''

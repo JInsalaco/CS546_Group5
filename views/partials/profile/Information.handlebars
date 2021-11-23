@@ -26,8 +26,9 @@
 
   <el-row :gutter='20'>
     <el-col :span='12'>
-      <el-form-item label='Age' prop='age'>
-        <el-input v-model='userForm.age' placeholder='age'></el-input>
+      <el-form-item label='DOB' prop='DOB'>
+        <el-date-picker v-model="userForm.DOB" type="date" placeholder="Date of Birth" format="MM/DD/YYYY"
+                        value-format="MM/DD/YYYY" />
       </el-form-item>
     </el-col>
     <el-col :span='12'>

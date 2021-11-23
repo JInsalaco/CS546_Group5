@@ -1,7 +1,9 @@
 <nav class="nav-side nav-container__right flex-c">
   <h2 class="info__title">Account</h2>
   <img class="info__avatar" :src="userInfo?.profilePic ?? '/public/img/default.png'" alt="">
-  <div class="info__username">\{{userInfo?.username || `${userInfo?.firstname} ${userInfo?.lastname}` || '---'}}</div>
+  <div class="info__username">
+    \{{displayName}}
+  </div>
   <ul class="info__contact-container">
     <li>
       <i class="iconfont icon-phone"></i>

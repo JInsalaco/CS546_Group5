@@ -1,4 +1,4 @@
-<el-form ref='signUpForm' :model='form' label-position='top' :rules='rules'>
+<el-form ref='signUpForm' :model='form' label-position='top' :rules='rules' @keyup.enter.native="handleSubmit">
 	<el-form-item label='Email' prop='email'>
 		<el-input v-model='form.email' placeholder='example@stevens.edu'></el-input>
 	</el-form-item>
