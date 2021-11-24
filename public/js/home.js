@@ -10,14 +10,7 @@ const composition = {
 			showTagDialog: false
 		});
 		const postsForm = ref();
-		const postForm = reactive(new Posts({ title: 'This is a demo', topics: ['School'], body: 'demo demo demo' })); // CLEAR
-
-		const article = computed(() =>
-			postForm.body
-				.split('\n')
-				.map(item => `<p>${item}</p>`)
-				.join('')
-		);
+		const postForm = ref(new Posts());
 
 		const topics = ['Public Finance', 'Accouting', 'Corporate', 'Controlling', 'Aquisition', 'Science', 'School']; // CLEAR
 		const currentTopic = ref(topics[0]);
@@ -46,7 +39,7 @@ const composition = {
 		const handlePublish = () => {
 			postsForm.value.validate(valid => {
 				if (valid) {
-					http.post('/posts/add', postForm).then(msg => {
+					http.post('/posts/add', postForm.value).then(msg => {
 						ElNotification({ title: 'Success', message: msg, type: 'success' });
 						postsForm.value.resetFields();
 						showDialog.showPostDialog = false;
@@ -57,10 +50,15 @@ const composition = {
 			});
 		};
 
+		const handleCancel = () => {
+			postForm.value = new Posts();
+			showDialog.showPostDialog = false;
+		};
+
 		// Comment Part
 		const showMoreDetailIndex = ref(null);
 		const handleShowMoreDetail = index => {
-			showMoreDetailIndex.value = showMoreDetailIndex.value === null ? index : null;
+			showMoreDetailIndex.value = showMoreDetailIndex.value === index ? null : index;
 		};
 		const comment = reactive(new Comment());
 		const handleSubmitComment = () => {}; // TODO: submit comment
@@ -71,13 +69,12 @@ const composition = {
 			...toRefs(showDialog),
 			postsForm,
 			postForm,
-			article,
-			time: getTime(),
 			topics,
 			currentTopic,
 			topicsNum,
 			loadMorePost,
 			handlePublish,
+			handleCancel,
 			displayName,
 			handleLogout,
 			showMoreDetailIndex,
@@ -86,14 +83,6 @@ const composition = {
 			handleShowMoreDetail
 		};
 	}
-};
-
-const getTime = () => {
-	const date = new Date();
-	const year = date.getFullYear();
-	const month = date.getMonth() + 1;
-	const day = date.getDate();
-	return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
 };
 
 Vue.createApp(composition).use(ElementPlus).mount('#app');

@@ -3,13 +3,14 @@ const { ElLoading, ElMessage, ElNotification } = ElementPlus;
 
 class Posts {
 	constructor(obj = {}) {
-		const { title, body, posterId, topics, thread, popularity, metaData } = obj;
+		const { title, body, posterId, topics, thread, popularity, createTime, metaData } = obj;
 		this.title = title ?? '';
 		this.body = body ?? '';
 		this.posterId = posterId ?? '';
 		this.topics = topics ?? [];
 		this.thread = thread ?? [];
 		this.popularity = popularity ?? {};
+		this.createTime = createTime ?? dayjs().format('MM/DD/YYYY');
 		this.metaData = metaData ?? { timeStamp: new Date().getTime(), archived: false, flags: 0 };
 	}
 }
@@ -43,3 +44,13 @@ const handleLogout = () => {
 	sessionStorage.clear();
 	location.replace('/'); // TODO: redirect to '/' in backend
 };
+
+const TOPICS = [
+	{ name: 'School Life', color: '' },
+	{ name: 'Courses', color: '' },
+	{ name: '', color: '' },
+	{ name: '', color: '' },
+	{ name: '', color: '' },
+	{ name: '', color: '' },
+	{ name: '', color: '' }
+];
