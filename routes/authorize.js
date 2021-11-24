@@ -1,15 +1,11 @@
 const express = require('express');
-const { ExplainVerbosity } = require('mongodb');
 const router = express.Router();
-const mongoCollections = require('../config/mongoCollections');
-const users = mongoCollections.users;
-const data = require('../data');
 const userData = require('../data/users');
 
 router.get('/:type', (req, res) => {
 	const { type } = req.params;
 	const actions = `Sign ${type.match(/^sign(\S+)$/)[1]}`;
-	res.render('authorize', { title: actions, isSignIn: type === 'signin' });
+	res.render('authorize', { title: actions, isSignIn: type === 'signin', scriptUrl: [`authorize/${type}.js`] });
 });
 
 router.post('/signup', async (req, res) => {

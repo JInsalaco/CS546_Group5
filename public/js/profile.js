@@ -1,4 +1,3 @@
-const { ref, reactive, onMounted, toRefs } = Vue;
 const profileMenu = [
 	{ text: 'Information', index: '1' },
 	{ text: 'Active', index: '2' },
@@ -53,19 +52,6 @@ const rules = {
 
 Vue.createApp({
 	setup() {
-		class User {
-			constructor() {
-				this.firstname = '';
-				this.lastname = '';
-				this.phoneNumber = '';
-				this.email = '';
-				this.gender = '';
-				this.DOB = '';
-				this.username = '';
-				this.bio = '';
-				this.profilePic = '';
-			}
-		}
 		const userAuth = reactive({
 			auth: false,
 			userInfo: null
@@ -112,11 +98,6 @@ Vue.createApp({
 
 		const handlePhoneInput = value => {
 			userForm.value.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
-		};
-
-		const handleLogout = () => {
-			sessionStorage.clear();
-			location.replace('/'); // TODO: redirect to '/' in backend
 		};
 
 		return {

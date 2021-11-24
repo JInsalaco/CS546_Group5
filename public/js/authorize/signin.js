@@ -1,6 +1,3 @@
-const { ref, reactive } = Vue;
-const { ElLoading } = ElementPlus;
-
 const rules = {
 	email: [
 		{

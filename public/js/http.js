@@ -4,7 +4,6 @@
  */
 
 const METHODS = ['get', 'post', 'put', 'delete'];
-const { ElMessage } = ElementPlus;
 
 // Global config
 const DEFAULT_CONFIG = {
@@ -21,7 +20,7 @@ instance.interceptors.response.use(
 	err => {
 		const msg = err.response.data;
 		console.log('error: ' + msg);
-		ElMessage.error(msg);
+		ElementPlus.ElMessage.error(msg);
 		return Promise.reject(msg);
 	}
 );

@@ -386,3 +386,19 @@
 	font-size: var(--font-xxl);
 	cursor: pointer;
 }
+
+.form__comment {
+	width: 100%;
+	margin: 10px 0 0;
+}
+.form__comment .el-form-item {
+	margin-bottom: 0;
+}
+.form__comment .form-item__input {
+	flex-grow: 1;
+}
+.form__comment .form-item__input .el-input__inner {
+	background: var(--bg-grey);
+	border: none;
+	border-radius: 50px;
+}

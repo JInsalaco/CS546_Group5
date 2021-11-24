@@ -1,6 +1,3 @@
-const { ref, reactive, toRefs, computed, nextTick, onMounted } = Vue;
-const { ElNotification } = ElementPlus;
-
 const composition = {
 	setup() {
 		const userAuth = reactive({
@@ -46,9 +43,6 @@ const composition = {
 			);
 		});
 
-		/**
-		 * add the new post
-		 */
 		const handlePublish = () => {
 			postsForm.value.validate(valid => {
 				if (valid) {
@@ -63,10 +57,13 @@ const composition = {
 			});
 		};
 
-		const handleLogout = () => {
-			sessionStorage.clear();
-			location.replace('/'); // TODO: redirect to '/' in backend
+		// Comment Part
+		const showMoreDetailIndex = ref(null);
+		const handleShowMoreDetail = index => {
+			showMoreDetailIndex.value = showMoreDetailIndex.value === null ? index : null;
 		};
+		const comment = reactive(new Comment());
+		const handleSubmitComment = () => {}; // TODO: submit comment
 
 		return {
 			...toRefs(userAuth),
@@ -82,23 +79,14 @@ const composition = {
 			loadMorePost,
 			handlePublish,
 			displayName,
-			handleLogout
+			handleLogout,
+			showMoreDetailIndex,
+			comment,
+			handleSubmitComment,
+			handleShowMoreDetail
 		};
 	}
 };
-
-class Posts {
-	constructor(obj = {}) {
-		const { title, body, posterId, topics, thread, popularity, metaData } = obj;
-		this.title = title ?? '';
-		this.body = body ?? '';
-		this.posterId = posterId ?? '';
-		this.topics = topics ?? [];
-		this.thread = thread ?? [];
-		this.popularity = popularity ?? {};
-		this.metaData = metaData ?? { timeStamp: new Date().getTime(), archived: false, flags: 0 };
-	}
-}
 
 const getTime = () => {
 	const date = new Date();
