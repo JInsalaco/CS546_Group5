@@ -30,12 +30,12 @@
       <el-button type="info" class="aside-h" size="mini" round @click="handleShowMoreDetail(index)">
         \{{showMoreDetailIndex === index ? 'Hide' : 'See More'}}
       </el-button>
-      <div class="post__operation-like">
+      <div v-if="auth" class="post__operation-like">
         <i class="iconfont icon-like aside-h"></i>
         <i class="iconfont icon-unlike aside-h"></i>
       </div>
     </div>
-    <el-form :inline="true" :model="comment" class="form__comment flex">
+    <el-form v-if="auth" inline :model="comment" class="form__comment flex">
       <el-form-item class="form-item__input">
         <el-input v-model="comment.body" placeholder="Add a comment"></el-input>
       </el-form-item>

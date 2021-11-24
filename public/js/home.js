@@ -9,11 +9,13 @@ const composition = {
 			showPostDialog: false,
 			showTagDialog: false
 		});
+
+		// Create Post
 		const postsForm = ref();
 		const postForm = ref(new Posts());
+		const selectedTopics = computed(() => TOPICS.filter(item => postForm.value.topics.includes(item.name)));
 
-		const topics = ['Public Finance', 'Accouting', 'Corporate', 'Controlling', 'Aquisition', 'Science', 'School']; // CLEAR
-		const currentTopic = ref(topics[0]);
+		const currentTopic = ref(TOPICS[0].name);
 
 		const topicsNum = ref(5); // CLEAR
 		const loadMorePost = () => {
@@ -69,7 +71,7 @@ const composition = {
 			...toRefs(showDialog),
 			postsForm,
 			postForm,
-			topics,
+			selectedTopics,
 			currentTopic,
 			topicsNum,
 			loadMorePost,
@@ -80,7 +82,8 @@ const composition = {
 			showMoreDetailIndex,
 			comment,
 			handleSubmitComment,
-			handleShowMoreDetail
+			handleShowMoreDetail,
+			TOPICS
 		};
 	}
 };
