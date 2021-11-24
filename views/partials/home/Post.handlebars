@@ -13,7 +13,8 @@
 	<el-form ref='postsForm' :model='postForm' class="posts__form">
 		<el-form-item label='Topic' prop='topics' required>
 			<el-select v-model='postForm.topics' multiple collapse-tags :multiple-limit='3'>
-				<el-option v-for='item in topics' :key='item' :value='item'>\{{item}}</el-option>
+				<el-option v-for='item in TOPICS' :key='item.name' :value='item.name'>\{{item.name}}
+				</el-option>
 			</el-select>
 		</el-form-item>
 		<div class='posts__preview'>
@@ -27,7 +28,8 @@
 					<div class='user-info__time'>\{{postForm.createTime}}</div>
 				</span>
 				<div class="tag-container">
-					<span v-for="item in postForm.topics" :key="item" class='post__tag aside-h'>\{{item}}</span>
+					<span v-for="item in selectedTopics" :key="item" class='post__tag aside-h'
+								:style="{'--color': `rgb(${item.color})`, '--bg': `rgba(${item.color}, .3)`}">\{{item.name}}</span>
 				</div>
 			</div>
 			<el-form-item prop='body' required class="post__content">
@@ -41,7 +43,5 @@
 	<template #footer>
 		<el-button @click="handleCancel">Cancel</el-button>
 		<el-button type="primary" @click="handlePublish">Publish</el-button>
-		{{!-- <span class="dialog-footer">
-		</span> --}}
 	</template>
 </el-dialog>
