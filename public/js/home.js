@@ -12,8 +12,25 @@ const composition = {
 
 		// Create Post
 		const postsForm = ref();
-		const postForm = ref(new Posts());
+		const postForm = ref(null);
 		const selectedTopics = computed(() => TOPICS.filter(item => postForm.value.topics.includes(item.name)));
+		const openPostDialog = () => {
+			const { id } = JSON.parse(sessionStorage['USER_INFO']);
+			postForm.value = new Posts({ posterId: id });
+		};
+		const handlePublish = () => {
+			postsForm.value.validate(valid => {
+				if (valid) {
+					http.post('/posts/add', postForm.value).then(msg => {
+						ElNotification({ title: 'Success', message: msg, type: 'success' });
+						postsForm.value.resetFields();
+						showDialog.showPostDialog = false;
+					});
+				} else {
+					return false;
+				}
+			});
+		};
 
 		const currentTopic = ref(TOPICS[0].name);
 
@@ -38,25 +55,6 @@ const composition = {
 			);
 		});
 
-		const handlePublish = () => {
-			postsForm.value.validate(valid => {
-				if (valid) {
-					http.post('/posts/add', postForm.value).then(msg => {
-						ElNotification({ title: 'Success', message: msg, type: 'success' });
-						postsForm.value.resetFields();
-						showDialog.showPostDialog = false;
-					});
-				} else {
-					return false;
-				}
-			});
-		};
-
-		const handleCancel = () => {
-			postForm.value = new Posts();
-			showDialog.showPostDialog = false;
-		};
-
 		// Comment Part
 		const showMoreDetailIndex = ref(null);
 		const handleShowMoreDetail = index => {
@@ -76,7 +74,7 @@ const composition = {
 			topicsNum,
 			loadMorePost,
 			handlePublish,
-			handleCancel,
+			openPostDialog,
 			displayName,
 			handleLogout,
 			showMoreDetailIndex,
