@@ -35,6 +35,9 @@ const composition = {
 			if (USER_INFO) {
 				userAuth.auth = true;
 				userAuth.userInfo = JSON.parse(USER_INFO);
+			} else {
+				userAuth.auth = false;
+				userAuth.userInfo = null;
 			}
 		});
 		const displayName = computed(() => {
@@ -60,6 +63,11 @@ const composition = {
 			});
 		};
 
+		const handleLogout = () => {
+			sessionStorage.clear();
+			location.replace('/'); // TODO: redirect to '/' in backend
+		};
+
 		return {
 			...toRefs(userAuth),
 			showFriendsList,
@@ -73,7 +81,8 @@ const composition = {
 			topicsNum,
 			loadMorePost,
 			handlePublish,
-			displayName
+			displayName,
+			handleLogout
 		};
 	}
 };

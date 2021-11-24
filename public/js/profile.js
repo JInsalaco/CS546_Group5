@@ -53,22 +53,25 @@ const rules = {
 
 Vue.createApp({
 	setup() {
+		class User {
+			constructor() {
+				this.firstname = '';
+				this.lastname = '';
+				this.phoneNumber = '';
+				this.email = '';
+				this.gender = '';
+				this.DOB = '';
+				this.username = '';
+				this.bio = '';
+				this.profilePic = '';
+			}
+		}
 		const userAuth = reactive({
 			auth: false,
 			userInfo: null
 		});
 		const activeMenu = ref('');
-		const userForm = ref({
-			firstname: '',
-			lastname: '',
-			phoneNumber: '',
-			email: '',
-			gender: '',
-			DOB: '',
-			username: '',
-			bio: '',
-			profilePic: ''
-		});
+		const userForm = ref(new User());
 		const userFormDisable = ref(true);
 
 		onMounted(() => {
@@ -79,6 +82,10 @@ Vue.createApp({
 				userAuth.auth = true;
 				userAuth.userInfo = JSON.parse(USER_INFO);
 				userForm.value = { ...userForm.value, ...userAuth.userInfo };
+			} else {
+				userAuth.auth = false;
+				userAuth.userInfo = null;
+				userForm.value = new User();
 			}
 		});
 
@@ -107,6 +114,11 @@ Vue.createApp({
 			userForm.value.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
 		};
 
+		const handleLogout = () => {
+			sessionStorage.clear();
+			location.replace('/'); // TODO: redirect to '/' in backend
+		};
+
 		return {
 			...toRefs(userAuth),
 			profileMenu,
@@ -117,7 +129,8 @@ Vue.createApp({
 			handleSubmit,
 			handlePhoneInput,
 			rules,
-			uploading
+			uploading,
+			handleLogout
 		};
 	}
 })

@@ -107,6 +107,13 @@ ul {
 	height: 40px;
 	width: 40px;
 }
+.header__avatar-profile a {
+	text-decoration: none;
+	color: var(--el-text-color-regular);
+}
+.header__avatar-profile:hover a {
+	color: var(--el-dropdown-menuItem-hover-color);
+}
 
 .el-dialog {
 	display: flex;

@@ -88,12 +88,12 @@
 	width: 20%;
 }
 .body-container .nav-container__left {
-	padding: 50px 15px 0 50px;
+	padding: 2% 15px 0 50px;
 	border-right: 2px solid #f9f9f9;
 }
 
 .body-container .nav-container__right {
-	padding: 50px 20px 0;
+	padding: 2% 20px 0;
 	border-left: 2px solid #f9f9f9;
 }
 
@@ -118,7 +118,7 @@
 }
 
 .info__contact-container {
-	margin: 40px 0;
+	margin: 10% 0 5%;
 	padding: 30px 20px;
 	background-color: #fff;
 	border-radius: var(--radius-default);
@@ -186,7 +186,7 @@
 
 .body-container .body__content {
 	width: 60%;
-	padding-top: 50px;
+	padding-top: 2%;
 	--side-width: 60px;
 }
 
@@ -378,4 +378,11 @@
 }
 .posts__form .el-select .el-select__tags > span {
 	display: flex;
+}
+.post__operation-like {
+	margin-left: auto;
+}
+.post__operation-like > i[class^='iconfont'] {
+	font-size: var(--font-xxl);
+	cursor: pointer;
 }

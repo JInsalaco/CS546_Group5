@@ -7,9 +7,20 @@
 	</a>
 	<el-input class='header__input' placeholder='Type to search' type='text'></el-input>
 
-	<a v-if="auth" href="/profile?entry=1">
-		<img class='header__avatar' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
-	</a>
+	<div v-if="auth">
+		<el-dropdown>
+			<img class='header__avatar' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
+			<template #dropdown>
+				<el-dropdown-menu>
+					<el-dropdown-item class="header__avatar-profile">
+						<a href="/profile?entry=1">Profile</a>
+					</el-dropdown-item>
+					<el-dropdown-item>Add Friends</el-dropdown-item>
+					<el-dropdown-item @click="handleLogout">Log out</el-dropdown-item>
+				</el-dropdown-menu>
+			</template>
+		</el-dropdown>
+	</div>
 
 	<div v-else>
 		<a href='/authorize/signup' class='aside-h'>
