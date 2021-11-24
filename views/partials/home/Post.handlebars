@@ -9,7 +9,7 @@
 	{{> home/PostsList}}
 </section>
 
-<el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post'>
+<el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post' destroy-on-close @open="openPostDialog">
 	<el-form ref='postsForm' :model='postForm' class="posts__form">
 		<el-form-item label='Topic' prop='topics' required>
 			<el-select v-model='postForm.topics' multiple collapse-tags :multiple-limit='3'>
@@ -41,7 +41,7 @@
 	</el-form>
 
 	<template #footer>
-		<el-button @click="handleCancel">Cancel</el-button>
+		<el-button @click="showPostDialog = false">Cancel</el-button>
 		<el-button type="primary" @click="handlePublish">Publish</el-button>
 	</template>
 </el-dialog>
