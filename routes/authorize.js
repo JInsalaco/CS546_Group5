@@ -37,6 +37,7 @@ router.post('/signin', async (req, res) => {
 		let user = await userData.authenticateUser(email, password);
 		if (user) {
 			res.json({
+				id: user.user._id,
 				username: user.user.userName,
 				firstname: user.user.firstname,
 				lastname: user.user.lastname,

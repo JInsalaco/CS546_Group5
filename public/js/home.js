@@ -14,7 +14,10 @@ const composition = {
 		const postsForm = ref();
 		const postForm = ref(null);
 		const selectedTopics = computed(() => TOPICS.filter(item => postForm.value.topics.includes(item.name)));
-		const openPostDialog = () => (postForm.value = new Posts());
+		const openPostDialog = () => {
+			const { id } = JSON.parse(sessionStorage['USER_INFO']);
+			postForm.value = new Posts({ posterId: id });
+		};
 		const handlePublish = () => {
 			postsForm.value.validate(valid => {
 				if (valid) {
