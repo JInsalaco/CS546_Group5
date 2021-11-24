@@ -72,6 +72,21 @@ async function authenticateUser(email, password) {
 	}
 	throw 'Invalid Username or password';
 }
+/*
+* Appends user ID to friends list
+*/
+async function addFriend(userId, friendId){
+	const userCollection = await users();
+	const user = await userCollection.findOne({_id: userId});
+	let friendsList = user.friends;
+	let updatedFriendsList = friendsList.push(friendId);
+	const newInsertInformation = await userCollection.updateOne({_id: id},
+		{$set: 
+			{friends: updatedFriendsList}
+		});
+	if(newInsertInformation.modifiedCount === 0) throw "Error: Could not add friend";
+	return newInsertInformation;
+}
 module.exports = {
 	addUser,
 	checkUserData,
