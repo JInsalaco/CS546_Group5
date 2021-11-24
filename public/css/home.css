@@ -342,17 +342,8 @@
 	color: var(--primary-color);
 }
 
-.posts__form {
-	width: 25%;
-	min-width: 500px;
-	margin: auto;
-	height: 100%;
-}
-.posts__form > .el-form-item:last-child {
-	margin-bottom: 0;
-}
-.post__body-input > textarea {
-	min-height: 200px !important;
+.post__body-input > .el-textarea__inner {
+	border-color: rgba(0, 0, 0, 0);
 }
 
 .dialog__create {
@@ -361,23 +352,26 @@
 .posts__preview {
 	position: relative;
 	padding: 30px 50px;
-	width: 30%;
 	min-width: 600px;
-	margin: auto;
 	border-radius: var(--radius-default);
 	background-color: rgba(255, 255, 255, 0.7);
 	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-	height: calc(100% - 2em - 21px);
-}
-.posts__preview .post__content {
-	max-height: 200px;
-	overflow-y: overlay;
 }
 .el-select__tags {
 	--el-index-normal: 9;
 }
+
+.posts__form {
+	margin: 0;
+}
 .posts__form .el-select .el-select__tags > span {
 	display: flex;
+}
+.posts__form .post__title .el-input__inner {
+	font-size: 2em;
+	font-weight: bold;
+	padding: 0;
+	border-color: rgba(0, 0, 0, 0);
 }
 .post__operation-like {
 	margin-left: auto;

@@ -28,7 +28,7 @@
     </article>
     <div class='post__operation-container flex'>
       <el-button type="info" class="aside-h" size="mini" round @click="handleShowMoreDetail(index)">
-        See More
+        \{{showMoreDetailIndex === index ? 'Hide' : 'See More'}}
       </el-button>
       <div class="post__operation-like">
         <i class="iconfont icon-like aside-h"></i>

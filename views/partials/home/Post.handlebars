@@ -10,28 +10,38 @@
 </section>
 
 <el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post'>
-	<main class='dialog__create'>
-		<div>
-			{{> home/PostForm}}
-		</div>
-
-		<div style="margin-left: 20px;">
-			<h3>Preview</h3>
-			<div class='posts__preview'>
-				<h1 class='post__title'>\{{postForm.title}}</h1>
-				<div class='post__info-container flex'>
-					<img class='post__avatar-img' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
-					<span class='post__user-info'>
-						<div class='user-info__username'>\{{displayName}}</div>
-						<div class='user-info__time'>\{{time}}</div>
-					</span>
-					<div class="tag-container">
-						<span v-for="item in postForm.topics" :key="item" class='post__tag aside-h'>\{{item}}</span>
-					</div>
+	<el-form ref='postsForm' :model='postForm' class="posts__form">
+		<el-form-item label='Topic' prop='topics' required>
+			<el-select v-model='postForm.topics' multiple collapse-tags :multiple-limit='3'>
+				<el-option v-for='item in topics' :key='item' :value='item'>\{{item}}</el-option>
+			</el-select>
+		</el-form-item>
+		<div class='posts__preview'>
+			<el-form-item prop='title' required class="post__title">
+				<el-input v-model='postForm.title' placeholder="Type your title here!"></el-input>
+			</el-form-item>
+			<div class='post__info-container flex'>
+				<img class='post__avatar-img' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
+				<span class='post__user-info'>
+					<div class='user-info__username'>\{{displayName}}</div>
+					<div class='user-info__time'>\{{postForm.createTime}}</div>
+				</span>
+				<div class="tag-container">
+					<span v-for="item in postForm.topics" :key="item" class='post__tag aside-h'>\{{item}}</span>
 				</div>
-				<article class='post__content' v-html='article'>
-				</article>
 			</div>
+			<el-form-item prop='body' required class="post__content">
+				<el-input class='post__body-input' v-model='postForm.body' type='textarea' :show-word-limit='true' :rows="10"
+									placeholder="Type your content here~">
+				</el-input>
+			</el-form-item>
 		</div>
-	</main>
+	</el-form>
+
+	<template #footer>
+		<el-button @click="handleCancel">Cancel</el-button>
+		<el-button type="primary" @click="handlePublish">Publish</el-button>
+		{{!-- <span class="dialog-footer">
+		</span> --}}
+	</template>
 </el-dialog>
