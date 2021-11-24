@@ -10,13 +10,7 @@
 	</el-form-item>
 
 	<el-form-item label='Article' prop='body' required>
-		<el-input
-			class='post__body-input'
-			v-model='postForm.body'
-			type='textarea'
-			:show-word-limit='true'
-			@input='handleInputBody'
-		></el-input>
+		<el-input class='post__body-input' v-model='postForm.body' type='textarea' :show-word-limit='true'></el-input>
 	</el-form-item>
 
 	<el-form-item>

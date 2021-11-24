@@ -1,7 +1,5 @@
-{{> header}}
-
-<main class='page__post-detail'>
-  <div class="post-container post__list-item">
+<ul class='post__list-container' v-infinite-scroll="loadMorePost">
+  <li v-for='(item, index) in topicsNum' :key='item' class='post__list-item'>
     <h1 class='post__title'>Lecture Rescheduling</h1>
     <div class='post__info-container flex'>
       <img class='post__avatar-img' src='../public/static/avatar.png' alt='' />
@@ -13,7 +11,7 @@
         <span class='post__tag'>Accounting</span>
       </div>
     </div>
-    <article class='post__content'>
+    <article class='post__content' :class="{omit: showMoreDetailIndex !== index}">
       <p>Hi mates</p>
       <p>
         soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably notice
@@ -29,18 +27,23 @@
       </p>
     </article>
     <div class='post__operation-container flex'>
-      <el-form :inline="true" :model="comment" class="form__comment flex">
-        <el-form-item class="form-item__input">
-          <el-input v-model="comment.body" placeholder="Add a comment"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSubmitComment" circle>
-            <i class="iconfont icon-send"></i>
-          </el-button>
-        </el-form-item>
-      </el-form>
+      <el-button type="info" class="aside-h" size="mini" round @click="handleShowMoreDetail(index)">
+        See More
+      </el-button>
+      <div class="post__operation-like">
+        <i class="iconfont icon-like aside-h"></i>
+        <i class="iconfont icon-unlike aside-h"></i>
+      </div>
     </div>
-  </div>
-</main>
-
-<script src="../public/js/posts.js"></script>
+    <el-form :inline="true" :model="comment" class="form__comment flex">
+      <el-form-item class="form-item__input">
+        <el-input v-model="comment.body" placeholder="Add a comment"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleSubmitComment" circle>
+          <i class="iconfont icon-send"></i>
+        </el-button>
+      </el-form-item>
+    </el-form>
+  </li>
+</ul>

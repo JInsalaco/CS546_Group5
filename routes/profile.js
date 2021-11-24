@@ -3,7 +3,7 @@ const { formidable } = require('formidable');
 const fs = require('fs');
 
 router.get('/', (_, res) => {
-	res.render('profile', { title: 'Profile' });
+	res.render('profile', { title: 'Profile', showHeader: true, scriptUrl: ['profile.js'] });
 });
 
 router.post('/upload', (req, res) => {

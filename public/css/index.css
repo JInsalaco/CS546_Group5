@@ -1,6 +1,5 @@
 @import './authorize.css';
 @import './home.css';
-@import './post.css';
 @import './profile.css';
 
 html,
@@ -37,12 +36,15 @@ a {
 	cursor: pointer;
 }
 
-body {
-	background: url('../static/bg.jpg');
-	background-size: 100% 100%;
+#app {
 	position: relative;
 	height: 100vh;
 	overflow: hidden;
+}
+
+body {
+	background: url('../static/bg.jpg');
+	background-size: 100% 100%;
 }
 
 body::after {

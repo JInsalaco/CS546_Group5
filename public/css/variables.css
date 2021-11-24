@@ -41,6 +41,10 @@
 	color: var(--primary-color-deep);
 }
 
+.el-dialog {
+	--el-dialog-width: auto;
+}
+
 .aside-h + .aside-h {
 	margin-left: 10px;
 }
