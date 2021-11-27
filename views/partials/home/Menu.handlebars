@@ -17,21 +17,11 @@
 	<div class='nav__categaries'>
 		<div class='nav__categaries-title'>Topics</div>
 		<ul class='menu__topic-list'>
-			<li
-				v-for='item in topics'
-				:key='item'
-				class='aside-v flex'
-				:class="{'is-checked': item === currentTopic}"
-				@click='currentTopic = item'
-			>
-				<span class='iconfont icon-point'></span>
-				\{{item}}
+			<li v-for='item in TOPICS' :key='item.name' class='aside-v flex'
+					:class="{'is-checked': item.name === currentTopic}" @click='currentTopic = item.name'>
+				<span class='iconfont icon-point' :style="{color: `rgb(${item.color})`}"></span>
+				\{{item.name}}
 			</li>
 		</ul>
 	</div>
-
-	<button class='btn__create-topic'>
-		<i class='iconfont icon-add'></i>
-		Create New Topic
-	</button>
 </nav>

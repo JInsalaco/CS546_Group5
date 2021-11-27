@@ -1,6 +1,3 @@
-const { ref, reactive, toRefs, computed, nextTick, onMounted } = Vue;
-const { ElNotification } = ElementPlus;
-
 const composition = {
 	setup() {
 		const userAuth = reactive({
@@ -12,18 +9,30 @@ const composition = {
 			showPostDialog: false,
 			showTagDialog: false
 		});
+
+		// Create Post
 		const postsForm = ref();
-		const postForm = reactive(new Posts({ title: 'This is a demo', topics: ['School'], body: 'demo demo demo' })); // CLEAR
+		const postForm = ref(null);
+		const selectedTopics = computed(() => TOPICS.filter(item => postForm.value.topics.includes(item.name)));
+		const openPostDialog = () => {
+			const { id } = JSON.parse(sessionStorage['USER_INFO']);
+			postForm.value = new Posts({ posterId: id });
+		};
+		const handlePublish = () => {
+			postsForm.value.validate(valid => {
+				if (valid) {
+					http.post('/posts/add', postForm.value).then(msg => {
+						ElNotification({ title: 'Success', message: msg, type: 'success' });
+						postsForm.value.resetFields();
+						showDialog.showPostDialog = false;
+					});
+				} else {
+					return false;
+				}
+			});
+		};
 
-		const article = computed(() =>
-			postForm.body
-				.split('\n')
-				.map(item => `<p>${item}</p>`)
-				.join('')
-		);
-
-		const topics = ['Public Finance', 'Accouting', 'Corporate', 'Controlling', 'Aquisition', 'Science', 'School']; // CLEAR
-		const currentTopic = ref(topics[0]);
+		const currentTopic = ref(TOPICS[0].name);
 
 		const topicsNum = ref(5); // CLEAR
 		const loadMorePost = () => {
@@ -46,27 +55,13 @@ const composition = {
 			);
 		});
 
-		/**
-		 * add the new post
-		 */
-		const handlePublish = () => {
-			postsForm.value.validate(valid => {
-				if (valid) {
-					http.post('/posts/add', postForm).then(msg => {
-						ElNotification({ title: 'Success', message: msg, type: 'success' });
-						postsForm.value.resetFields();
-						showDialog.showPostDialog = false;
-					});
-				} else {
-					return false;
-				}
-			});
+		// Comment Part
+		const showMoreDetailIndex = ref(null);
+		const handleShowMoreDetail = index => {
+			showMoreDetailIndex.value = showMoreDetailIndex.value === index ? null : index;
 		};
-
-		const handleLogout = () => {
-			sessionStorage.clear();
-			location.replace('/'); // TODO: redirect to '/' in backend
-		};
+		const comment = reactive(new Comment());
+		const handleSubmitComment = () => {}; // TODO: submit comment
 
 		return {
 			...toRefs(userAuth),
@@ -74,38 +69,21 @@ const composition = {
 			...toRefs(showDialog),
 			postsForm,
 			postForm,
-			article,
-			time: getTime(),
-			topics,
+			selectedTopics,
 			currentTopic,
 			topicsNum,
 			loadMorePost,
 			handlePublish,
+			openPostDialog,
 			displayName,
-			handleLogout
+			handleLogout,
+			showMoreDetailIndex,
+			comment,
+			handleSubmitComment,
+			handleShowMoreDetail,
+			TOPICS
 		};
 	}
-};
-
-class Posts {
-	constructor(obj = {}) {
-		const { title, body, posterId, topics, thread, popularity, metaData } = obj;
-		this.title = title ?? '';
-		this.body = body ?? '';
-		this.posterId = posterId ?? '';
-		this.topics = topics ?? [];
-		this.thread = thread ?? [];
-		this.popularity = popularity ?? {};
-		this.metaData = metaData ?? { timeStamp: new Date().getTime(), archived: false, flags: 0 };
-	}
-}
-
-const getTime = () => {
-	const date = new Date();
-	const year = date.getFullYear();
-	const month = date.getMonth() + 1;
-	const day = date.getDate();
-	return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
 };
 
 Vue.createApp(composition).use(ElementPlus).mount('#app');

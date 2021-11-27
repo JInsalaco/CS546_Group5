@@ -6,68 +6,42 @@
 		</button>
 	</div>
 
-	<ul class='post__list-container' v-infinite-scroll="loadMorePost">
-		<li v-for='item in topicsNum' :key='item' class='post__list-item'>
-			<h1 class='post__title'>Lecture Rescheduling</h1>
-			<div class='post__info-container flex'>
-				<img class='post__avatar-img' src='../public/static/avatar.png' alt='' />
-				<span class='post__user-info'>
-					<div class='user-info__username'>Eliseabeth May</div>
-					<div class='user-info__time'>6h ago</div>
-				</span>
-				<div class="tag-container">
-					<span class='post__tag'>Accounting</span>
-				</div>
-			</div>
-			<article class='post__content omit'>
-				<p>Hi mates</p>
-				<p>
-					soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably notice
-					that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for additional
-					lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her ilner we need
-					to reschedule upcoming Lecture.
-				</p>
-				<p>
-					You propably notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend
-					for additional lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her
-					ilner we need to reschedule upcoming Lecture. You propably notice that this lecture is the last before exam so
-					Dr Hellen asked us also if we want to attend for additional lecture where we can study more dfficult excercise
-				</p>
-			</article>
-			<div class='post__operation-container flex'>
-				<a href="/posts/detail" class='aside-h operation__btn-response'>Detail</a>
-				<div class="post__operation-like">
-					<i class="iconfont icon-like aside-h"></i>
-					<i class="iconfont icon-unlike aside-h"></i>
-				</div>
-			</div>
-		</li>
-	</ul>
+	{{> home/PostsList}}
 </section>
 
-<el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post' width='auto'>
-	<main class='dialog__create'>
-		<div>
-			{{> home/PostForm}}
-		</div>
-
-		<div style="margin-left: 20px;">
-			<h3>Preview</h3>
-			<div class='posts__preview'>
-				<h1 class='post__title'>\{{postForm.title}}</h1>
-				<div class='post__info-container flex'>
-					<img class='post__avatar-img' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
-					<span class='post__user-info'>
-						<div class='user-info__username'>\{{displayName}}</div>
-						<div class='user-info__time'>\{{time}}</div>
-					</span>
-					<div class="tag-container">
-						<span v-for="item in postForm.topics" :key="item" class='post__tag aside-h'>\{{item}}</span>
-					</div>
+<el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post' destroy-on-close @open="openPostDialog">
+	<el-form ref='postsForm' :model='postForm' class="posts__form" @keyup.enter.native="handlePublish">
+		<el-form-item label='Topic' prop='topics' required>
+			<el-select v-model='postForm.topics' multiple collapse-tags :multiple-limit='3'>
+				<el-option v-for='item in TOPICS' :key='item.name' :value='item.name'>\{{item.name}}
+				</el-option>
+			</el-select>
+		</el-form-item>
+		<div class='posts__preview'>
+			<el-form-item prop='title' required class="post__title">
+				<el-input v-model='postForm.title' placeholder="Type your title here!"></el-input>
+			</el-form-item>
+			<div class='post__info-container flex'>
+				<img class='post__avatar-img' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
+				<span class='post__user-info'>
+					<div class='user-info__username'>\{{displayName}}</div>
+					<div class='user-info__time'>\{{postForm.createTime}}</div>
+				</span>
+				<div class="tag-container">
+					<span v-for="item in selectedTopics" :key="item" class='post__tag aside-h'
+								:style="{'--color': `rgb(${item.color})`, '--bg': `rgba(${item.color}, .3)`}">\{{item.name}}</span>
 				</div>
-				<article class='post__content' v-html='article'>
-				</article>
 			</div>
+			<el-form-item prop='body' required class="post__content">
+				<el-input class='post__body-input' v-model='postForm.body' type='textarea' :show-word-limit='true' :rows="10"
+									placeholder="Type your content here~">
+				</el-input>
+			</el-form-item>
 		</div>
-	</main>
+	</el-form>
+
+	<template #footer>
+		<el-button @click="showPostDialog = false">Cancel</el-button>
+		<el-button type="primary" @click="handlePublish">Publish</el-button>
+	</template>
 </el-dialog>

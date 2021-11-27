@@ -2,20 +2,12 @@
   <div id="animate"></div>
 
   {{#if isSignIn}}
-    {{> authorize/SignInForm}}
+  {{> authorize/SignInForm}}
   {{else}}
-    {{> authorize/SignUpForm}}
+  {{> authorize/SignUpForm}}
   {{/if}}
 
   <a class="btn-back" href="/">
     <el-button type="primary">Back to Home</el-button>
   </a>
 </main>
-
-<script type="module" src="../public/js/authorize/authorize.js"></script>
-{{!-- <script src="../public/js/http.js"></script> --}}
-{{#if isSignIn}}
-  <script src='../public/js/authorize/signin.js'></script>
-{{else}}
-  <script type="module" src='../public/js/authorize/signup.js'></script>
-{{/if}}

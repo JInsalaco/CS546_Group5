@@ -13,9 +13,4 @@ router.post('/add', async (req, res) => {
 	}
 });
 
-// TODO: add id after url '/detail/:id'
-router.get('/detail', (_, res) => {
-	res.render('post');
-});
-
 module.exports = router;
