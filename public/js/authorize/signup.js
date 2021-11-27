@@ -6,7 +6,7 @@ const rules = {
 		{
 			required: true,
 			trigger: 'change',
-			message: 'Eamil is required!'
+			message: 'Email is required!'
 		},
 		{
 			pattern: /[a-z0-9]+@stevens\.edu$/,
@@ -88,7 +88,9 @@ Vue.createApp({
 						.post('/authorize/signup', form)
 						.then(msg => {
 							ElMessage.success(msg);
-							setTimeout(() => location.replace('/authorize/signin'), 1000);
+							setTimeout(() => {
+								window.location.replace('/authorize/signin');
+							}, 1000);
 						})
 						.finally(() => loadingInstance.close());
 				} else {
