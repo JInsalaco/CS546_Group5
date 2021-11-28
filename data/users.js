@@ -107,7 +107,12 @@ async function addFriend(userId, friendId){
 
 async function getUserFriends(id) {
 	const user = await getUser(id);
-	return user.friends;
+	let friendList = [];
+
+	for (let i = 0; i < user.friends.length; i++) {
+		let friend = await getUser(user.friends[i]);
+	}
+	return
 }
 
 async function getAllUserPosts(id) {
