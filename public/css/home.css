@@ -5,10 +5,6 @@
 	padding: 0 calc(var(--side-width) - 10px) 0 var(--side-width);
 }
 
-/* .post__list-container:hover {
-	overflow-y: overlay;
-} */
-
 .post__list-item {
 	background-color: #fff;
 	border-radius: var(--radius-default);
@@ -21,9 +17,10 @@
 	margin-top: 20px;
 }
 
-.post__title {
+h2.post__title {
+	font-size: 2em;
 	font-weight: bold;
-	margin-bottom: 20px;
+	margin: 0 0 20px;
 }
 
 .post__info-container,

@@ -41,8 +41,11 @@ class User {
 }
 
 const handleLogout = () => {
-	sessionStorage.clear();
-	location.replace('/logout'); // TODO: redirect to '/' in backend
+	http.get('/logout').then(res => {
+		location.replace('/');
+		sessionStorage.clear();
+		ElMessage.success(res);
+	});
 };
 
 const TOPICS = [
