@@ -218,10 +218,8 @@ function equalUser(user1, user2) {
 		user1.lastname === user2.lastname &&
 		user1.phoneNumber === user2.phoneNumber &&
 		user1.email === user2.email &&
-		// user1.hashedPwd === user2.hashedPwd &&
 		user1.gender === user2.gender &&
 		user1.DOB === user2.DOB &&
-		// user1.profilePic === user2.profilePic &&
 		user1.userName === user2.userName &&
 		user1.bio === user2.bio) {
 			return true;
