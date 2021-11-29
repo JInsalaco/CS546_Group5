@@ -1,7 +1,7 @@
 const { communities } = require('../config/mongoCollections');
 const utils = require('./utils');
 
-function createCommunity(title,description,owner){
+async function createCommunity(title,description,owner){
     //TODO: Error Checking
     const communitiesList = await communities();
     const dateCreated = new Date();
@@ -26,7 +26,7 @@ function createCommunity(title,description,owner){
 
     return insertInfo;
 }
-function deleteCommunity(id){
+async function deleteCommunity(id){
     //TODO: Error Checking
     let oid = utils.stringToObjectID(id);
     const communitiesList = await communities();
@@ -38,12 +38,12 @@ function deleteCommunity(id){
     return { deleted: true };
 
 }
-function getAllCommunities(){
+async function getAllCommunities(){
     const communitiesList = await communities();
     const communtiies = communitiesList.find({}).toArray();
     return communities;
 }
-function joinCommunity(communityId,memberId){
+async function joinCommunity(communityId,memberId){
     let oid = utils.stringToObjectID(communityId);
     const communitiesList = await communities();
     const joinedCommunity = await communitiesList.findOne({_id: oid});
@@ -56,7 +56,14 @@ function joinCommunity(communityId,memberId){
 	if(newInsertInformation.modifiedCount === 0) throw "Error: Could not add friend";
 	return newInsertInformation;
 }
-function leaveCommunity(communityId,memberId){
+async function leaveCommunity(communityId,memberId){
+    //TODO: Implement function
     let oid = utils.stringToObjectID(memberId)
     const communitiesList = await communities();
+}
+module.exports = {
+    createCommunity,
+    deleteCommunity,
+    getAllCommunities,
+    joinCommunity
 }
