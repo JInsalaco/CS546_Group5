@@ -146,6 +146,20 @@ async function deleteUser(id) {
     if (deletionInfo.deletedCount === 0) { throw `Could not delete user ${user.userName}`; }
     return user;
 }
+async function uploadPic(id, path){
+	if(!path || path.trim() === "" || typeof path !== 'string')
+		throw "invalid path";
+	if(!id || id.trim() === "")
+		throw "user not found";
+	const userCollection = await users();
+	const updateInfo = await userCollection.updateOne(
+		  { _id: ObjectId(id) },
+		  { $set: {profilePic:path} }
+		);
+	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) { throw 'Upload failed'; }
+	return true;
+
+}
 
 async function editUser(id, email, password, firstname, lastname, phoneNumber, gender, DOB, userName, bio) {
 	checkUserData(email, password, firstname, lastname, phoneNumber, gender, DOB, userName, bio);
@@ -264,5 +278,6 @@ module.exports = {
 	// getAllUserPosts,
 	getAllUsers,
 	editUser,
-	deleteUser
+	deleteUser,
+	uploadPic
 };
