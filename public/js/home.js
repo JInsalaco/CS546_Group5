@@ -1,22 +1,45 @@
+const postRules = {
+	topics: [{ required: true, message: 'You must select at least 1 topics', trigger: 'change' }],
+	title: [{ required: true, message: 'Title is required', trigger: 'change' }],
+	body: [{ required: true, message: 'Content is required', trigger: 'change' }]
+};
+
 const composition = {
 	setup() {
+		/************************************************************* Auth *************************************************************/
 		const userAuth = reactive({
 			auth: false,
 			userInfo: null
 		});
-		const showFriendsList = ref(true);
-		const showDialog = reactive({
-			showPostDialog: false,
-			showTagDialog: false
+		onMounted(() => {
+			const USER_INFO = sessionStorage.getItem('USER_INFO');
+			if (USER_INFO) {
+				userAuth.auth = true;
+				userAuth.userInfo = JSON.parse(USER_INFO);
+			} else {
+				userAuth.auth = false;
+				userAuth.userInfo = null;
+			}
 		});
 
-		// Create Post
+		/************************************************************* Topics *************************************************************/
+		const currentTopic = ref(null);
+		onMounted(() => {
+			http.get('/topics/getAll').then(res => {
+				TOPICS.value = res;
+				currentTopic.value = res[0]._id;
+			});
+		});
+
+		/************************************************************* Create Post *************************************************************/
+		const showDialog = reactive({ showPostDialog: false });
 		const postsForm = ref();
 		const postForm = ref(null);
-		const selectedTopics = computed(() => TOPICS.filter(item => postForm.value.topics.includes(item.name)));
+		const createTime = ref(null);
+		const selectedTopics = computed(() => TOPICS.value.filter(item => postForm.value.topics.includes(item._id)));
 		const openPostDialog = () => {
-			const { id } = JSON.parse(sessionStorage['USER_INFO']);
-			postForm.value = new Posts({ posterId: id });
+			postForm.value = new Posts();
+			createTime.value = dayjs().format('MM/DD/YYYY');
 		};
 		const handlePublish = () => {
 			postsForm.value.validate(valid => {
@@ -32,36 +55,27 @@ const composition = {
 			});
 		};
 
-		const currentTopic = ref(TOPICS[0].name);
-
+		/************************************************************* Post List *************************************************************/
 		const topicsNum = ref(5); // CLEAR
 		const loadMorePost = () => {
 			topicsNum.value += 2;
 		};
 
-		onMounted(() => {
-			const USER_INFO = sessionStorage.getItem('USER_INFO');
-			if (USER_INFO) {
-				userAuth.auth = true;
-				userAuth.userInfo = JSON.parse(USER_INFO);
-			} else {
-				userAuth.auth = false;
-				userAuth.userInfo = null;
-			}
+		/************************************************************* Comment *************************************************************/
+		const show = reactive({
+			showMoreDetailIndex: null,
+			showComment: null
 		});
+		const comment = reactive(new Comment());
+		const handleSubmitComment = () => {}; // TODO: submit comment
+
+		/************************************************************* Profile *************************************************************/
+		const showFriendsList = ref(true);
 		const displayName = computed(() => {
 			return (
 				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
 			);
 		});
-
-		// Comment Part
-		const showMoreDetailIndex = ref(null);
-		const handleShowMoreDetail = index => {
-			showMoreDetailIndex.value = showMoreDetailIndex.value === index ? null : index;
-		};
-		const comment = reactive(new Comment());
-		const handleSubmitComment = () => {}; // TODO: submit comment
 
 		return {
 			...toRefs(userAuth),
@@ -69,6 +83,8 @@ const composition = {
 			...toRefs(showDialog),
 			postsForm,
 			postForm,
+			postRules,
+			createTime,
 			selectedTopics,
 			currentTopic,
 			topicsNum,
@@ -77,10 +93,9 @@ const composition = {
 			openPostDialog,
 			displayName,
 			handleLogout,
-			showMoreDetailIndex,
+			...toRefs(show),
 			comment,
 			handleSubmitComment,
-			handleShowMoreDetail,
 			TOPICS
 		};
 	}

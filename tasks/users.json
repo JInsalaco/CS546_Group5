@@ -1,0 +1,44 @@
+[
+	{
+		"email": "sxiong5@stevens.edu",
+		"password": "Xsh031023",
+		"firstname": "Shihao",
+		"lastname": "Xiong",
+		"phoneNumber": "(551)556-4100"
+	},
+	{
+		"email": "mscott5@stevens.edu",
+		"password": "098234mS",
+		"firstname": "Michael",
+		"lastname": "Scott",
+		"phoneNumber": "(973)865-9942"
+	},
+	{
+		"email": "dshrute21@stevens.edu",
+		"password": "beets85Beets",
+		"firstname": "Dwight",
+		"lastname": "Shrute",
+		"phoneNumber": "(973)865-9942"
+	},
+	{
+		"email": "hhutty7@stevens.edu",
+		"password": "Ps2000HH",
+		"firstname": "Ha-mil",
+		"lastname": "Hutty",
+		"phoneNumber": "(201)509-1386"
+	},
+	{
+		"email": "gwashi999@stevens.edu",
+		"password": "USArocks101",
+		"firstname": "George",
+		"lastname": "Washington",
+		"phoneNumber": "(001)000-0001"
+	},
+	{
+		"email": "riyaK@stevens.edu",
+		"password": "Qwerty12345",
+		"firstname": "Riya",
+		"lastname": "Kharbanda",
+		"phoneNumber": "(001)000-9876"
+	}
+]

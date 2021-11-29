@@ -17,10 +17,10 @@
 	<div class='nav__categaries'>
 		<div class='nav__categaries-title'>Topics</div>
 		<ul class='menu__topic-list'>
-			<li v-for='item in TOPICS' :key='item.name' class='aside-v flex'
-					:class="{'is-checked': item.name === currentTopic}" @click='currentTopic = item.name'>
+			<li v-for='item in TOPICS' :key='item._id' class='aside-v flex' :class="{'is-checked': item._id === currentTopic}"
+					@click='currentTopic = item._id'>
 				<span class='iconfont icon-point' :style="{color: `rgb(${item.color})`}"></span>
-				\{{item.name}}
+				\{{item.title}}
 			</li>
 		</ul>
 	</div>

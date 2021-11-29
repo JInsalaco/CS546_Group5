@@ -6,7 +6,8 @@
   <i v-else class="iconfont icon-add user__avatar-icon"></i>
 </el-upload>
 
-<el-form :rules="rules" :model="userForm" label-width="120px" class="user-info__form" :disabled="userFormDisable">
+<el-form ref="userFormRef" :rules="rules" :model="userForm" label-width="120px" class="user-info__form"
+         :disabled="userFormDisable">
   <el-form-item label="Username" prop='username'>
     <el-input v-model="userForm.username"></el-input>
   </el-form-item>

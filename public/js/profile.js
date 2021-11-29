@@ -58,6 +58,7 @@ Vue.createApp({
 		});
 		const activeMenu = ref('');
 		const userForm = ref(new User());
+		const userFormRef = ref();
 		const userFormDisable = ref(true);
 
 		onMounted(() => {
@@ -94,6 +95,15 @@ Vue.createApp({
 
 		const handleSubmit = () => {
 			userFormDisable.value = true;
+			userFormRef.value.validate(valid => {
+				if (valid) {
+					http.post('/profile/edit', userForm.value).then(res => {
+						console.log(res);
+					});
+				} else {
+					return false;
+				}
+			});
 		};
 
 		const handlePhoneInput = value => {
@@ -105,6 +115,7 @@ Vue.createApp({
 			profileMenu,
 			activeMenu,
 			userForm,
+			userFormRef,
 			userFormDisable,
 			handleImageUpload,
 			handleSubmit,
