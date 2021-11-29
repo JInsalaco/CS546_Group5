@@ -41,5 +41,35 @@ router.post('/upload', async (req, res) => {
 		}
 	});
 });
+router.post('/edit', async (req, res) => {
+	try{
+	if(req.body){
+	let username = "", gender="", DOB="", profilePic="", bio = "";
+	if(req.body.username && req.body.username.trim() !== "")
+		username = req.body.username;
+	if(req.body.bio && req.body.bio.trim() !== "")
+		bio = req.body.bio;
+	if(req.body.DOB && req.body.DOB.trim() !== "")
+		DOB = req.body.DOB;
+	if(req.body.gender && req.body.gender.trim() !== "")
+		gender = req.body.gender;
+	if(!req.body.firstname || req.body.firstname.trim() == "")
+		throw "firstname is a required field";
+	if(!req.body.lastname || req.body.lastname.trim() == "")
+		throw "lastname is a required field";
+	if(!req.body.phoneNumber || req.body.phoneNumber.trim() == "" || req.body.phoneNumber.search(/^\((\d{3})\)(\d{3})-(\d{4})$/) === -1)
+		throw "phone number is a required field, please enter valid phone number";
+	if(!req.body.email || req.body.email.trim() == "" || req.body.email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1)
+		throw "email is a required field, please enter valid email";
+	var newUser = await userData.editUser(req.session.userid, req.body.email, req.body.firstname, req.body.lastname, req.body.phoneNumber, gender, DOB, username, bio);
+	if (newUser) res.status(200).send('Profile edited successfully');
+	}
+	else
+		throw "Could not edit profile";
+}catch(e){
+	res.status(400).send(e);
+}	
 
+	
+});
 module.exports = router;

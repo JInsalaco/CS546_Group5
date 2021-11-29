@@ -33,5 +33,12 @@
 		"firstname": "George",
 		"lastname": "Washington",
 		"phoneNumber": "(001)000-0001"
+	},
+	{
+		"email": "riyaK@stevens.edu",
+		"password": "Qwerty12345",
+		"firstname": "Riya",
+		"lastname": "Kharbanda",
+		"phoneNumber": "(001)000-9876"
 	}
 ]

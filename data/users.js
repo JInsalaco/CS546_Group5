@@ -95,12 +95,11 @@ async function authenticateUser(email, password) {
 * Appends user ID to friends list
 */
 async function addFriend(userId, friendId){
-	const uid = utils.stringToObjectID(userId);
 	const userCollection = await users();
-	const user = await userCollection.findOne({ _id: uid });
+	const user = await userCollection.findOne({ _id: userId });
 	let friendsList = user.friends;
 	let updatedFriendsList = friendsList.push(friendId);
-	const newInsertInformation = await userCollection.updateOne({ _id: uid },
+	const newInsertInformation = await userCollection.updateOne({ _id: id },
 		{$set: 
 			{friends: updatedFriendsList}
 		});
@@ -162,8 +161,8 @@ async function uploadPic(id, path){
 
 }
 
-async function editUser(id, email, password, firstname, lastname, phoneNumber, gender, DOB, userName, bio) {
-	checkUserData(email, password, firstname, lastname, phoneNumber, gender, DOB, userName, bio);
+async function editUser(id, email,firstname, lastname, phoneNumber, gender, DOB, userName, bio) {
+	// checkUserData(email, password, firstname, lastname, phoneNumber, gender, DOB, userName, bio);
 	const sid = utils.objectIdToString(id)
 	const user = await this.getUser(sid);
 
@@ -177,7 +176,7 @@ async function editUser(id, email, password, firstname, lastname, phoneNumber, g
 		DOB: DOB,
 		userName: userName,
 		bio: bio,
-		profilePic: '/public/img/default.png',
+		profilePic: user.profilePic,
 		posts: user.posts,
 		threads: user.threads,
 		friends: user.friends,
@@ -185,18 +184,18 @@ async function editUser(id, email, password, firstname, lastname, phoneNumber, g
 	}
 
 	const checkUser = equalUser(user, newUser);
-	if (!checkUser) throw 'No changes made to the user'; 
+	if (checkUser) throw 'No changes made to the user profile'; 
 
 	const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
-      { _id: id },
-      { $set: newUser }
+      { _id: ObjectId(id) },
+      { $set: newUser}
     );
 
     // Check if the update was made in MongoDB
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) { throw 'Update failed'; }
 
-    return await this.getUser(sid);
+    return newUser;
 }
 
 async function updateUser(user, userId) {
@@ -219,52 +218,52 @@ function equalUser(user1, user2) {
 		user1.lastname === user2.lastname &&
 		user1.phoneNumber === user2.phoneNumber &&
 		user1.email === user2.email &&
-		user1.hashedPwd === user2.hashedPwd &&
 		user1.gender === user2.gender &&
 		user1.DOB === user2.DOB &&
-		user1.profilePic === user2.profilePic &&
-		user1.profilePic === user2.profilePic) {
-			let postsFlag, threadsFlag, friendsFlag = false;
+		user1.userName === user2.userName &&
+		user1.bio === user2.bio) {
+			return true;
+			// let postsFlag, threadsFlag, friendsFlag = false;
 
-			if (user1.posts.length !== user2.posts.length) return false;
-            let postList1 = sort(user1.posts);
-            let postList2 = sort(user2.posts);
+			// if (user1.posts.length !== user2.posts.length) return false;
+            // let postList1 = user1.posts.sort();
+            // let postList2 = user2.posts.sort();
 
-			for (let i = 0; i < postList1.length; i++) {
-                if (postList1[i] !== postList2[i]) {
-                    postsFlag = true;
-                }
-            }
+			// for (let i = 0; i < postList1.length; i++) {
+            //     if (postList1[i] !== postList2[i]) {
+            //         postsFlag = true;
+            //     }
+            // }
 
-			if (postsFlag) return false;
+			// if (postsFlag) return false;
 
-			if (user1.threads.length !== user2.threads.length) return false;
-            let tList1 = sort(user1.threads);
-            let tList2 = sort(user2.threads);
+			// if (user1.threads.length !== user2.threads.length) return false;
+            // let tList1 = user1.threads.sort();
+            // let tList2 = user2.threads.sort();
 
-			for (let i = 0; i < tList1.length; i++) {
-                if (tList1[i] !== tList2[i]) {
-                    threadsFlag = true;
-                }
-            }
+			// for (let i = 0; i < tList1.length; i++) {
+            //     if (tList1[i] !== tList2[i]) {
+            //         threadsFlag = true;
+            //     }
+            // }
 
-			if (threadsFlag) return false;
+			// if (threadsFlag) return false;
 
-			if (user1.friends.length !== user2.friends.length) return false;
-            let friendList1 = sort(user1.friends);
-            let friendsList2 = sort(user2.friends);
+			// if (user1.friends.length !== user2.friends.length) return false;
+            // let friendList1 = user1.friends.sort();
+            // let friendsList2 = user2.friends.sort();
 
-			for (let i = 0; i < friendList1.length; i++) {
-                if (friendList1[i] !== friendsList2[i]) {
-                    friendsFlag = true;
-                }
-            }
+			// for (let i = 0; i < friendList1.length; i++) {
+            //     if (friendList1[i] !== friendsList2[i]) {
+            //         friendsFlag = true;
+            //     }
+            // }
 
-			if (friendsFlag) return false;
+			// if (friendsFlag) return false;
 
 	}
 
-	return true;
+	return false;
 
 }
 
