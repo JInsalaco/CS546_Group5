@@ -1,6 +1,12 @@
+const postRules = {
+	topics: [{ required: true, message: 'You must select at least 1 topics', trigger: 'change' }],
+	title: [{ required: true, message: 'Title is required', trigger: 'change' }],
+	body: [{ required: true, message: 'Content is required', trigger: 'change' }]
+};
+
 const composition = {
 	setup() {
-		// Auth
+		/************************************************************* Auth *************************************************************/
 		const userAuth = reactive({
 			auth: false,
 			userInfo: null
@@ -16,12 +22,7 @@ const composition = {
 			}
 		});
 
-		const showDialog = reactive({
-			showPostDialog: false,
-			showTagDialog: false
-		});
-
-		// Topics
+		/************************************************************* Topics *************************************************************/
 		const currentTopic = ref(null);
 		onMounted(() => {
 			http.get('/topics/getAll').then(res => {
@@ -30,7 +31,8 @@ const composition = {
 			});
 		});
 
-		// Create Post
+		/************************************************************* Create Post *************************************************************/
+		const showDialog = reactive({ showPostDialog: false });
 		const postsForm = ref();
 		const postForm = ref(null);
 		const createTime = ref(null);
@@ -53,19 +55,13 @@ const composition = {
 			});
 		};
 
-		// Post List
+		/************************************************************* Post List *************************************************************/
 		const topicsNum = ref(5); // CLEAR
 		const loadMorePost = () => {
 			topicsNum.value += 2;
 		};
 
-		const displayName = computed(() => {
-			return (
-				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
-			);
-		});
-
-		// Comment Part
+		/************************************************************* Comment *************************************************************/
 		const show = reactive({
 			showMoreDetailIndex: null,
 			showComment: null
@@ -73,8 +69,13 @@ const composition = {
 		const comment = reactive(new Comment());
 		const handleSubmitComment = () => {}; // TODO: submit comment
 
-		// Profile
+		/************************************************************* Profile *************************************************************/
 		const showFriendsList = ref(true);
+		const displayName = computed(() => {
+			return (
+				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
+			);
+		});
 
 		return {
 			...toRefs(userAuth),
@@ -82,6 +83,7 @@ const composition = {
 			...toRefs(showDialog),
 			postsForm,
 			postForm,
+			postRules,
 			createTime,
 			selectedTopics,
 			currentTopic,
