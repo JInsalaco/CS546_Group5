@@ -351,3 +351,21 @@ h2.post__title {
 	border: none;
 	border-radius: 50px;
 }
+
+.post__comment-container {
+	padding-top: 10px;
+}
+.comment__bar {
+	text-align: center;
+	cursor: pointer;
+}
+.comment__bar .icon-down[data-show-list='true'] {
+	transform: rotate(180deg);
+}
+.comment__info {
+	align-items: center;
+}
+.comment__info .comment__info-time {
+	margin-left: auto;
+	color: var(--font-color-grey);
+}

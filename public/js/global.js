@@ -3,15 +3,10 @@ const { ElLoading, ElMessage, ElNotification } = ElementPlus;
 
 class Posts {
 	constructor(obj = {}) {
-		const { title, body, posterId, topics, thread, popularity, createTime, metaData } = obj;
+		const { title, body, topics } = obj;
 		this.title = title ?? '';
 		this.body = body ?? '';
-		this.posterId = posterId ?? '';
 		this.topics = topics ?? [];
-		this.thread = thread ?? [];
-		this.popularity = popularity ?? {};
-		this.createTime = createTime ?? dayjs().format('MM/DD/YYYY');
-		this.metaData = metaData ?? { timeStamp: new Date().getTime(), archived: false, flags: 0 };
 	}
 }
 
