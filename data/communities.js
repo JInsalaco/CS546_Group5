@@ -1,11 +1,51 @@
 const { communities } = require('../config/mongoCollections');
+const utils = require('./utils');
 
-function createTopic(community){
+function createCommunity(title,description,owner){
+    //TODO: Error Checking
+    const communitiesList = await communities();
+    const dateCreated = new Date();
 
+    const newCommunity =
+    {
+        title: title,
+        description: description,
+        owner: owner,
+        members: [],
+        usersWhoCanPost: [],
+        posts: [],
+        metadata:
+            {
+                active: true,
+                dateCreated: dateCreated
+            }
+    }
+
+    const insertInfo = await communitiesList.insertOne(newCommunity);
+    if (insertInfo.insertedCount === 0) throw "Error: Could not add topic";
+
+    return insertInfo;
 }
-function deleteTopic(community){
+function deleteCommunity(id){
+    //TODO: Error Checking
+    let oid = utils.stringToObjectID(id);
+    const communitiesList = await communities();
+    const community = await communitiesList.findOne({_id: oid});
+    if(!community) throw "Error: Community DNE";
+
+    const deletionInfo = await communitiesList.deleteOne({_id: oid});
+    if (deletionInfo.deletedCount === 0) { throw `Could not delete topic`; }
+    return { deleted: true };
 
 }
 function getAllCommunities(){
-    
+    const communitiesList = await communities();
+    const communtiies = communitiesList.find({}).toArray();
+    return communities;
+}
+function joinCommunity(community,memberID){
+    const communitiesList = await communities();
+}
+function leaveCommunity(community,memberID){
+    const communitiesList = await communities();
 }
