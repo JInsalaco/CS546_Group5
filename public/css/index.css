@@ -101,11 +101,6 @@ ul {
 	max-width: 300px;
 }
 
-.header__avatar {
-	border-radius: var(--radius-circle);
-	height: 40px;
-	width: 40px;
-}
 .header__avatar-profile a {
 	text-decoration: none;
 	color: var(--el-text-color-regular);

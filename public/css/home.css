@@ -100,10 +100,6 @@ h2.post__title {
 }
 
 .info__avatar {
-	display: block;
-	width: 100px;
-	height: 100px;
-	border-radius: var(--radius-circle);
 	margin: 30px auto;
 	box-shadow: var(--box-shadow);
 }
@@ -166,13 +162,6 @@ h2.post__title {
 .info__friends-list > li {
 	align-items: center;
 	padding-right: 15px;
-}
-
-.friends-list__avatar {
-	width: 40px;
-	height: 40px;
-	border-radius: var(--radius-default);
-	margin-right: 15px;
 }
 
 .friends-list__email {
