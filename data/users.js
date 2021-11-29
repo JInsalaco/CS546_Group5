@@ -95,11 +95,12 @@ async function authenticateUser(email, password) {
 * Appends user ID to friends list
 */
 async function addFriend(userId, friendId){
+	const uid = utils.stringToObjectID(userId);
 	const userCollection = await users();
-	const user = await userCollection.findOne({ _id: userId });
+	const user = await userCollection.findOne({ _id: uid });
 	let friendsList = user.friends;
 	let updatedFriendsList = friendsList.push(friendId);
-	const newInsertInformation = await userCollection.updateOne({ _id: id },
+	const newInsertInformation = await userCollection.updateOne({ _id: uid },
 		{$set: 
 			{friends: updatedFriendsList}
 		});
