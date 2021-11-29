@@ -9,7 +9,7 @@
 
 	<div v-if="auth">
 		<el-dropdown>
-			<img class='header__avatar' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
+			<el-avatar :size="40" :src="userInfo?.profilePic ?? '/public/img/default.png'"></el-avatar>
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item class="header__avatar-profile">

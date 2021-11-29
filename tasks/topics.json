@@ -1,0 +1,37 @@
+[
+	{
+		"title": "School Life",
+		"description": "Students express how they feel being a college student at Stevens",
+		"color": "86,71,197"
+	},
+	{
+		"title": "Courses",
+		"description": "Posts based on different courses",
+		"color": "131,88,255"
+	},
+	{
+		"title": "Events",
+		"description": "Posts based on different events held by Stevens",
+		"color": "12,197,209"
+	},
+	{
+		"title": "Activities",
+		"description": "Posts based on activites set up by the Stevens Community",
+		"color": "202,71,173"
+	},
+	{
+		"title": "Announcement",
+		"description": "Posts based on important announcements made the university",
+		"color": "202,71,71"
+	},
+	{
+		"title": "Social",
+		"description": "Posts for Stevens students to interact with one another",
+		"color": "255,132,153"
+	},
+	{
+		"title": "Career",
+		"description": "Posts based on career development",
+		"color": "124,166,250"
+	}
+]

@@ -25,7 +25,7 @@
 				<img class='post__avatar-img' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
 				<span class='post__user-info'>
 					<div class='user-info__username'>\{{displayName}}</div>
-					<div class='user-info__time'>\{{postForm.createTime}}</div>
+					<div class='user-info__time'>\{{createTime}}</div>
 				</span>
 				<div class="tag-container">
 					<span v-for="item in selectedTopics" :key="item" class='post__tag aside-h'

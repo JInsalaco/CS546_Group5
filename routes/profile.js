@@ -53,8 +53,6 @@ router.post('/edit', async (req, res) => {
 		DOB = req.body.DOB;
 	if(req.body.gender && req.body.gender.trim() !== "")
 		gender = req.body.gender;
-	// if(req.body.profilePic && req.body.profilePic.trim() !== "")
-	// 	profilePic = req.body.profilePic;
 	if(!req.body.firstname || req.body.firstname.trim() == "")
 		throw "firstname is a required field";
 	if(!req.body.lastname || req.body.lastname.trim() == "")

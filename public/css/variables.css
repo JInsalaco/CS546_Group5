@@ -45,6 +45,10 @@
 	--el-dialog-width: auto;
 }
 
+.el-link.el-link--primary:hover {
+	color: var(--primary-color-deep);
+}
+
 .aside-h + .aside-h {
 	margin-left: 10px;
 }
