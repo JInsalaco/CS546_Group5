@@ -39,7 +39,7 @@ router.post('/signin', async (req, res) => {
 			req.session.userid = user.user._id;
 			res.json({
 				id: user.user._id,
-				username: user.user.userName,
+				username: user.user.username,
 				firstname: user.user.firstname,
 				lastname: user.user.lastname,
 				profilePic: user.user.profilePic,
@@ -51,6 +51,5 @@ router.post('/signin', async (req, res) => {
 		res.status(400).send(e); //need to render
 	}
 });
-
 
 module.exports = router;
