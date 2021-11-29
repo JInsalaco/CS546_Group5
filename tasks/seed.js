@@ -10,20 +10,60 @@ async function main() {
     await db.dropDatabase();
 
     // Load Default Topics
-    try {
-        await topics.loadDefaultTopics();
-    } catch(e) {
-        console.log(e);
-    }
-
+    // try {
+    //     await topics.loadDefaultTopics();
+    // } catch(e) {
+    //     console.log(e);
+    // }
+    try{
+        const topicList = [
+            {
+                title: "School Life",
+                description: "Students express how they feel being a college student at Stevens"
+            },
+            {
+                title: "Courses",
+                description: "Posts based on different courses"
+            },
+            {
+                title: "Events",
+                description: "Posts based on different events held by Stevens"
+            },
+            {
+                title: "Activities",
+                description: "Posts based on activites set up by the Stevens Community"
+            },
+            {
+                title: "Announcement",
+                description: "Posts based on important announcements made the university"
+            },
+            {
+                title: "Social",
+                description: "Posts for Stevens students to interact with one another"
+            },
+            {
+                title: "Career",
+                description: "Posts based on career development"
+            }
+        ];
+        
+    
+        for(let i=0;i<topicList.length; i++){
+            let topic = await topics.addTopic(topicList[i].title,topicList[i].description);
+        }        
+      
+       }
+       catch(e){
+           console.log(e);
+       }
     // Add user 1
     try {
         const user = await users.addUser('jdiaz6@stevens.edu', 'Baseball123', 'Javier', 'Diaz', '(201)790-0190');
         const post1 = await posts.addPost(user._id, "My First Post", "This pond application is amazing");
         const post2 = await posts.addPost(user._id, "My Second Post", "I have a topic", ["School Life"]);
         const newUser = await users.editUser(user._id, 'jdiaz6@stevens.edu', 'Baseball123', 'Javier', 'Diaz', '(201)790-0190', 'Male', '08/27/2000', 'javierdiaz13', "I love empanadas");
-        const deletedPost = await posts.deletePost(post1._id);
-        const editedPost = await posts.editPost(user._id ,post2._id, post2.title, "New body", ['Courses'])
+        // const deletedPost = await posts.deletePost(post1._id);
+        // const editedPost = await posts.editPost(user._id ,post2._id, post2.title, "New body", ['Courses'])
     } catch(e) {
         console.log(e);
     }
@@ -57,54 +97,12 @@ async function main() {
         console.log(e);
     }
 
-   try{
-    const topicList = [
-        {
-            title: "School Life",
-            description: "Students express how they feel being a college student at Stevens"
-        },
-        {
-            title: "Courses",
-            description: "Posts based on different courses"
-        },
-        {
-            title: "Events",
-            description: "Posts based on different events held by Stevens"
-        },
-        {
-            title: "Activities",
-            description: "Posts based on activites set up by the Stevens Community"
-        },
-        {
-            title: "Announcement",
-            description: "Posts based on important announcements made the university"
-        },
-        {
-            title: "Social",
-            description: "Posts for Stevens students to interact with one another"
-        },
-        {
-            title: "Career",
-            description: "Posts based on career development"
-        }
-    ];
-    
-
-    for(let i=0;i<topicList.length; i++){
-        let topic = await topics.addTopic(topicList[i].title,topicList[i].description);
-    }        
-  
-   }
-   catch(e){
-       console.log(e);
-   }
-
     // Add user 5
-    try {
-        const users = await users.getAllUsers();
-    } catch(e) {
-        console.log(e);
-    }
+    // try {
+    //     const users = await users.getAllUsers();
+    // } catch(e) {
+    //     console.log(e);
+    // }
 
     console.log('Done seeding database');
     await db.serverConfig.close();   
