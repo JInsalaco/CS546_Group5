@@ -21,7 +21,7 @@ async function addPost(posterId, title, body, topics) {
 		if (topics.length > 0 && topics.length < 4) {
 			const topicListDB = await topicData.getAllTopicTitles();
 			// Iterate and check that each topic is valid
-			for (let i = 0; i < topics.length; topics++) {
+			for (let i = 0; i < topics.length; i++) {
 				let userTopic = topics[i];
 				let topicFlag = true;
 				for (let j = 0; j < topicListDB.length && topicFlag; j++) {
@@ -222,5 +222,6 @@ module.exports = {
 	getPost,
 	deletePost,
 	editPost,
-	updatePopularity
+	updatePopularity,
+	errorCheckingPost
 };
