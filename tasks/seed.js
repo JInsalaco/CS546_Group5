@@ -57,6 +57,48 @@ async function main() {
         console.log(e);
     }
 
+   try{
+    const topicList = [
+        {
+            title: "School Life",
+            description: "Students express how they feel being a college student at Stevens"
+        },
+        {
+            title: "Courses",
+            description: "Posts based on different courses"
+        },
+        {
+            title: "Events",
+            description: "Posts based on different events held by Stevens"
+        },
+        {
+            title: "Activities",
+            description: "Posts based on activites set up by the Stevens Community"
+        },
+        {
+            title: "Announcement",
+            description: "Posts based on important announcements made the university"
+        },
+        {
+            title: "Social",
+            description: "Posts for Stevens students to interact with one another"
+        },
+        {
+            title: "Career",
+            description: "Posts based on career development"
+        }
+    ];
+    
+
+    for(let i=0;i<topicList.length; i++){
+        let topic = await topics.addTopic(topicList[i].title,topicList[i].description);
+    }        
+  
+   }
+   catch(e){
+       console.log(e);
+   }
+
     // Add user 5
     try {
         const users = await users.getAllUsers();
