@@ -1,20 +1,40 @@
 const composition = {
 	setup() {
+		// Auth
 		const userAuth = reactive({
 			auth: false,
 			userInfo: null
 		});
-		const showFriendsList = ref(true);
+		onMounted(() => {
+			const USER_INFO = sessionStorage.getItem('USER_INFO');
+			if (USER_INFO) {
+				userAuth.auth = true;
+				userAuth.userInfo = JSON.parse(USER_INFO);
+			} else {
+				userAuth.auth = false;
+				userAuth.userInfo = null;
+			}
+		});
+
 		const showDialog = reactive({
 			showPostDialog: false,
 			showTagDialog: false
+		});
+
+		// Topics
+		const currentTopic = ref(null);
+		onMounted(() => {
+			http.get('/topics/getAll').then(res => {
+				TOPICS.value = res;
+				currentTopic.value = res[0]._id;
+			});
 		});
 
 		// Create Post
 		const postsForm = ref();
 		const postForm = ref(null);
 		const createTime = ref(null);
-		const selectedTopics = computed(() => TOPICS.filter(item => postForm.value.topics.includes(item.name)));
+		const selectedTopics = computed(() => TOPICS.value.filter(item => postForm.value.topics.includes(item._id)));
 		const openPostDialog = () => {
 			postForm.value = new Posts();
 			createTime.value = dayjs().format('MM/DD/YYYY');
@@ -33,23 +53,12 @@ const composition = {
 			});
 		};
 
-		const currentTopic = ref(TOPICS[0].name);
-
+		// Post List
 		const topicsNum = ref(5); // CLEAR
 		const loadMorePost = () => {
 			topicsNum.value += 2;
 		};
 
-		onMounted(() => {
-			const USER_INFO = sessionStorage.getItem('USER_INFO');
-			if (USER_INFO) {
-				userAuth.auth = true;
-				userAuth.userInfo = JSON.parse(USER_INFO);
-			} else {
-				userAuth.auth = false;
-				userAuth.userInfo = null;
-			}
-		});
 		const displayName = computed(() => {
 			return (
 				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
@@ -63,6 +72,9 @@ const composition = {
 		});
 		const comment = reactive(new Comment());
 		const handleSubmitComment = () => {}; // TODO: submit comment
+
+		// Profile
+		const showFriendsList = ref(true);
 
 		return {
 			...toRefs(userAuth),

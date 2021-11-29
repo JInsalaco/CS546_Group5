@@ -13,10 +13,11 @@
 	<el-form ref='postsForm' :model='postForm' class="posts__form" @keyup.enter.native="handlePublish">
 		<el-form-item label='Topic' prop='topics' required>
 			<el-select v-model='postForm.topics' multiple collapse-tags :multiple-limit='3'>
-				<el-option v-for='item in TOPICS' :key='item.name' :value='item.name'>\{{item.name}}
+				<el-option v-for='item in TOPICS' :key="item._id" :label="item.title" :value='item._id'>\{{item.title}}
 				</el-option>
 			</el-select>
 		</el-form-item>
+
 		<div class='posts__preview'>
 			<el-form-item prop='title' required class="post__title">
 				<el-input v-model='postForm.title' placeholder="Type your title here!"></el-input>
@@ -29,7 +30,7 @@
 				</span>
 				<div class="tag-container">
 					<span v-for="item in selectedTopics" :key="item" class='post__tag aside-h'
-								:style="{'--color': `rgb(${item.color})`, '--bg': `rgba(${item.color}, .3)`}">\{{item.name}}</span>
+								:style="{'--color': `rgb(${item.color})`, '--bg': `rgba(${item.color}, .3)`}">\{{item.title}}</span>
 				</div>
 			</div>
 			<el-form-item prop='body' required class="post__content">
