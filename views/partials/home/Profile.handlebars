@@ -1,6 +1,6 @@
 <nav class="nav-side nav-container__right flex-c">
   <h2 class="info__title">Account</h2>
-  <img class="info__avatar" :src="userInfo?.profilePic ?? '/public/img/default.png'" alt="">
+  <el-avatar class="info__avatar" :size="100" :src="userInfo?.profilePic ?? '/public/img/default.png'"></el-avatar>
   <div class="info__username">
     \{{displayName}}
   </div>
@@ -24,12 +24,11 @@
     <el-collapse-transition>
       <ul class="info__friends-list" v-show="showFriendsList">
         <li v-for="item in 20" :key="item" class="aside-v flex">
-          <img class="friends-list__avatar" src="../public/static/avatar.png" alt="">
-          Shihao Xion
+          <el-avatar class="aside-h" src="../public/static/avatar.png"></el-avatar>
+          <span class="aside-h">Shihao Xion</span>
           <span class="friends-list__email">example@stevens.edu</span>
         </li>
       </ul>
     </el-collapse-transition>
-  </div>
   </div>
 </nav>

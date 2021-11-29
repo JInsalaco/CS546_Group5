@@ -13,10 +13,11 @@ const composition = {
 		// Create Post
 		const postsForm = ref();
 		const postForm = ref(null);
+		const createTime = ref(null);
 		const selectedTopics = computed(() => TOPICS.filter(item => postForm.value.topics.includes(item.name)));
 		const openPostDialog = () => {
-			const { id } = JSON.parse(sessionStorage['USER_INFO']);
-			postForm.value = new Posts({ posterId: id });
+			postForm.value = new Posts();
+			createTime.value = dayjs().format('MM/DD/YYYY');
 		};
 		const handlePublish = () => {
 			postsForm.value.validate(valid => {
@@ -56,10 +57,10 @@ const composition = {
 		});
 
 		// Comment Part
-		const showMoreDetailIndex = ref(null);
-		const handleShowMoreDetail = index => {
-			showMoreDetailIndex.value = showMoreDetailIndex.value === index ? null : index;
-		};
+		const show = reactive({
+			showMoreDetailIndex: null,
+			showComment: null
+		});
 		const comment = reactive(new Comment());
 		const handleSubmitComment = () => {}; // TODO: submit comment
 
@@ -69,6 +70,7 @@ const composition = {
 			...toRefs(showDialog),
 			postsForm,
 			postForm,
+			createTime,
 			selectedTopics,
 			currentTopic,
 			topicsNum,
@@ -77,10 +79,9 @@ const composition = {
 			openPostDialog,
 			displayName,
 			handleLogout,
-			showMoreDetailIndex,
+			...toRefs(show),
 			comment,
 			handleSubmitComment,
-			handleShowMoreDetail,
 			TOPICS
 		};
 	}
