@@ -63,7 +63,7 @@ async function addPost(posterId, title, body, topics) {
 	const userWithPost = await userData.updateUser(user, sid);
 	if (!userWithPost) throw "Post not created for user";
 
-	return { postId: sid };
+	return post;
 }
 
 async function getPost(id) {
@@ -83,47 +83,59 @@ async function getPost(id) {
 
 async function deletePost(id) {
 	// Check that post exist
-	let oid = utils.stringToObjectID(id);
+	const sid = utils.objectIdToString(id);
 	const postCollection = await posts();
-	let post = await this.getPost(id);
+	let post = await this.getPost(sid);
 
 	if (!post) throw "Post not found";
 
 	// Delete
-	const deletionInfo = await postCollection.deleteOne({ _id: oid });
+	const deletionInfo = await postCollection.deleteOne({ _id: id });
 
 	// Check deletion worked
 	if (deletionInfo.deletedCount === 0) { throw `Could not delete post`; }
-    return { deleted: true };
+    return { deleted: sid };
 }
 
-async function editPost(id, title, body, topics) {
+async function editPost(posterId, postId, title, body, topics) {
 	errorCheckingPost(title, body);
 
 	// Check for user
-	const user = await userData.getUser(user);
+	const sidUser = utils.objectIdToString(posterId);
+	const user = await userData.getUser(sidUser);
 	if (user === null) throw "User does not exist";
+
+	// Check if post exist
+	const sidPost = utils.objectIdToString(postId);
+	const post = await this.getPost(sidPost);
+	if (post === null) throw "Post does not exist";
 
 	// Check for topic
 	if (topics) {
 		if (topics.length > 0 && topics.length < 4) {
 			const topicListDB = await topicData.getAllTopicTitles();
-	
 			// Iterate and check that each topic is valid
 			for (let i = 0; i < topics.length; topics++) {
-				if (topics[i] in topicListDB === false) {
-					throw `Topic ${topics[i]} not found`
+				let userTopic = topics[i];
+				let topicFlag = true;
+				for (let j = 0; j < topicListDB.length && topicFlag; j++) {
+					if (topicListDB[j].title === userTopic) {
+						topicFlag = false;
+					}
+				}
+				if (topicFlag) {
+					throw "Topic does not exist";
 				}
 			}
+
 		}
 	}
 
 	// Get the old post and make the edited Post
 	// Add the lastEdit field in metaData to 
 	// show post was modified and when
-	const post = await this.getPost(id);
 	const newPost = {
-		title: title,
+		title: post.title,
 		body: body,
 		posterId: user._id,
 		topics: topics,
@@ -133,7 +145,7 @@ async function editPost(id, title, body, topics) {
 			timeStamp: post.metaData.timeStamp, 
 			lastEdit: new Date().getTime(),
 			archived: post.metaData.archived,
-			flags: post.metaData.archived 
+			flags: post.metaData.flags 
 		}
 	}
 	
@@ -142,8 +154,8 @@ async function editPost(id, title, body, topics) {
 	if (equalPost) throw 'No changes made to the post'; 
 
 	// Update the pre-existing post
-	const postCollection = await post();
 	let oid = utils.objectIdToString(user._id);
+	const postCollection = await post();
 	const updateInfo = await postCollection.updateOne(
 		{ _id: oid },
 		{ $set: newPost }
@@ -164,6 +176,7 @@ async function editPost(id, title, body, topics) {
 async function updatePopularity(id, popularity) {
 	const postCollection = await posts();
 	const post = await postCollection.getPost(id);
+	if (post === null) throw "Post does not exist"; 
 	post.metaData.popularity.id = popularity;
 }
 
@@ -188,8 +201,8 @@ function errorCheckingPost(title, body) {
 }
 
 function editComparison(oldBody, newBody, oldTopics, newTopics) {
-	oldTopics = oldTopics.sort();
-	newTopics = newTopics.sort();
+	oldTopics.sort();
+	newTopics.sort();
 
 	if (oldBody === newBody) {
 		for (let i = 0; i < oldTopics.length; i++) {

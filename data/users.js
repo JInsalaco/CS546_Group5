@@ -186,9 +186,8 @@ async function editUser(id, email, password, firstname, lastname, phoneNumber, g
 
 async function updateUser(user, userId) {
 	const oid = utils.stringToObjectID(userId)
-	const user = await this.getUser(userId);
-	if (user === null) throw "User does not exist";
 	const userCollection = await users();
+	user._id = oid;
 	const updateInfo = await userCollection.updateOne(
 		{ _id: oid },
 		{ $set: user }
@@ -196,8 +195,8 @@ async function updateUser(user, userId) {
 
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) { throw 'Update failed'; }
 
-	utils.objectIdToString(user);
-    return await this.getUser(userId);
+	let sid = utils.objectIdToString(oid);
+    return await this.getUser(sid);
 }
 
 function equalUser(user1, user2) {

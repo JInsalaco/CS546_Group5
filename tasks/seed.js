@@ -22,6 +22,8 @@ async function main() {
         const post1 = await posts.addPost(user._id, "My First Post", "This pond application is amazing");
         const post2 = await posts.addPost(user._id, "My Second Post", "I have a topic", ["School Life"]);
         const newUser = await users.editUser(user._id, 'jdiaz6@stevens.edu', 'Baseball123', 'Javier', 'Diaz', '(201)790-0190', 'Male', '08/27/2000', 'javierdiaz13', "I love empanadas");
+        const deletedPost = await posts.deletePost(post1._id);
+        const editedPost = await posts.editPost(user._id ,post2._id, post2.title, "New body", ['Courses'])
     } catch(e) {
         console.log(e);
     }
@@ -51,6 +53,13 @@ async function main() {
     // Add user 5
     try {
         const user = await users.addUser('gwashi999@stevens.edu', 'USArocks101', 'George', 'Washington', '(001)000-0001')
+    } catch(e) {
+        console.log(e);
+    }
+
+    // Add user 5
+    try {
+        const users = await users.getAllUsers();
     } catch(e) {
         console.log(e);
     }
