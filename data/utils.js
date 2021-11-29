@@ -20,9 +20,8 @@ function objectIdToString(id){
             coll._id = coll._id.toString();
         }
         return id;
-    } else {
-        return id.toString();
     }
+    return id.toString();
 }
 
 module.exports = {

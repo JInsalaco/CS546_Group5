@@ -63,10 +63,12 @@ async function addUser(email, password, firstname, lastname, phoneNumber) {
 		friends: [],
 		anonymous: false
 	};
+
 	const newInsertInformation = await userCollection.insertOne(newUser);
 	if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
 	return newUser;
 }
+
 async function authenticateUser(email, password) {
 	if (!email || !password) throw 'You must supply both username and password';
 	if (typeof email !== 'string') throw "Email is invalid"
@@ -105,28 +107,21 @@ async function addFriend(userId, friendId){
 	return newInsertInformation;
 }
 
-async function getUserFriends(id) {
-	const user = await getUser(id);
-	let friendList = [];
+// async function getUserFriends(id) {
+// }
 
-	for (let i = 0; i < user.friends.length; i++) {
-		let friend = await getUser(user.friends[i]);
-	}
-	return
-}
-
-async function getAllUserPosts(id) {
-	// Find the user whose posts will be returned
-	const user = await getUser(id);
-	return user.posts;
-}
+// async function getAllUserPosts(id) {
+// 	// Find the user whose posts will be returned
+// 	const user = await getUser(id);
+// 	return user.posts;
+// }
 
 async function getUser(id) {
 	let oid = utils.stringToObjectID(id);
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: oid });
-	if (user === null) throw "Post not found";
-	utils.objectIdToString(oid);
+	if (user === null) throw "User not found";
+	utils.objectIdToString([user]);
 
 	return user;
 }
@@ -143,6 +138,7 @@ async function getAllUsers() {
 async function deleteUser(id) {
     const sid = utils.objectIdToString(id);
     const user = await this.getUser(sid);
+	if (user === null) throw "User does not exist"
 	const userCollection = await users();
     const deletionInfo = await userCollection.deleteOne({ _id: id });
 
@@ -174,7 +170,7 @@ async function editUser(id, email, password, firstname, lastname, phoneNumber, g
 	}
 
 	const checkUser = equalUser(user, newUser);
-	if (!checkUser) throw 'No changes made to the post'; 
+	if (!checkUser) throw 'No changes made to the user'; 
 
 	const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
@@ -190,6 +186,8 @@ async function editUser(id, email, password, firstname, lastname, phoneNumber, g
 
 async function updateUser(user, userId) {
 	const oid = utils.stringToObjectID(userId)
+	const user = await this.getUser(userId);
+	if (user === null) throw "User does not exist";
 	const userCollection = await users();
 	const updateInfo = await userCollection.updateOne(
 		{ _id: oid },
@@ -198,8 +196,8 @@ async function updateUser(user, userId) {
 
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) { throw 'Update failed'; }
 
-	let sid = utils.objectIdToString(oid);
-    return await this.getUser(sid);
+	utils.objectIdToString(user);
+    return await this.getUser(userId);
 }
 
 function equalUser(user1, user2) {
@@ -263,8 +261,8 @@ module.exports = {
 	addFriend,
 	getUser,
 	updateUser,
-	getUserFriends,
-	getAllUserPosts,
+	// getUserFriends,
+	// getAllUserPosts,
 	getAllUsers,
 	editUser,
 	deleteUser

@@ -67,7 +67,7 @@ async function getTopic(id) {
     return topic;
 }
 
-async function getAllTopics() {
+async function getAllTopicTitles() {
     const topicCollection = await topics();
     const topicList = await topicCollection.find({}, {
 		projection: {
@@ -95,6 +95,6 @@ module.exports = {
     addTopic,
     loadDefaultTopics,
     getTopic,
-    getAllTopics,
+    getAllTopicTitles,
     deleteTopic
 }

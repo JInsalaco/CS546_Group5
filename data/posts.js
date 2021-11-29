@@ -8,18 +8,18 @@ const posts = mongoCollections.posts;
 
 
 // Add a post to the Pond
-async function addPost(id, title, body, topics) {
+async function addPost(posterId, title, body, topics) {
 	errorCheckingPost(title, body);
 
 	// Check for user
-	const sid = utils.objectIdToString(id);
+	const sid = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sid);
 	if (user === null) throw "User does not exist";
 
 	// Check for topic
 	if (topics) {
 		if (topics.length > 0 && topics.length < 4) {
-			const topicListDB = await topicData.getAllTopics();
+			const topicListDB = await topicData.getAllTopicTitles();
 			// Iterate and check that each topic is valid
 			for (let i = 0; i < topics.length; topics++) {
 				let userTopic = topics[i];
@@ -60,8 +60,8 @@ async function addPost(id, title, body, topics) {
 	let postId = utils.objectIdToString(post._id);
 	user.posts.push(postId);
 
-	const userWithPosts = await userData.updateUser(user, sid);
-	if (!userWithPosts) throw "Post not created";
+	const userWithPost = await userData.updateUser(user, sid);
+	if (!userWithPost) throw "Post not created for user";
 
 	return { postId: sid };
 }
@@ -76,7 +76,7 @@ async function getPost(id) {
 
 	// Check if the post was found
 	if (post === null) throw "Post not found";
-	utils.objectIdToString(post._id);
+	utils.objectIdToString([post]);
 
 	return post;
 }
@@ -107,7 +107,7 @@ async function editPost(id, title, body, topics) {
 	// Check for topic
 	if (topics) {
 		if (topics.length > 0 && topics.length < 4) {
-			const topicListDB = await topicData.getAll();
+			const topicListDB = await topicData.getAllTopicTitles();
 	
 			// Iterate and check that each topic is valid
 			for (let i = 0; i < topics.length; topics++) {
@@ -159,7 +159,7 @@ async function editPost(id, title, body, topics) {
 	@updatePopularity: add a user who liked or disliked the post
 		id: Unique id of the post
 		popularity: 1 (like) -1 (dislike)
-
+		// Needs testing
 */
 async function updatePopularity(id, popularity) {
 	const postCollection = await posts();
