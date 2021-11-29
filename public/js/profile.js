@@ -85,9 +85,7 @@ Vue.createApp({
 				.post('/profile/upload', formData)
 				.then(res => {
 					userForm.value.profilePic = res.path;
-					const USER_INFO = JSON.parse(sessionStorage['USER_INFO']);
-					USER_INFO.profilePic = res.path;
-					sessionStorage['USER_INFO'] = JSON.stringify(USER_INFO);
+					setSession('profilePic', res.path);
 				})
 				.finally(() => setTimeout(() => (uploading.value = false), 1000));
 			return false;
@@ -97,8 +95,11 @@ Vue.createApp({
 			userFormDisable.value = true;
 			userFormRef.value.validate(valid => {
 				if (valid) {
-					http.post('/profile/edit', userForm.value).then(res => {
-						console.log(res);
+					http.post('/profile/edit', userForm.value).then(msg => {
+						ElMessage.success(msg);
+						['email', 'firstname', 'lastname', 'phoneNumber', 'username'].forEach(item =>
+							setSession(item, userForm.value[item])
+						);
 					});
 				} else {
 					return false;

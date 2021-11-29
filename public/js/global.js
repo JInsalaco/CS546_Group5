@@ -43,4 +43,10 @@ const handleLogout = () => {
 	});
 };
 
+const setSession = (key, value) => {
+	const userInfo = JSON.parse(sessionStorage['USER_INFO']);
+	userInfo[key] = value;
+	sessionStorage['USER_INFO'] = JSON.stringify(userInfo);
+};
+
 let TOPICS = ref([]);
