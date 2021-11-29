@@ -36,6 +36,7 @@ router.post('/signin', async (req, res) => {
 		if (password.length < 8 || password.length > 15) throw 'You must supply valid username or password';
 		let user = await userData.authenticateUser(email, password);
 		if (user) {
+			req.session.userid = user.user._id;
 			res.json({
 				id: user.user._id,
 				username: user.user.userName,
@@ -50,4 +51,6 @@ router.post('/signin', async (req, res) => {
 		res.status(400).send(e); //need to render
 	}
 });
+
+
 module.exports = router;
