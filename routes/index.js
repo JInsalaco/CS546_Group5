@@ -10,7 +10,8 @@ const constructorMethod = app => {
 	app.use('/profile', profile);
 
 	app.use('*', (_, res) => {
-		res.status(404).json({ error: 'No APIs' });
+		// res.status(404).json({ error: 'No APIs' });
+		return res.redirect('/');
 	});
 };
 
