@@ -12,9 +12,12 @@ router.post('/add', async (req, res) => {
 		postData.errorCheckingPost(title,body);
 		let posterId = req.session.userid;
 		const result = await postData.addPost(posterId, title, body, topics);
+		if(result)
 		res.status(200).send("Posted Successfully, check your feed!")
+		else
+			res.status(500).send("Internal server error, please try again after some time");
 	} catch (error) {
-		res.status(500).send(error);
+		res.status(400).send(error);
 	}
 });
 
