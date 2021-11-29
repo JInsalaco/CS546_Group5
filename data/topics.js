@@ -32,21 +32,14 @@ async function getTopic(id) {
 	return topic;
 }
 
-async function getAllTopicTitles() {
+async function getAllTopics() {
 	const topicCollection = await topics();
-	const topicList = await topicCollection
-		.find(
-			{},
-			{
-				projection: {
-					_id: 0,
-					title: 1
-				}
-			}
-		)
-		.toArray();
+	const topicList = await topicCollection.find({}).toArray();
 
-	return topicList;
+	return topicList.map(item => {
+		item._id = utils.objectIdToString(item._id);
+		return item;
+	});
 }
 
 async function deleteTopic(id) {
@@ -68,6 +61,6 @@ module.exports = {
 	addTopic,
 	loadDefaultTopics,
 	getTopic,
-	getAllTopicTitles,
+	getAllTopics,
 	deleteTopic
 };
