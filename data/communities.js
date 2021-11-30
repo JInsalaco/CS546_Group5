@@ -40,7 +40,7 @@ async function deleteCommunity(id){
 }
 async function getAllCommunities(){
     const communitiesList = await communities();
-    const communtiies = communitiesList.find({}).toArray();
+    const communities = communitiesList.find({}).toArray();
     return communities;
 }
 async function joinCommunity(communityId,memberId){

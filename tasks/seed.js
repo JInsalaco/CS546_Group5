@@ -32,8 +32,7 @@ async function main() {
 			'I love empanadas'
 		);
 		const deletedPost = await posts.deletePost(post1._id);
-		// BUG
-		// const editedPost = await posts.editPost(user._id, post2._id, post2.title, 'New body', ['Courses']);
+		const editedPost = await posts.editPost(user._id, post2._id, post2.title, 'New body', ['Courses']);
 	} catch (e) {
 		console.log(e);
 	}
@@ -48,13 +47,12 @@ async function main() {
 		console.log(error);
 	}
 
-	// Add user 5
-	// BUG
-	// try {
-	// 	const allUsers = await users.getAllUsers();
-	// } catch (e) {
-	// 	console.log(e);
-	// }
+	try {
+		const allUsers = await users.getAllUsers();
+		console.log(allUsers)
+	} catch (e) {
+		console.log(e);
+	}
 
 	console.log('Done seeding database');
 
