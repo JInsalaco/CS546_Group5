@@ -36,10 +36,7 @@ async function getAllTopics() {
 	const topicCollection = await topics();
 	const topicList = await topicCollection.find({}).toArray();
 
-	return topicList.map(item => {
-		item._id = utils.objectIdToString(item._id);
-		return item;
-	});
+	return utils.objectIdToString(topicList);
 }
 
 async function deleteTopic(id) {
