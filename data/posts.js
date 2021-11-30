@@ -3,6 +3,7 @@ const utils = require('./utils');
 const userData = require('./users');
 const topicData = require('./topics');
 const posts = mongoCollections.posts;
+const { ObjectId } = require('mongodb');
 
 // Add a post to the Pond
 async function addPost(posterId, title, body, topics) {
@@ -11,7 +12,7 @@ async function addPost(posterId, title, body, topics) {
 	// Check for user
 	const sid = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sid);
-	if (user === null) throw 'User does not exist';
+	//if (user === null) throw 'User does not exist';
 
 	// Check for topic
 	if (topics) {
@@ -97,16 +98,16 @@ async function deletePost(id) {
 
 async function editPost(posterId, postId, title, body, topics) {
 	errorCheckingPost(title, body);
-
+	const topicInput = topics;
 	// Check for user
 	const sidUser = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sidUser);
-	if (user === null) throw 'User does not exist';
+	//if (user === null) throw 'User does not exist';
 
 	// Check if post exist
 	const sidPost = utils.objectIdToString(postId);
 	const post = await this.getPost(sidPost);
-	if (post === null) throw 'Post does not exist';
+	//if (post === null) throw 'Post does not exist';
 
 	// Check for topic
 	if (topics) {
@@ -147,13 +148,16 @@ async function editPost(posterId, postId, title, body, topics) {
 	};
 
 	// Check that the content of the posts are not the same
-	let equalPost = editComparison(post.body, body, post.topics, topics);
-	if (equalPost) throw 'No changes made to the post';
+	let equalPost = editComparison(post.body, body, post.topics, topicInput);
+	if (!equalPost) throw 'No changes made to the post';
 
 	// Update the pre-existing post
-	let oid = utils.objectIdToString(user._id);
-	const postCollection = await post();
-	const updateInfo = await postCollection.updateOne({ _id: oid }, { $set: newPost });
+	if (!(ObjectId.isValid(postId))) throw "Id is not a valid ObjectID";
+	const postCollection = await posts();
+	const updateInfo = await postCollection.updateOne(
+		{ _id: postId }, 
+		{ $set: newPost }
+	);
 
 	// Ensure the update was successful
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
@@ -195,6 +199,7 @@ function errorCheckingPost(title, body) {
 }
 
 function editComparison(oldBody, newBody, oldTopics, newTopics) {
+
 	oldTopics.sort();
 	newTopics.sort();
 
@@ -204,10 +209,7 @@ function editComparison(oldBody, newBody, oldTopics, newTopics) {
 				return false;
 			}
 		}
-	} else {
-		return false;
 	}
-
 	return true;
 }
 
