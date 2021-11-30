@@ -1,18 +1,9 @@
 <main class="page__profile">
-  <aside class="profile__aside">
-    <el-menu :default-active="activeMenu" class="el-menu-vertical-demo">
-      <el-menu-item v-for="item in profileMenu" :key="item" :index="item.index" @click="activeMenu = item.index">
-        <span>\{{item.text}}</span>
-      </el-menu-item>
-    </el-menu>
-  </aside>
-  <div v-if="activeMenu == 1" class="profile__content-container">
-    {{> profile/Information}}
+  {{> profile/Information}}
+  <div>
+    <h2>Archive</h2>
+    <el-empty description="No Data"></el-empty>
   </div>
-  <div v-else-if="activeMenu == 2" class="profile__content-container">
-    {{> profile/Active}}
-  </div>
-  <div v-else-if="activeMenu == 3" class="profile__content-container">
-    {{> profile/History}}
-  </div>
+  {{> profile/FriendsList}}
+  {{> profile/PostsList}}
 </main>

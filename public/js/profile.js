@@ -56,14 +56,11 @@ Vue.createApp({
 			auth: false,
 			userInfo: null
 		});
-		const activeMenu = ref('');
 		const userForm = ref(new User());
 		const userFormRef = ref();
 		const userFormDisable = ref(true);
 
 		onMounted(() => {
-			const current = location.href.match(/entry=(\d)/)[1];
-			activeMenu.value = current;
 			const USER_INFO = sessionStorage['USER_INFO'];
 			if (USER_INFO) {
 				userAuth.auth = true;
@@ -114,7 +111,6 @@ Vue.createApp({
 		return {
 			...toRefs(userAuth),
 			profileMenu,
-			activeMenu,
 			userForm,
 			userFormRef,
 			userFormDisable,
