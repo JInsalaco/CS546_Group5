@@ -125,7 +125,7 @@ async function getUser(id) {
 async function getAllUsers() {
 	const userCollection = await users();
 	const usersList = await userCollection.find({}).toArray();
-	objectIdToString(usersList);
+	utils.objectIdToString(usersList);
 
 	return usersList;
 }
@@ -181,7 +181,7 @@ async function editUser(id, email, firstname, lastname, phoneNumber, gender, DOB
 	if (checkUser) throw 'No changes made to the user profile';
 
 	const userCollection = await users();
-	const updateInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: newUser });
+	const updateInfo = await userCollection.updateOne({ _id: id }, { $set: newUser });
 
 	// Check if the update was made in MongoDB
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
