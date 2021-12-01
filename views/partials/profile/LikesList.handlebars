@@ -1,9 +1,9 @@
-<div class="profile__posts flex-c">
-  <h2>My Posts</h2>
+<div class="profile__like-list flex-c">
+  <h2>My Likes</h2>
 
   <div v-if="true" class="table-container">
     <el-table :data="tableData" stripe style="width: 100%" :show-header="false">
-      <el-table-column prop="title" width="250">
+      <el-table-column prop="title" show-overflow-tooltip>
         <template #default="{row}">
           <el-link type="primary">\{{row.title}}</el-link>
         </template>
@@ -16,7 +16,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" align="right" />
+      <el-table-column show-overflow-tooltip prop="createTime" align="right" />
     </el-table>
   </div>
 

@@ -44,6 +44,36 @@ const rules = {
 	]
 };
 
+// CLEAR
+const tableData = [
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	},
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	},
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	},
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	}
+];
+const friendsData = [
+	{ name: 'Shihao', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
+	{ name: 'Riya', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
+	{ name: 'Joseph', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
+	{ name: 'Javier', url: '/public/static/avatar.png', email: 'example@stevens.edu' }
+];
+
 Vue.createApp({
 	setup() {
 		const userAuth = reactive({
@@ -112,7 +142,9 @@ Vue.createApp({
 			handlePhoneInput,
 			rules,
 			uploading,
-			handleLogout
+			handleLogout,
+			tableData, // CLEAR
+			friendsData // CLEAR
 		};
 	}
 })

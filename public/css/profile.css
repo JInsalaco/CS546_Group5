@@ -48,3 +48,12 @@
 .form-btn-container > .el-form-item__content > button {
 	flex-grow: 1;
 }
+
+.table-container {
+	flex-grow: 1;
+	height: 0;
+	overflow-y: auto;
+}
+.cell__cus-author {
+	align-items: center;
+}

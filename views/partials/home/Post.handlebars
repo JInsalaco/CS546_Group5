@@ -10,7 +10,7 @@
 </section>
 
 <el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post' destroy-on-close @open="openPostDialog">
-	<el-form ref='postsForm' :rules="postRules" :model='postForm' class="posts__form" @keyup.enter.native="handlePublish">
+	<el-form ref='postsForm' :rules="postRules" :model='postForm' class="posts__form">
 		<el-form-item label='Topic' prop='topics' required>
 			<el-select v-model='postForm.topics' multiple collapse-tags :multiple-limit='3'>
 				<el-option v-for='item in TOPICS' :key="item._id" :label="item.title" :value='item._id'>\{{item.title}}
