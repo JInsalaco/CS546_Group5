@@ -3,7 +3,14 @@ const { formidable } = require('formidable');
 const fs = require('fs');
 const userData = require('../data/users');
 
+
 router.get('/', (_, res) => {
+
+router.get('/', (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).redirect('/');
+		return;
+	}
 	res.render('profile', { title: 'Profile', showHeader: true, scriptUrl: ['profile.js'] });
 });
 

@@ -46,7 +46,7 @@ async function getAllTopics() {
 async function getTopicTitles(topic) {
 	const topicCollection = await topics();
 	const topicList = await topicCollection.find({ _id: { $in: [ObjectId("61a6d9c7107d395d50b15be5"), ObjectId("61a6d9c7107d395d50b15be6")] }});
-	return topicList;
+	return utils.objectIdToString(topicList);
 }
 
 async function deleteTopic(id) {

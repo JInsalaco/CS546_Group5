@@ -56,14 +56,11 @@ Vue.createApp({
 			auth: false,
 			userInfo: null
 		});
-		const activeMenu = ref('');
 		const userForm = ref(new User());
 		const userFormRef = ref();
 		const userFormDisable = ref(true);
 
 		onMounted(() => {
-			const current = location.href.match(/entry=(\d)/)[1];
-			activeMenu.value = current;
 			const USER_INFO = sessionStorage['USER_INFO'];
 			if (USER_INFO) {
 				userAuth.auth = true;
@@ -85,9 +82,7 @@ Vue.createApp({
 				.post('/profile/upload', formData)
 				.then(res => {
 					userForm.value.profilePic = res.path;
-					const USER_INFO = JSON.parse(sessionStorage['USER_INFO']);
-					USER_INFO.profilePic = res.path;
-					sessionStorage['USER_INFO'] = JSON.stringify(USER_INFO);
+					setSession('profilePic', res.path);
 				})
 				.finally(() => setTimeout(() => (uploading.value = false), 1000));
 			return false;
@@ -97,8 +92,11 @@ Vue.createApp({
 			userFormDisable.value = true;
 			userFormRef.value.validate(valid => {
 				if (valid) {
-					http.post('/profile/edit', userForm.value).then(res => {
-						console.log(res);
+					http.post('/profile/edit', userForm.value).then(msg => {
+						ElMessage.success(msg);
+						['email', 'firstname', 'lastname', 'phoneNumber', 'username'].forEach(item =>
+							setSession(item, userForm.value[item])
+						);
 					});
 				} else {
 					return false;
@@ -113,7 +111,6 @@ Vue.createApp({
 		return {
 			...toRefs(userAuth),
 			profileMenu,
-			activeMenu,
 			userForm,
 			userFormRef,
 			userFormDisable,

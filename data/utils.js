@@ -25,21 +25,30 @@ function stringToObjectID(id) {
 
 // Function that takes a list of collections and changes their
 // ObjectIds into strings. Useful for when responding to requests
-function objectIdToString(id){
+// function objectIdToString(id){
 
-    if (Array.isArray(id)) {
-        for (let i = 0; i < id.length; i++) {
-            let coll = id[i];
-            coll._id = coll._id.toString();
-        }
-        return id;
-    }
-    return id.toString();
+//     if (Array.isArray(id)) {
+//         for (let i = 0; i < id.length; i++) {
+//             let coll = id[i];
+//             coll._id = coll._id.toString();
+//         }
+//         return id;
+//     }
+//     return id.toString();
+  
+function objectIdToString(id) {
+	if (Array.isArray(id)) {
+		return id.map(item => {
+			item._id = item?._id.toString();
+			return item;
+		});
+	}
+	return id.toString();
 }
 
 
 
 module.exports = {
-    stringToObjectID,
-    objectIdToString
-}
+	stringToObjectID,
+	objectIdToString
+};

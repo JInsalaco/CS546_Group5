@@ -1,57 +1,50 @@
 .page__profile {
-	height: 100vh;
-	padding-top: 50px;
-	overflow-y: auto;
+	height: calc(100vh - 70px);
+	display: grid;
+	grid-template-columns: 1.5fr 1.5fr 2fr;
+	grid-template-rows: 1.5fr 1fr;
+	grid-gap: 30px;
+	padding: 50px 30px 30px;
+}
+
+.page__profile > div {
+	background-color: #fff;
+	border-radius: var(--radius-default);
+	padding: 20px 30px;
+}
+
+.profile__posts {
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+.profile__info {
+	grid-row-end: -1;
+	grid-row-start: -3;
+	grid-column-start: 3;
+}
+
+.profile__info .info__form,
+.profile__info .info__form-btn {
+	width: 95%;
+	margin: 5% auto;
+}
+.user__avatar {
+	width: 200px;
+	height: 200px;
+	align-items: center;
+	justify-content: center;
 	position: relative;
+	margin: 0 auto;
 }
-
-.page__profile .profile__aside {
-	background-color: #fff;
-	border-radius: var(--radius-default);
-	width: 20%;
+.user-link-edit {
 	position: absolute;
-	left: 2.5%;
-	padding: 20px 0;
+	bottom: 10px;
 }
 
-.page__profile .profile__content-container {
-	background-color: #fff;
-	border-radius: var(--radius-default);
-	min-height: 100%;
-	margin: 0 auto;
-	width: 50%;
-	padding: 30px;
+.form-btn-container > .el-form-item__content {
+	display: flex;
 }
-
-.user__avatar.hide-border {
-	border: 1px dashed var(--font-color-grey);
-}
-.user__avatar:hover {
-	border-color: var(--primary-color);
-}
-.user__avatar-icon {
-	display: block;
-	width: 100px;
-	height: 100px;
-	line-height: 100px;
-}
-.user__avatar,
-.user__avatar-image {
-	display: block;
-	width: 100px;
-	height: 100px;
-	margin: auto;
-	border-radius: var(--radius-circle);
-}
-.user__avatar-image {
-	box-shadow: var(--box-shadow);
-}
-
-.user-info__form {
-	width: 65%;
-	margin: 50px auto 0;
-}
-.user-info__form-btn {
-	width: 65%;
-	margin: 0 auto;
+.form-btn-container > .el-form-item__content > button {
+	flex-grow: 1;
 }
