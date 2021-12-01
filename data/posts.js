@@ -18,6 +18,8 @@ async function addPost(posterId, title, body, topics) {
 	if (topics) {
 		if (topics.length > 0 && topics.length < 4) {
 			const topicListDB = await topicData.getAllTopics();
+			utils.stringToObjectID(topics);
+			const inputTopics = await topicData.getTopicTitles(topics);
 			// Iterate and check that each topic is valid
 			for (let i = 0; i < topics.length; i++) {
 				let userTopic = topics[i];
@@ -93,7 +95,7 @@ async function deletePost(id) {
 	if (deletionInfo.deletedCount === 0) {
 		throw `Could not delete post`;
 	}
-	return { deleted: sid };
+	return { deleted: true };
 }
 
 async function editPost(posterId, postId, title, body, topics) {
@@ -219,5 +221,6 @@ module.exports = {
 	deletePost,
 	editPost,
 	updatePopularity,
-	errorCheckingPost
+	errorCheckingPost,
+	editComparison
 };

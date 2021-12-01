@@ -39,11 +39,13 @@ async function deleteCommunity(id){
 
 }
 async function getAllCommunities(){
+    //TODO: Testing
     const communitiesList = await communities();
     const communities = communitiesList.find({}).toArray();
     return communities;
 }
 async function joinCommunity(communityId,memberId){
+    //TODO: Error Checking
     let oid = utils.stringToObjectID(communityId);
     const communitiesList = await communities();
     const joinedCommunity = await communitiesList.findOne({_id: oid});
