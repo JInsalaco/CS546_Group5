@@ -1,9 +1,3 @@
-const profileMenu = [
-	{ text: 'Information', index: '1' },
-	{ text: 'Active', index: '2' },
-	{ text: 'History', index: '3' }
-];
-
 const rules = {
 	email: [
 		{
@@ -110,7 +104,6 @@ Vue.createApp({
 
 		return {
 			...toRefs(userAuth),
-			profileMenu,
 			userForm,
 			userFormRef,
 			userFormDisable,
