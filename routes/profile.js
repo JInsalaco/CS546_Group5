@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { formidable } = require('formidable');
 const fs = require('fs');
 const userData = require('../data/users');
+
 router.get('/', (_, res) => {
 	res.render('profile', { title: 'Profile', showHeader: true, scriptUrl: ['profile.js'] });
 });
