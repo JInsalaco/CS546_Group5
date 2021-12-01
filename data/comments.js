@@ -31,7 +31,8 @@ async function commentPopularity(commentId,userId,val){
             {popularity: popularityObj}
         });
     if(updateInfo.modifiedCount === 0) throw "Error: could not update popularity";
-    return updateInfo;
+    const overallPopularity = popularityObj => Object.values(popularityObj).reduce((a, b) => a + b);
+    return overallPopularity(popularityObj);
 }
 
 async function deleteComment(commentId){
