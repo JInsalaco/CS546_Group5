@@ -94,17 +94,23 @@ async function authenticateUser(email, password) {
  * Appends user ID to friends list
  */
 async function addFriend(userId, friendId) {
+	let uid = utils.stringToObjectID(userId);
 	const userCollection = await users();
-	const user = await userCollection.findOne({ _id: userId });
+	const user = await userCollection.findOne({ _id: uid });
 	let friendsList = user.friends;
 	let updatedFriendsList = friendsList.push(friendId);
-	const newInsertInformation = await userCollection.updateOne({ _id: id }, { $set: { friends: updatedFriendsList } });
+	const newInsertInformation = await userCollection.updateOne({ _id: uid }, { $set: { friends: updatedFriendsList } });
 	if (newInsertInformation.modifiedCount === 0) throw 'Error: Could not add friend';
 	return newInsertInformation;
 }
 
-// async function getUserFriends(id) {
-// }
+async function getUserFriends(userId) {
+	let uid = utils.stringToObjectID(userId);
+	const userCollection = await users();
+	const user = await userCollection.findOne({ _id: uid });
+	if(!user) throw "Error: User does not exist";
+	return user.friends;
+}
 
 // async function getAllUserPosts(id) {
 // 	// Find the user whose posts will be returned
@@ -266,7 +272,7 @@ module.exports = {
 	addFriend,
 	getUser,
 	updateUser,
-	// getUserFriends,
+	getUserFriends,
 	// getAllUserPosts,
 	getAllUsers,
 	editUser,
