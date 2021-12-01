@@ -100,10 +100,6 @@ h2.post__title {
 }
 
 .info__avatar {
-	display: block;
-	width: 100px;
-	height: 100px;
-	border-radius: var(--radius-circle);
 	margin: 30px auto;
 	box-shadow: var(--box-shadow);
 }
@@ -166,13 +162,6 @@ h2.post__title {
 .info__friends-list > li {
 	align-items: center;
 	padding-right: 15px;
-}
-
-.friends-list__avatar {
-	width: 40px;
-	height: 40px;
-	border-radius: var(--radius-default);
-	margin-right: 15px;
 }
 
 .friends-list__email {
@@ -350,4 +339,22 @@ h2.post__title {
 	background: var(--bg-grey);
 	border: none;
 	border-radius: 50px;
+}
+
+.post__comment-container {
+	padding-top: 10px;
+}
+.comment__bar {
+	text-align: center;
+	cursor: pointer;
+}
+.comment__bar .icon-down[data-show-list='true'] {
+	transform: rotate(180deg);
+}
+.comment__info {
+	align-items: center;
+}
+.comment__info .comment__info-time {
+	margin-left: auto;
+	color: var(--font-color-grey);
 }

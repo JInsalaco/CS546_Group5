@@ -10,29 +10,30 @@
 </section>
 
 <el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post' destroy-on-close @open="openPostDialog">
-	<el-form ref='postsForm' :model='postForm' class="posts__form" @keyup.enter.native="handlePublish">
+	<el-form ref='postsForm' :rules="postRules" :model='postForm' class="posts__form" @keyup.enter.native="handlePublish">
 		<el-form-item label='Topic' prop='topics' required>
 			<el-select v-model='postForm.topics' multiple collapse-tags :multiple-limit='3'>
-				<el-option v-for='item in TOPICS' :key='item.name' :value='item.name'>\{{item.name}}
+				<el-option v-for='item in TOPICS' :key="item._id" :label="item.title" :value='item._id'>\{{item.title}}
 				</el-option>
 			</el-select>
 		</el-form-item>
+
 		<div class='posts__preview'>
-			<el-form-item prop='title' required class="post__title">
+			<el-form-item prop='title' class="post__title">
 				<el-input v-model='postForm.title' placeholder="Type your title here!"></el-input>
 			</el-form-item>
 			<div class='post__info-container flex'>
 				<img class='post__avatar-img' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
 				<span class='post__user-info'>
 					<div class='user-info__username'>\{{displayName}}</div>
-					<div class='user-info__time'>\{{postForm.createTime}}</div>
+					<div class='user-info__time'>\{{createTime}}</div>
 				</span>
 				<div class="tag-container">
 					<span v-for="item in selectedTopics" :key="item" class='post__tag aside-h'
-								:style="{'--color': `rgb(${item.color})`, '--bg': `rgba(${item.color}, .3)`}">\{{item.name}}</span>
+								:style="{'--color': `rgb(${item.color})`, '--bg': `rgba(${item.color}, .3)`}">\{{item.title}}</span>
 				</div>
 			</div>
-			<el-form-item prop='body' required class="post__content">
+			<el-form-item prop='body' class="post__content">
 				<el-input class='post__body-input' v-model='postForm.body' type='textarea' :show-word-limit='true' :rows="10"
 									placeholder="Type your content here~">
 				</el-input>

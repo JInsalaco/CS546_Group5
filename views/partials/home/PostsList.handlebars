@@ -27,7 +27,8 @@
       </p>
     </article>
     <div class='post__operation-container flex'>
-      <el-button type="info" class="aside-h" size="mini" round @click="handleShowMoreDetail(index)">
+      <el-button type="info" class="aside-h" size="mini" round
+                 @click="showMoreDetailIndex = showMoreDetailIndex === index ? null : index">
         \{{showMoreDetailIndex === index ? 'Hide' : 'See More'}}
       </el-button>
       <div v-if="auth" class="post__operation-like">
@@ -45,5 +46,14 @@
         </el-button>
       </el-form-item>
     </el-form>
+
+    <div class="post__comment-container">
+      <div class="comment__bar" @click="showComment = showComment === index ? null : index">
+        <i class="iconfont icon-down" :data-show-list="showComment === index"></i>
+      </div>
+      <el-collapse-transition>
+        {{> home/CommentList}}
+      </el-collapse-transition>
+    </div>
   </li>
 </ul>
