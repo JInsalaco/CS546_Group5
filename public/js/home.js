@@ -90,7 +90,9 @@ const composition = {
 			...toRefs(show),
 			comment,
 			handleSubmitComment,
-			TOPICS
+			TOPICS,
+			showAddFriendsDialog,
+			...toRefs(addFriendsConfig)
 		};
 	}
 };

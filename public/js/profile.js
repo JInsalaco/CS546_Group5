@@ -189,6 +189,8 @@ Vue.createApp({
 			TOPICS,
 			beforeClosePostDialog,
 			handleEditConfirm,
+			showAddFriendsDialog,
+			...toRefs(addFriendsConfig),
 			tableData, // CLEAR
 			friendsData // CLEAR
 		};

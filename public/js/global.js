@@ -56,3 +56,12 @@ const postRules = {
 	title: [{ required: true, message: 'Title is required', trigger: 'change' }],
 	body: [{ required: true, message: 'Content is required', trigger: 'change' }]
 };
+
+const showAddFriendsDialog = ref(false);
+const addFriendsConfig = reactive({
+	friendId: '',
+	querySearchAsync: () => {},
+	handleFriendsSelected: item => {
+		console.log(item);
+	}
+});

@@ -15,7 +15,7 @@
 					<el-dropdown-item class="header__avatar-profile">
 						<a href="/profile">Profile</a>
 					</el-dropdown-item>
-					<el-dropdown-item>Add Friends</el-dropdown-item>
+					<el-dropdown-item @click="showAddFriendsDialog = true">Add Friends</el-dropdown-item>
 					<el-dropdown-item @click="handleLogout">Log out</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
@@ -31,3 +31,14 @@
 		</a>
 	</div>
 </header>
+
+<el-dialog v-model="showAddFriendsDialog" title="Add Friends" width="30%" destroy-on-close>
+	<el-autocomplete v-model="friendId" :fetch-suggestions="querySearchAsync" @select="handleFriendsSelected"
+									 placeholder="Search your friend" :trigger-on-focus="false" />
+	<template #footer>
+		<span class="dialog-footer">
+			<el-button @click="showAddFriendsDialog = false">Cancel</el-button>
+			<el-button type="primary" @click="showAddFriendsDialog = false">Confirm</el-button>
+		</span>
+	</template>
+</el-dialog>
