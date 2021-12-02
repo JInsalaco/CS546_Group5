@@ -2,10 +2,16 @@
 	<span class='aside-h header__logo'>
 		<img src='../../public/static/logo_white.svg' alt='' />
 	</span>
-	<a class="aside-h" href="/">
+	<a class="aside-h header__title-container" href="/">
 		<h1 class="header__title">The Pond</h1>
 	</a>
-	<el-input class='header__input' placeholder='Type to search' type='text'></el-input>
+	{{#if showSeatcdInput}}
+	<div>
+		<el-autocomplete class="header__input" v-model="searchConfig.searchTerm"
+										 :fetch-suggestions="searchConfig.querySearchPost" @select="searchConfig.handlePostSelected"
+										 placeholder="Type to search" />
+	</div>
+	{{/if}}
 
 	<div v-if="auth">
 		<el-dropdown>

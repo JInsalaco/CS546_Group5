@@ -54,6 +54,8 @@ const composition = {
 		const loadMorePost = () => {
 			topicsNum.value += 2;
 		};
+		// TODO
+		const handleLikes = id => {};
 
 		/************************************************************* Comment *************************************************************/
 		const show = reactive({
@@ -71,6 +73,15 @@ const composition = {
 			);
 		});
 
+		/************************************************************* Search *************************************************************/
+		const searchConfig = reactive({
+			searchTerm: '',
+			querySearchPost: () => {},
+			handlePostSelected: item => {
+				console.log(item);
+			}
+		});
+
 		return {
 			...toRefs(userAuth),
 			showFriendsList,
@@ -82,6 +93,7 @@ const composition = {
 			selectedTopics,
 			currentTopic,
 			topicsNum,
+			handleLikes,
 			loadMorePost,
 			handlePublish,
 			openPostDialog,
@@ -92,7 +104,8 @@ const composition = {
 			handleSubmitComment,
 			TOPICS,
 			showAddFriendsDialog,
-			...toRefs(addFriendsConfig)
+			...toRefs(addFriendsConfig),
+			searchConfig
 		};
 	}
 };

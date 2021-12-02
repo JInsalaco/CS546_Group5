@@ -299,8 +299,6 @@ h2.post__title {
 }
 .post__operation-like {
 	margin-left: auto;
-}
-.post__operation-like > i[class^='iconfont'] {
 	font-size: var(--font-xxl);
 	cursor: pointer;
 }

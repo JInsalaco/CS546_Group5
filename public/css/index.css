@@ -76,6 +76,7 @@ ul {
 	align-items: center;
 	background-color: #fff;
 	height: 70px;
+	justify-content: flex-end;
 }
 
 .header__logo {
@@ -94,9 +95,11 @@ ul {
 .header__title {
 	color: var(--primary-color);
 }
+.header__title-container {
+	margin-right: auto;
+}
 
 .header__input {
-	margin-left: auto;
 	margin-right: 30px;
 	max-width: 300px;
 }

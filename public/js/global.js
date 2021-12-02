@@ -49,6 +49,8 @@ const setSession = (key, value) => {
 	sessionStorage['USER_INFO'] = JSON.stringify(userInfo);
 };
 
+const showSearchInput = ref(true);
+
 let TOPICS = ref([]);
 
 const postRules = {
