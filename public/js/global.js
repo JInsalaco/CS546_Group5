@@ -50,3 +50,9 @@ const setSession = (key, value) => {
 };
 
 let TOPICS = ref([]);
+
+const postRules = {
+	topics: [{ required: true, message: 'You must select at least 1 topics', trigger: 'change' }],
+	title: [{ required: true, message: 'Title is required', trigger: 'change' }],
+	body: [{ required: true, message: 'Content is required', trigger: 'change' }]
+};

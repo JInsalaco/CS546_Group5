@@ -54,6 +54,12 @@
 	height: 0;
 	overflow-y: auto;
 }
-.cell__cus-author {
+.cell__cus {
 	align-items: center;
+}
+.opt-btn-edit {
+	cursor: pointer;
+}
+.opt-btn-edit:hover {
+	color: var(--primary-color);
 }
