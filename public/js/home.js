@@ -40,7 +40,7 @@ const composition = {
 					return {
 						title,
 						content,
-						name: username ?? `${firstname} ${lastname}`,
+						name: username || `${firstname} ${lastname}`,
 						createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm'),
 						topicsList,
 						popularity,

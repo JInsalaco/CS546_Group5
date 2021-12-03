@@ -4,6 +4,19 @@ const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const Mock = require('mockjs');
 
+let ALL_USERS;
+let ALL_TOPICS;
+const getAllUsers = async () => {
+	!ALL_USERS && (ALL_USERS = await userData.getAllUsers());
+
+	return ALL_USERS;
+};
+const getAllTopics = async () => {
+	!ALL_TOPICS && (ALL_TOPICS = await topicsData.getAllTopics());
+
+	return ALL_TOPICS;
+};
+
 const loadDefaultUsers = async userList => {
 	const userCollection = await users();
 
@@ -39,13 +52,13 @@ const loadDefaultTopics = async topicList => {
 
 const loadDefaultPosts = async () => {
 	// get all uesers and topics from DB
-	const USER = await userData.getAllUsers();
-	const TOPICS = await topicsData.getAllTopics();
+	const USERS = await getAllUsers();
+	const TOPICS = await getAllTopics();
 
 	const Random = Mock.Random;
 	Random.extend({
 		posterId(data) {
-			const list = USER.map(item => item._id);
+			const list = USERS.map(item => item._id);
 			return this.pick(list);
 		},
 		topicId(data) {
