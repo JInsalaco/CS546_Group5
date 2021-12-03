@@ -3,14 +3,12 @@ const { formidable } = require('formidable');
 const fs = require('fs');
 const userData = require('../data/users');
 
-
-router.get('/', (_, res) => {
-
 router.get('/', (req, res) => {
-	if (!req.session.userid) {
-		res.status(403).redirect('/');
-		return;
-	}
+	// MODIFY uncomment this when project is finished
+	// if (!req.session.userid) {
+	// 	res.status(403).redirect('/');
+	// 	return;
+	// }
 	res.render('profile', { title: 'Profile', showHeader: true, scriptUrl: ['profile.js'] });
 });
 
@@ -92,4 +90,5 @@ router.post('/edit', async (req, res) => {
 		res.status(400).send(e);
 	}
 });
+
 module.exports = router;

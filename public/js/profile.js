@@ -1,9 +1,3 @@
-const profileMenu = [
-	{ text: 'Information', index: '1' },
-	{ text: 'Active', index: '2' },
-	{ text: 'History', index: '3' }
-];
-
 const rules = {
 	email: [
 		{
@@ -50,6 +44,36 @@ const rules = {
 	]
 };
 
+// CLEAR
+const tableData = [
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	},
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	},
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	},
+	{
+		title: 'Lecture Rescheduling',
+		author: { url: '/public/static/avatar.png', name: 'Shihao' },
+		createTime: '11/30/2021 13:00'
+	}
+];
+const friendsData = [
+	{ name: 'Shihao', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
+	{ name: 'Riya', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
+	{ name: 'Joseph', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
+	{ name: 'Javier', url: '/public/static/avatar.png', email: 'example@stevens.edu' }
+];
+
 Vue.createApp({
 	setup() {
 		const userAuth = reactive({
@@ -73,6 +97,7 @@ Vue.createApp({
 			}
 		});
 
+		/************************************************************* Information *************************************************************/
 		const uploading = ref(false);
 		const handleImageUpload = file => {
 			uploading.value = true;
@@ -108,9 +133,42 @@ Vue.createApp({
 			userForm.value.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
 		};
 
+		/************************************************************* My Post *************************************************************/
+		const postDialogControl = reactive({
+			showDialog: false,
+			edit: false
+		});
+		const postsForm = ref();
+		const postForm = ref(null);
+		const createTime = computed(() => dayjs(postForm.value?.metaData?.timeStamp).format('MM/DD/YYYY HH:mm'));
+
+		const handleGetPostdetail = id => {
+			getPostDetail(id);
+			postDialogControl.showDialog = true;
+		};
+		const handlePostEdit = id => {
+			getPostDetail(id);
+			postDialogControl.edit = true;
+			postDialogControl.showDialog = true;
+		};
+		const getPostDetail = id => {
+			// TODO get detail data from DB
+			postForm.value = { ...new Posts(), topics: [], metaData: { timeStamp: new Date().getTime() } };
+		};
+		const beforeClosePostDialog = () => {
+			postDialogControl.showDialog = false;
+			setTimeout(() => (postDialogControl.edit = false), 500);
+		};
+		// TODO
+		const handleEditConfirm = () => {};
+		const displayName = computed(() => {
+			return (
+				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
+			);
+		});
+
 		return {
 			...toRefs(userAuth),
-			profileMenu,
 			userForm,
 			userFormRef,
 			userFormDisable,
@@ -118,8 +176,23 @@ Vue.createApp({
 			handleSubmit,
 			handlePhoneInput,
 			rules,
+			postRules,
 			uploading,
-			handleLogout
+			handleLogout,
+			postsForm,
+			postForm,
+			createTime,
+			postDialogControl,
+			handleGetPostdetail,
+			handlePostEdit,
+			displayName,
+			TOPICS,
+			beforeClosePostDialog,
+			handleEditConfirm,
+			showAddFriendsDialog,
+			...toRefs(addFriendsConfig),
+			tableData, // CLEAR
+			friendsData // CLEAR
 		};
 	}
 })

@@ -4,8 +4,48 @@ const userData = require('./users');
 const topicData = require('./topics');
 const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
+const { errorCheckingId } = require('../utils/utils');
 
 // Add a post to the Pond
+async function getPostsByTitle(title) {
+	const postCollection = await posts();
+	let postList = await postCollection.find({ title }).sort({ 'metaData.timeStamp': 1 }).toArray();
+	postList = await handlePost(postList);
+	return postList;
+}
+
+const getPosts = async ({ topicId, pageSize, pageNumber }) => {
+	if (errorCheckingId(topicId)) throw 'topicId invalid';
+	if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
+
+	const postCollection = await posts();
+	let postList = await postCollection
+		.find({ topics: { $elemMatch: { $eq: topicId } } })
+		.sort({ 'metaData.timeStamp': 1 })
+		.skip(+pageNumber - 1)
+		.limit(+pageSize)
+		.toArray();
+
+	postList = await handlePost(postList);
+	return postList;
+};
+
+const handlePost = async postList => {
+	let res = [];
+	for (let post of postList) {
+		post.timeStamp = post.metaData.timeStamp;
+		const poster = await userData.getUser(post.posterId);
+		poster && ['firstname', 'lastname', 'username'].forEach(item => (post[item] = poster[item]));
+		delete post.thread;
+		delete post.posterId;
+		delete post.metaData;
+
+		res.push(post);
+	}
+
+	return res;
+};
+
 async function addPost(posterId, title, body, topics) {
 	errorCheckingPost(title, body);
 
@@ -13,19 +53,21 @@ async function addPost(posterId, title, body, topics) {
 	const sid = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sid);
 	//if (user === null) throw 'User does not exist';
-
+	var topicTitles = [];
 	// Check for topic
 	if (topics) {
 		if (topics.length > 0 && topics.length < 4) {
 			const topicListDB = await topicData.getAllTopics();
 			utils.stringToObjectID(topics);
-			const inputTopics = await topicData.getTopicTitles(topics);
+			// const inputTopics = await topicData.getTopicTitles(topics);
 			// Iterate and check that each topic is valid
 			for (let i = 0; i < topics.length; i++) {
 				let userTopic = topics[i];
+				let title = await topicData.getTopicbyId(userTopic);
+				topicTitles.push(title);
 				let topicFlag = true;
 				for (let j = 0; j < topicListDB.length && topicFlag; j++) {
-					if (topicListDB[j].title === userTopic) {
+					if (topicListDB[j]._id === userTopic) {
 						topicFlag = false;
 					}
 				}
@@ -42,7 +84,7 @@ async function addPost(posterId, title, body, topics) {
 		title: title,
 		body: body,
 		posterId: sid,
-		topics: topics,
+		topics: topicTitles,
 		thread: [],
 		popularity: {},
 		metaData: {
@@ -154,12 +196,9 @@ async function editPost(posterId, postId, title, body, topics) {
 	if (!equalPost) throw 'No changes made to the post';
 
 	// Update the pre-existing post
-	if (!(ObjectId.isValid(postId))) throw "Id is not a valid ObjectID";
+	if (!ObjectId.isValid(postId)) throw 'Id is not a valid ObjectID';
 	const postCollection = await posts();
-	const updateInfo = await postCollection.updateOne(
-		{ _id: postId }, 
-		{ $set: newPost }
-	);
+	const updateInfo = await postCollection.updateOne({ _id: postId }, { $set: newPost });
 
 	// Ensure the update was successful
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
@@ -201,7 +240,6 @@ function errorCheckingPost(title, body) {
 }
 
 function editComparison(oldBody, newBody, oldTopics, newTopics) {
-
 	oldTopics.sort();
 	newTopics.sort();
 
@@ -222,5 +260,7 @@ module.exports = {
 	editPost,
 	updatePopularity,
 	errorCheckingPost,
-	editComparison
+	editComparison,
+	getPostsByTitle,
+	getPosts
 };

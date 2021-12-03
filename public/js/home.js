@@ -1,9 +1,3 @@
-const postRules = {
-	topics: [{ required: true, message: 'You must select at least 1 topics', trigger: 'change' }],
-	title: [{ required: true, message: 'Title is required', trigger: 'change' }],
-	body: [{ required: true, message: 'Content is required', trigger: 'change' }]
-};
-
 const composition = {
 	setup() {
 		/************************************************************* Auth *************************************************************/
@@ -60,6 +54,8 @@ const composition = {
 		const loadMorePost = () => {
 			topicsNum.value += 2;
 		};
+		// TODO
+		const handleLikes = id => {};
 
 		/************************************************************* Comment *************************************************************/
 		const show = reactive({
@@ -77,6 +73,15 @@ const composition = {
 			);
 		});
 
+		/************************************************************* Search *************************************************************/
+		const searchConfig = reactive({
+			searchTerm: '',
+			querySearchPost: () => {},
+			handlePostSelected: item => {
+				console.log(item);
+			}
+		});
+
 		return {
 			...toRefs(userAuth),
 			showFriendsList,
@@ -88,6 +93,7 @@ const composition = {
 			selectedTopics,
 			currentTopic,
 			topicsNum,
+			handleLikes,
 			loadMorePost,
 			handlePublish,
 			openPostDialog,
@@ -96,7 +102,10 @@ const composition = {
 			...toRefs(show),
 			comment,
 			handleSubmitComment,
-			TOPICS
+			TOPICS,
+			showAddFriendsDialog,
+			...toRefs(addFriendsConfig),
+			searchConfig
 		};
 	}
 };

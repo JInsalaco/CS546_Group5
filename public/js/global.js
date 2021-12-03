@@ -12,10 +12,9 @@ class Posts {
 
 class Comment {
 	constructor(obj = {}) {
-		const { body, posterId, threads, popularity, metaData } = obj;
+		const { body, posterId, popularity, metaData } = obj;
 		this.body = body ?? '';
 		this.posterId = posterId ?? '';
-		this.threads = threads ?? [];
 		this.popularity = popularity ?? {};
 		this.metaData = metaData ?? { timeStamp: new Date().getTime(), archived: false, flags: 0 };
 	}
@@ -49,4 +48,21 @@ const setSession = (key, value) => {
 	sessionStorage['USER_INFO'] = JSON.stringify(userInfo);
 };
 
+const showSearchInput = ref(true);
+
 let TOPICS = ref([]);
+
+const postRules = {
+	topics: [{ required: true, message: 'You must select at least 1 topics', trigger: 'change' }],
+	title: [{ required: true, message: 'Title is required', trigger: 'change' }],
+	body: [{ required: true, message: 'Content is required', trigger: 'change' }]
+};
+
+const showAddFriendsDialog = ref(false);
+const addFriendsConfig = reactive({
+	friendId: '',
+	querySearchAsync: () => {},
+	handleFriendsSelected: item => {
+		console.log(item);
+	}
+});
