@@ -48,7 +48,12 @@ async function getTopicTitles(topic) {
 	const topicList = await topicCollection.find({ _id: { $in: [ObjectId("61a6d9c7107d395d50b15be5"), ObjectId("61a6d9c7107d395d50b15be6")] }});
 	return utils.objectIdToString(topicList);
 }
-
+async function getTopicbyId(id){
+	const topicCollection = await topics();
+	let oid = ObjectId(id);
+	const topic = await topicCollection.findOne({_id: oid});
+	return topic.title;
+}
 async function deleteTopic(id) {
 	if (!(ObjectId.isValid(id))) throw "Not a valid id"
 
@@ -85,5 +90,6 @@ module.exports = {
 	getTopic,
 	getAllTopics,
 	getTopicTitles,
-	deleteTopic
+	deleteTopic,
+	getTopicbyId
 };
