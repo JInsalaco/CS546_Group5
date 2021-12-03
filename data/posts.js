@@ -2,10 +2,40 @@ const mongoCollections = require('../config/mongoCollections');
 const utils = require('./utils');
 const userData = require('./users');
 const topicData = require('./topics');
+const commentData = require('./comments')
 const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
+const { del } = require('express/lib/application');
 
 // Add a post to the Pond
+async function getAllPosts(){
+	const postCollection = await posts();
+	const postList = await postCollection.find({}).sort({"metaData.timeStamp":1}).toArray();
+	// let postListNew = [];
+	if(postList)
+	{
+		for(let i =0 ; i<postList.length; i++){
+			// postList[i].comment = [];
+			postList[i].timeStamp = postList[i].metaData.timeStamp;
+			// for(let j=0; j<postList[i].thread.length; j++){			//code for getting comments	
+			// 	let comment = await commentData.getCommentById(postList[i].thread[j]);
+			// 	if(comment)
+			// 	postList[i].comments.push(comment);
+			// }
+			let poster = await userData.getUser(postList[i].posterId);
+			if(poster){
+				postList[i].firstname = poster.firstname;
+				postList[i].lastname = poster.lastname;
+				postList[i].ProfilePic = poster.ProfilePic;
+			}
+			delete postList[i].thread;
+			delete postList[i].posterId;
+			delete postList[i].metaData;
+
+		}
+	}
+	return postList;
+ }
 async function addPost(posterId, title, body, topics) {
 	errorCheckingPost(title, body);
 
@@ -13,19 +43,21 @@ async function addPost(posterId, title, body, topics) {
 	const sid = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sid);
 	//if (user === null) throw 'User does not exist';
-
+	var topicTitles = [];
 	// Check for topic
 	if (topics) {
 		if (topics.length > 0 && topics.length < 4) {
 			const topicListDB = await topicData.getAllTopics();
 			utils.stringToObjectID(topics);
-			const inputTopics = await topicData.getTopicTitles(topics);
+			// const inputTopics = await topicData.getTopicTitles(topics);
 			// Iterate and check that each topic is valid
 			for (let i = 0; i < topics.length; i++) {
 				let userTopic = topics[i];
+				let title = await topicData.getTopicbyId(userTopic);
+				topicTitles.push(title);
 				let topicFlag = true;
 				for (let j = 0; j < topicListDB.length && topicFlag; j++) {
-					if (topicListDB[j].title === userTopic) {
+					if (topicListDB[j]._id === userTopic) {
 						topicFlag = false;
 					}
 				}
@@ -42,7 +74,7 @@ async function addPost(posterId, title, body, topics) {
 		title: title,
 		body: body,
 		posterId: sid,
-		topics: topics,
+		topics: topicTitles,
 		thread: [],
 		popularity: {},
 		metaData: {
@@ -222,5 +254,6 @@ module.exports = {
 	editPost,
 	updatePopularity,
 	errorCheckingPost,
-	editComparison
+	editComparison,
+	getAllPosts
 };
