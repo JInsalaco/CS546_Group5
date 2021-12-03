@@ -3,15 +3,6 @@ const utils = require('./utils');
 const topics = mongoCollections.topics;
 const { ObjectId } = require('mongodb');
 
-async function loadDefaultTopics(topicList) {
-	const topicsCollection = await topics();
-
-	const insertInfo = await topicsCollection.insertMany(topicList);
-	if (insertInfo.insertedCount === 0) throw 'Could not add default topics';
-
-	return;
-}
-
 async function addTopic(title, description) {
 	errorChecking(title, description);
 	const topicsCollection = await topics();
@@ -28,7 +19,7 @@ async function addTopic(title, description) {
 }
 
 async function getTopic(id) {
-	if (!(ObjectId.isValid(id))) throw "Not a valid id"
+	if (!ObjectId.isValid(id)) throw 'Not a valid id';
 
 	const topicCollection = await topics();
 	const topic = await topicCollection.findOne({ _id: id });
@@ -45,17 +36,19 @@ async function getAllTopics() {
 
 async function getTopicTitles(topic) {
 	const topicCollection = await topics();
-	const topicList = await topicCollection.find({ _id: { $in: [ObjectId("61a6d9c7107d395d50b15be5"), ObjectId("61a6d9c7107d395d50b15be6")] }});
+	const topicList = await topicCollection.find({
+		_id: { $in: [ObjectId('61a6d9c7107d395d50b15be5'), ObjectId('61a6d9c7107d395d50b15be6')] }
+	});
 	return utils.objectIdToString(topicList);
 }
-async function getTopicbyId(id){
+async function getTopicbyId(id) {
 	const topicCollection = await topics();
 	let oid = ObjectId(id);
-	const topic = await topicCollection.findOne({_id: oid});
+	const topic = await topicCollection.findOne({ _id: oid });
 	return topic.title;
 }
 async function deleteTopic(id) {
-	if (!(ObjectId.isValid(id))) throw "Not a valid id"
+	if (!ObjectId.isValid(id)) throw 'Not a valid id';
 
 	const topicCollection = await topics();
 	let topic = await this.getTopic(id);
@@ -71,22 +64,21 @@ async function deleteTopic(id) {
 }
 
 function errorChecking(topic, description) {
-	if (!topic) throw "No topic provided";
-	if (!description) throw "No description provided";
+	if (!topic) throw 'No topic provided';
+	if (!description) throw 'No description provided';
 
-	if (typeof topic !== 'string') throw "Topic is not a string";
-	else if (topic.trim() === "") throw "Topic is empty string";
-	if (typeof description !== 'string') throw "Description is not a string";
-	else if (description.trim() === "") throw "Description is empty string";
+	if (typeof topic !== 'string') throw 'Topic is not a string';
+	else if (topic.trim() === '') throw 'Topic is empty string';
+	if (typeof description !== 'string') throw 'Description is not a string';
+	else if (description.trim() === '') throw 'Description is empty string';
 
-	if (description.length > 150) throw "Maximum characters exceeded"
+	if (description.length > 150) throw 'Maximum characters exceeded';
 
 	return;
 }
 
 module.exports = {
 	addTopic,
-	loadDefaultTopics,
 	getTopic,
 	getAllTopics,
 	getTopicTitles,

@@ -1,4 +1,3 @@
-//const { users } = require('../config/mongoCollections');
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 const utils = require('./utils');
@@ -108,7 +107,7 @@ async function getUserFriends(userId) {
 	let uid = utils.stringToObjectID(userId);
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: uid });
-	if(!user) throw "Error: User does not exist";
+	if (!user) throw 'Error: User does not exist';
 	return user.friends;
 }
 
