@@ -30,23 +30,25 @@ const composition = {
 		const getPostList = params => {
 			http.get('/posts/getPosts', params).then(res => {
 				disabledLoad.value = res.length < pageConfig.pageSize;
-				postList.value = res.map(item => {
-					const { body, title, username, firstname, lastname, timeStamp, topics, popularity, profilePic } = item;
-					const topicsList = TOPICS.value.filter(item => topics.includes(item._id));
-					const content = body
-						.split('\n')
-						.map(item => `<p>${item}</p>`)
-						.join('');
-					return {
-						title,
-						content,
-						name: username ?? `${firstname} ${lastname}`,
-						createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm'),
-						topicsList,
-						popularity,
-						profilePic
-					};
-				});
+				postList.value.push(
+					...res.map(item => {
+						const { body, title, username, firstname, lastname, timeStamp, topics, popularity, profilePic } = item;
+						const topicsList = TOPICS.value.filter(item => topics.includes(item._id));
+						const content = body
+							.split('\n')
+							.map(item => `<p>${item}</p>`)
+							.join('');
+						return {
+							title,
+							content,
+							name: username ?? `${firstname} ${lastname}`,
+							createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm'),
+							topicsList,
+							popularity,
+							profilePic
+						};
+					})
+				);
 			});
 		};
 		// TODO
@@ -60,7 +62,11 @@ const composition = {
 				currentTopic.value = res[0]._id;
 			});
 		});
-		watch(currentTopic, newVal => getPostList({ ...pageConfig, topicId: newVal }));
+		watch(currentTopic, newVal => {
+			postList.value = [];
+			pageConfig.pageNumber = 1;
+			getPostList({ ...pageConfig, topicId: newVal });
+		});
 
 		/************************************************************* Create Post *************************************************************/
 		const showDialog = reactive({ showPostDialog: false });
