@@ -57,9 +57,9 @@
 .cell__cus {
 	align-items: center;
 }
-.opt-btn-edit {
+.opt-btn {
 	cursor: pointer;
 }
-.opt-btn-edit:hover {
+.opt-btn:hover {
 	color: var(--primary-color);
 }
