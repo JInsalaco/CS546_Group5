@@ -16,12 +16,49 @@ const composition = {
 			}
 		});
 
+		/************************************************************* Post List *************************************************************/
+		const pageConfig = reactive({
+			pageNumber: 1,
+			pageSize: 5
+		});
+		const disabledLoad = ref(true);
+		const postList = ref([]);
+		const loadMorePost = () => {
+			pageConfig.pageNumber++;
+			getPostList({ ...pageConfig, topicId: currentTopic.value });
+		};
+		const getPostList = params => {
+			http.get('/posts/getPosts', params).then(res => {
+				disabledLoad.value = res.length < pageConfig.pageSize;
+				postList.value = res.map(item => {
+					const { body, title, username, firstname, lastname, timeStamp, topics, popularity, profilePic } = item;
+					const topicsList = TOPICS.value.filter(item => topics.includes(item._id));
+					const content = body
+						.split('\n')
+						.map(item => `<p>${item}</p>`)
+						.join('');
+					return {
+						title,
+						content,
+						name: username ?? `${firstname} ${lastname}`,
+						createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm'),
+						topicsList,
+						popularity,
+						profilePic
+					};
+				});
+			});
+		};
+		// TODO
+		const handleLikes = id => {};
+
 		/************************************************************* Topics *************************************************************/
 		const currentTopic = ref(null);
 		onMounted(() => {
 			http.get('/topics/getAll').then(res => {
 				TOPICS.value = res;
 				currentTopic.value = res[0]._id;
+				getPostList({ ...pageConfig, topicId: currentTopic.value });
 			});
 		});
 
@@ -48,14 +85,6 @@ const composition = {
 				}
 			});
 		};
-
-		/************************************************************* Post List *************************************************************/
-		const topicsNum = ref(5); // CLEAR
-		const loadMorePost = () => {
-			topicsNum.value += 2;
-		};
-		// TODO
-		const handleLikes = id => {};
 
 		/************************************************************* Comment *************************************************************/
 		const show = reactive({
@@ -92,7 +121,9 @@ const composition = {
 			createTime,
 			selectedTopics,
 			currentTopic,
-			topicsNum,
+			pageConfig,
+			disabledLoad,
+			postList,
 			handleLikes,
 			loadMorePost,
 			handlePublish,

@@ -35,7 +35,7 @@ const handlePost = async postList => {
 	for (let post of postList) {
 		post.timeStamp = post.metaData.timeStamp;
 		const poster = await userData.getUser(post.posterId);
-		poster && ['firstname', 'lastname', 'username'].forEach(item => (post[item] = poster[item]));
+		poster && ['firstname', 'lastname', 'username', 'profilePic'].forEach(item => (post[item] = poster[item]));
 		delete post.thread;
 		delete post.posterId;
 		delete post.metaData;

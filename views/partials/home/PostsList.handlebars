@@ -1,30 +1,19 @@
-<ul class='post__list-container' v-infinite-scroll="loadMorePost">
-  <li v-for='(item, index) in topicsNum' :key='item' class='post__list-item'>
-    <h2 class='post__title'>Lecture Rescheduling</h2>
+<ul v-if="postList.length" class='post__list-container' infinite-scroll-disabled="disabledLoad"
+    v-infinite-scroll="loadMorePost">
+  <li v-for='(item, index) in postList' :key='item' class='post__list-item'>
+    <h2 class='post__title'>\{{item.title}}</h2>
     <div class='post__info-container flex'>
-      <img class='post__avatar-img' src='../public/static/avatar.png' alt='' />
+      <el-avatar :size="50" :src="item.profilePic"></el-avatar>
       <span class='post__user-info'>
-        <div class='user-info__username'>Eliseabeth May</div>
-        <div class='user-info__time'>6h ago</div>
+        <div class='user-info__username'>\{{item.name}}</div>
+        <div class='user-info__time'>\{{item.createTime}}</div>
       </span>
       <div class="tag-container">
-        <span class='post__tag'>Accounting</span>
+        <span v-for="topic in item.topicsList" :key="topic._id" class='post__tag aside-h'
+              :style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
       </div>
     </div>
-    <article class='post__content' :class="{omit: showMoreDetailIndex !== index}">
-      <p>Hi mates</p>
-      <p>
-        soi tlked with Dr Hellen and because of her ilner we need to reschedule upcoming Lecture. You propably notice
-        that this lecture is the last before exam so Dr Hellen asked us also if we want to attend for additional
-        lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her ilner we need
-        to reschedule upcoming Lecture.
-      </p>
-      <p>
-        You propably notice that this lecture is the last before exam so Dr Hellen asked us also if we want to attend
-        for additional lecture where we can study more dfficult excercise soi tlked with Dr Hellen and because of her
-        ilner we need to reschedule upcoming Lecture. You propably notice that this lecture is the last before exam so
-        Dr Hellen asked us also if we want to attend for additional lecture where we can study more dfficult excercise
-      </p>
+    <article class='post__content' :class="{omit: showMoreDetailIndex !== index}" v-html="item.content">
     </article>
     <div class='post__operation-container flex'>
       <el-button type="info" class="aside-h" size="mini" round
@@ -54,3 +43,4 @@
     </div>
   </li>
 </ul>
+<el-empty v-else></el-empty>
