@@ -17,12 +17,20 @@
         </template>
       </el-table-column>
       <el-table-column prop="createTime" align="right" />
-      <el-table-column fixed="right" width="120">
+      <el-table-column fixed="right" width="150">
         <template #default>
-          <span class="cell__cus opt-btn-edit" @click="handlePostEdit('1234')">
+          <span class="aside-h cell__cus opt-btn" @click="handlePostEdit('1234')">
             <i class="iconfont icon-edit"></i>
             Edit
           </span>
+          <el-popconfirm title="Are you sure to delete this?">
+            <template #reference>
+              <span class="aside-h cell__cus opt-btn">
+                <i class="iconfont icon-delete"></i>
+                Delete
+              </span>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
