@@ -58,9 +58,9 @@ const composition = {
 			http.get('/topics/getAll').then(res => {
 				TOPICS.value = res;
 				currentTopic.value = res[0]._id;
-				getPostList({ ...pageConfig, topicId: currentTopic.value });
 			});
 		});
+		watch(currentTopic, newVal => getPostList({ ...pageConfig, topicId: newVal }));
 
 		/************************************************************* Create Post *************************************************************/
 		const showDialog = reactive({ showPostDialog: false });

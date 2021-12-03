@@ -1,4 +1,4 @@
-const { ref, reactive, toRefs, computed, nextTick, onMounted } = Vue;
+const { ref, reactive, toRefs, computed, nextTick, onMounted, watch } = Vue;
 const { ElLoading, ElMessage, ElNotification } = ElementPlus;
 
 class Posts {
