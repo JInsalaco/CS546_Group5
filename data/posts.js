@@ -2,40 +2,50 @@ const mongoCollections = require('../config/mongoCollections');
 const utils = require('./utils');
 const userData = require('./users');
 const topicData = require('./topics');
-const commentData = require('./comments')
 const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
-const { del } = require('express/lib/application');
+const { errorCheckingId } = require('../utils/utils');
 
 // Add a post to the Pond
-async function getAllPosts(){
+async function getPostsByTitle(title) {
 	const postCollection = await posts();
-	const postList = await postCollection.find({}).sort({"metaData.timeStamp":1}).toArray();
-	// let postListNew = [];
-	if(postList)
-	{
-		for(let i =0 ; i<postList.length; i++){
-			// postList[i].comment = [];
-			postList[i].timeStamp = postList[i].metaData.timeStamp;
-			// for(let j=0; j<postList[i].thread.length; j++){			//code for getting comments	
-			// 	let comment = await commentData.getCommentById(postList[i].thread[j]);
-			// 	if(comment)
-			// 	postList[i].comments.push(comment);
-			// }
-			let poster = await userData.getUser(postList[i].posterId);
-			if(poster){
-				postList[i].firstname = poster.firstname;
-				postList[i].lastname = poster.lastname;
-				postList[i].ProfilePic = poster.ProfilePic;
-			}
-			delete postList[i].thread;
-			delete postList[i].posterId;
-			delete postList[i].metaData;
-
-		}
-	}
+	let postList = await postCollection.find({ title }).sort({ 'metaData.timeStamp': 1 }).toArray();
+	postList = await handlePost(postList);
 	return postList;
- }
+}
+
+const getPosts = async ({ topicId, pageSize, pageNumber }) => {
+	if (errorCheckingId(topicId)) throw 'topicId invalid';
+	if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
+
+	const postCollection = await posts();
+	let postList = await postCollection
+		.find({ topics: { $elemMatch: { $eq: topicId } } })
+		.sort({ 'metaData.timeStamp': 1 })
+		.skip(+pageNumber - 1)
+		.limit(+pageSize)
+		.toArray();
+
+	postList = await handlePost(postList);
+	return postList;
+};
+
+const handlePost = async postList => {
+	let res = [];
+	for (let post of postList) {
+		post.timeStamp = post.metaData.timeStamp;
+		const poster = await userData.getUser(post.posterId);
+		poster && ['firstname', 'lastname', 'username'].forEach(item => (post[item] = poster[item]));
+		delete post.thread;
+		delete post.posterId;
+		delete post.metaData;
+
+		res.push(post);
+	}
+
+	return res;
+};
+
 async function addPost(posterId, title, body, topics) {
 	errorCheckingPost(title, body);
 
@@ -186,12 +196,9 @@ async function editPost(posterId, postId, title, body, topics) {
 	if (!equalPost) throw 'No changes made to the post';
 
 	// Update the pre-existing post
-	if (!(ObjectId.isValid(postId))) throw "Id is not a valid ObjectID";
+	if (!ObjectId.isValid(postId)) throw 'Id is not a valid ObjectID';
 	const postCollection = await posts();
-	const updateInfo = await postCollection.updateOne(
-		{ _id: postId }, 
-		{ $set: newPost }
-	);
+	const updateInfo = await postCollection.updateOne({ _id: postId }, { $set: newPost });
 
 	// Ensure the update was successful
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
@@ -233,7 +240,6 @@ function errorCheckingPost(title, body) {
 }
 
 function editComparison(oldBody, newBody, oldTopics, newTopics) {
-
 	oldTopics.sort();
 	newTopics.sort();
 
@@ -255,5 +261,6 @@ module.exports = {
 	updatePopularity,
 	errorCheckingPost,
 	editComparison,
-	getAllPosts
+	getPostsByTitle,
+	getPosts
 };

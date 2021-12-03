@@ -14,6 +14,15 @@ const toObjectId = id => {
 	}
 };
 
+function errorCheckingId(id) {
+	if (!id) return true;
+	if (typeof id !== 'string') return true;
+	if (id.trim() === '') return true;
+	if (!ObjectId.isValid(id)) return true;
+	return false;
+}
+
 module.exports = {
-	toObjectId
+	toObjectId,
+	errorCheckingId
 };

@@ -12,7 +12,8 @@ const constructorMethod = app => {
 	app.use('/topics', topics);
 
 	app.use('*', (_, res) => {
-		return res.redirect('/');
+		// return res.redirect('/');
+		res.status(404).send('Not found');
 	});
 };
 
