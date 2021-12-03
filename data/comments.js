@@ -42,9 +42,17 @@ async function deleteComment(commentId){
     if (deletionInfo.deletedCount === 0) { throw `Could not delete topic`; }
     return { deleted: true };
 }
-
+async function getCommentById(id)
+{
+    const commentCollection = await comments();
+    const comment = commentCollection.findOne({_id: id});
+    if(comment)
+        return comment;
+    else return false;
+}
 module.exports = {
     createComment,
     commentPopularity,
-    deleteComment
+    deleteComment,
+    getCommentById
 }
