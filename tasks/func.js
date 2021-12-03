@@ -63,7 +63,7 @@ const loadDefaultPosts = async () => {
 				posterId: '@POSTERID',
 				'topics|1-3': ['@TOPICID'],
 				thread: [],
-				'popularity|1-6': ['@POSTERID'],
+				'popularity|0-6': ['@POSTERID'],
 				metaData: {
 					timeStamp: new Date().getTime(),
 					archived: false,
