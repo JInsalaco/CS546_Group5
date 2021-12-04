@@ -9,9 +9,9 @@ const { errorCheckingId } = require('../utils/utils');
 // Add a post to the Pond
 async function getPostsByTitle(title) {
 	const postCollection = await posts();
-	let postList = await postCollection.find({ title }).sort({ 'metaData.timeStamp': 1 }).toArray();
+	let postList = await postCollection.find({ title: RegExp(title) }).toArray();
 	postList = await handlePost(postList);
-	return postList;
+	return postList.map(item => ({ _id: item._id, title: item.title }));
 }
 
 const getPosts = async ({ topicId, pageSize, pageNumber }) => {
