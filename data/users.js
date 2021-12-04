@@ -122,7 +122,7 @@ async function getUser(id) {
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: oid });
 	if (user === null) throw 'User not found';
-	utils.objectIdToString([user]);
+	user._id = utils.objectIdToString(user._id);
 
 	return user;
 }
@@ -130,9 +130,8 @@ async function getUser(id) {
 async function getAllUsers() {
 	const userCollection = await users();
 	const usersList = await userCollection.find({}).toArray();
-	utils.objectIdToString(usersList);
 
-	return usersList;
+	return utils.objectIdToString(usersList);
 }
 
 // Remove a restaurant

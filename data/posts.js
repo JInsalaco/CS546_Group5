@@ -117,7 +117,7 @@ async function getPost(id) {
 
 	// Check if the post was found
 	if (post === null) throw 'Post not found';
-	utils.objectIdToString([post]);
+	post._id = utils.objectIdToString(post._id);
 
 	return post;
 }
@@ -253,6 +253,13 @@ function editComparison(oldBody, newBody, oldTopics, newTopics) {
 	return true;
 }
 
+const getAllPosts = async () => {
+	const postCollection = await posts();
+	const postList = await postCollection.find({}).toArray();
+
+	return utils.objectIdToString(postList);
+};
+
 module.exports = {
 	addPost,
 	getPost,
@@ -262,5 +269,6 @@ module.exports = {
 	errorCheckingPost,
 	editComparison,
 	getPostsByTitle,
-	getPosts
+	getPosts,
+	getAllPosts
 };

@@ -1,7 +1,7 @@
 const dbConnection = require('../config/mongoConnection');
 const topicsList = require('./topics.json');
 const userList = require('./users.json');
-const { loadDefaultTopics, loadDefaultUsers, loadDefaultPosts } = require('./func');
+const { loadDefaultTopics, loadDefaultUsers, loadDefaultPosts, loadDefaultComments } = require('./func');
 
 async function main() {
 	const db = await dbConnection();
@@ -13,7 +13,7 @@ async function main() {
 	await loadDefaultUsers(userList);
 
 	/**
-	 * add topics to DB and get the topics from DB (with id)
+	 * add topics to DB
 	 */
 	await loadDefaultTopics(topicsList);
 
@@ -22,8 +22,12 @@ async function main() {
 	 */
 	await loadDefaultPosts();
 
-	console.log('Done seeding database');
+	/**
+	 * add comment to DB
+	 */
+	await loadDefaultComments();
 
+	console.log('Done seeding database');
 	await db.s.client.close();
 }
 

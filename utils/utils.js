@@ -5,7 +5,7 @@ const toObjectId = id => {
 	if (id instanceof ObjectId) {
 		return id;
 	}
-	if (!stringChecker(id)) throw 'Id is not a string or it is an empty string.';
+	if (typeof id !== 'string' || id.trim() === '') throw 'Id is not a string or it is an empty string.';
 
 	try {
 		return ObjectId(id);
