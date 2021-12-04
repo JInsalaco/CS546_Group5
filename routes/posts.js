@@ -2,27 +2,21 @@ const router = require('express').Router();
 const { posts } = require('../data');
 const { errorCheckingId } = require('../utils/utils');
 
-router.get('/getDetail/:id', async (req, res) => {
-	const idCheck = errorCheckingId(req.params.id);
-	if (!idCheck) {
+router.get('/getDetail', async (req, res) => {
+	// MODIFY uncomment when finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permisssion');
+	// 	return;
+	// }
+
+	const { id } = req.query;
+	if (errorCheckingId(id)) {
 		return res.status(400).send('Post does not exist');
 	}
 
 	try {
-		if (!req.session.userid) {
-			return res.redirect('/partials/authorize/SignInForm');
-		} else {
-			const post = await posts.getPost(req.params.id);
-			return res.render('post', {
-				title: post.title,
-				body: post.body,
-				posterId: post.posterId,
-				topics: post.topics,
-				thread: post.thread,
-				popularity: post.popularity,
-				timePosted: post.metaData.timeStamp
-			});
-		}
+		const post = await posts.getPost(id);
+		res.json(post);
 	} catch (e) {
 		return res.status(400).send(e);
 	}

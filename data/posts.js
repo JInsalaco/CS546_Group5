@@ -30,20 +30,31 @@ const getPosts = async ({ topicId, pageSize, pageNumber }) => {
 	return postList;
 };
 
-const handlePost = async postList => {
-	let res = [];
-	for (let post of postList) {
-		post.timeStamp = post.metaData.timeStamp;
-		const poster = await userData.getUser(post.posterId);
-		poster && ['firstname', 'lastname', 'username', 'profilePic'].forEach(item => (post[item] = poster[item]));
-		delete post.thread;
-		delete post.posterId;
-		delete post.metaData;
+const handlePost = async inputPost => {
+	let res;
+	if (Array.isArray(inputPost)) {
+		res = [];
+		for (let post of inputPost) {
+			post = await getUserInfoToPost(post);
 
-		res.push(post);
+			res.push(post);
+		}
+	} else {
+		res = await getUserInfoToPost(inputPost);
 	}
 
 	return res;
+};
+
+const getUserInfoToPost = async post => {
+	post.timeStamp = post.metaData.timeStamp;
+	const poster = await userData.getUser(post.posterId);
+	poster && ['firstname', 'lastname', 'username', 'profilePic'].forEach(item => (post[item] = poster[item]));
+	delete post.thread;
+	delete post.posterId;
+	delete post.metaData;
+
+	return post;
 };
 
 async function addPost(posterId, title, body, topics) {
@@ -113,11 +124,11 @@ async function getPost(id) {
 
 	// Look for post in the database
 	const postCollection = await posts();
-	const post = await postCollection.findOne({ _id: oid });
+	let post = await postCollection.findOne({ _id: oid });
 
 	// Check if the post was found
 	if (post === null) throw 'Post not found';
-	post._id = utils.objectIdToString(post._id);
+	post = await handlePost(post);
 
 	return post;
 }
