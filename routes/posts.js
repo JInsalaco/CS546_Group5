@@ -2,29 +2,31 @@ const router = require('express').Router();
 const { posts } = require('../data');
 const { errorCheckingId } = require('../utils/utils');
 
-router.get('/getDetail/:id', async (req, res) => {
-	const idCheck = errorCheckingId(req.params.id);
-	if (!idCheck) {
-		return res.status(400).send('Post does not exist');
-	}
-
+router.get('/getDetail', async (req, res) => {
 	try {
-		if (!req.session.userid) {
-			return res.redirect('/partials/authorize/SignInForm');
-		} else {
-			const post = await posts.getPost(req.params.id);
-			return res.render('post', {
-				title: post.title,
-				body: post.body,
-				posterId: post.posterId,
-				topics: post.topics,
-				thread: post.thread,
-				popularity: post.popularity,
-				timePosted: post.metaData.timeStamp
-			});
+		if (req.session.userid) {
+			const postId = req.query.id;
+		
+			if(!postId || postId === "")
+				throw "Could not fetch post details for this post";
+		const post = await posts.getPost(postId);
+		if(post)
+			res.json( {
+			title: post.title,
+			body: post.body,
+			posterId: post.posterId,
+			topics: post.topics,
+			thread: post.thread,
+			popularity: post.popularity,
+			timeStamp: post.metaData.timeStamp });
+		else
+			res.send(400).send("Could not fetch post details for this post");
 		}
-	} catch (e) {
-		return res.status(400).send(e);
+		else
+			throw "Please sing in first";
+	} catch (error) {
+		console.log(error);
+		res.status(500).send(error);
 	}
 });
 
@@ -64,6 +66,26 @@ router.get('/getPosts', async (req, res) => {
 	try {
 		const postList = await posts.getPosts(req.query);
 		res.json(postList);
+	} catch (error) {
+		console.log(error);
+		res.status(500).send(error);
+	}
+});
+router.get('/getMyPosts', async (req, res) => {
+	// MODIFY uncomment when finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permisssion');
+	// 	return;
+	// }
+
+	try {
+		if (req.session.userid) {
+		const postList = await posts.getMyPosts(req.session.userid);
+		if(postList)
+			res.json(postList);
+		else
+			res.send(400).send("No Posts");
+		}
 	} catch (error) {
 		console.log(error);
 		res.status(500).send(error);
