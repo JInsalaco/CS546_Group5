@@ -6,6 +6,15 @@ const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
 const { errorCheckingId } = require('../utils/utils');
 
+async function getMyPosts(id){		//get myposts using req.session.userid as posterID
+	if (!id) 
+		throw "No Permissipn, please sign in";
+	
+		const postCollection = await posts();
+		let postList = await postCollection.find({ posterId: id},{ projection: { _id: 1, title: 1} }).sort({ 'metaData.timeStamp': 1 }).toArray();
+		return postList;
+	
+}
 // Add a post to the Pond
 async function getPostsByTitle(title) {
 	const postCollection = await posts();
@@ -281,5 +290,6 @@ module.exports = {
 	editComparison,
 	getPostsByTitle,
 	getPosts,
-	getAllPosts
+	getAllPosts,
+	getMyPosts
 };

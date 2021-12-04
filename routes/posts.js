@@ -63,6 +63,24 @@ router.get('/getPosts', async (req, res) => {
 		res.status(500).send(error);
 	}
 });
+router.get('/getMyPosts', async (req, res) => {
+	// MODIFY uncomment when finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permisssion');
+	// 	return;
+	// }
+
+	try {
+		if (req.session.userid) {
+			const postList = await posts.getMyPosts(req.session.userid);
+			if (postList) res.json(postList);
+			else res.send(400).send('No Posts');
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(500).send(error);
+	}
+});
 
 router.post('/add', async (req, res) => {
 	if (!req.session.userid) {
