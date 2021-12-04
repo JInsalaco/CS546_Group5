@@ -28,7 +28,7 @@ router.get('/getDetail/:id', async (req, res) => {
 	}
 });
 
-router.get('/getPostByTitle', async (req, res) => {
+router.get('/search', async (req, res) => {
 	// MODIFY uncomment when finished
 	// if (!req.session.userid) {
 	// 	res.status(403).send('No permisssion');
