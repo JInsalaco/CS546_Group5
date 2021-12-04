@@ -133,16 +133,16 @@ const loadDefaultComments = async () => {
 
 		// get all comments and update the user and post
 		const COMMENTS = await commentsData.getAllComments(lastCount, commentCount);
-		lastCount = commentCount;
+		lastCount += commentCount;
 		const thread = COMMENTS.map(item => item._id);
 		// update the post
 		await postCollection.updateOne({ _id: toObjectId(post._id) }, { $set: { thread } });
 		// update the user
 		for (let comment of COMMENTS) {
-			const { thread } = await usersData.getUser(comment.posterId);
-			thread.push(comment._id);
+			const { thread: threads } = await usersData.getUser(comment.posterId);
+			threads.push(comment._id);
 
-			await userCollection.updateOne({ _id: toObjectId(comment.posterId) }, { $set: { thread } });
+			await userCollection.updateOne({ _id: toObjectId(comment.posterId) }, { $set: { thread: threads } });
 		}
 	}
 };
