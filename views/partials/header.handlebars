@@ -7,9 +7,9 @@
 	</a>
 	{{#if showSeatcdInput}}
 	<div>
-		<el-autocomplete class="header__input" v-model="searchConfig.searchTerm"
-										 :fetch-suggestions="searchConfig.querySearchPost" @select="searchConfig.handlePostSelected"
-										 placeholder="Type to search" />
+		<el-autocomplete class="header__input" v-model="searchTerm" :trigger-on-focus="false"
+										 :fetch-suggestions="querySearchPost" @select="handlePostSelected" placeholder="Type to search"
+										 value-key="title" />
 	</div>
 	{{/if}}
 

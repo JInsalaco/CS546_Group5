@@ -109,13 +109,16 @@ const composition = {
 		});
 
 		/************************************************************* Search *************************************************************/
-		const searchConfig = reactive({
-			searchTerm: '',
-			querySearchPost: () => {},
-			handlePostSelected: item => {
-				console.log(item);
-			}
-		});
+		const searchTerm = ref('');
+		const querySearchPost = (queryString, cb) => {
+			http.get('/posts/search', { title: queryString }).then(res => {
+				console.log(res);
+				cb(res);
+			});
+		};
+		const handlePostSelected = item => {
+			console.log(item);
+		};
 
 		return {
 			...toRefs(userAuth),
@@ -142,7 +145,9 @@ const composition = {
 			TOPICS,
 			showAddFriendsDialog,
 			...toRefs(addFriendsConfig),
-			searchConfig
+			searchTerm,
+			querySearchPost,
+			handlePostSelected
 		};
 	}
 };

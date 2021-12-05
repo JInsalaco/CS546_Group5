@@ -3,34 +3,26 @@ const { posts } = require('../data');
 const { errorCheckingId } = require('../utils/utils');
 
 router.get('/getDetail', async (req, res) => {
+	// MODIFY uncomment when finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permisssion');
+	// 	return;
+	// }
+
+	const { id } = req.query;
+	if (errorCheckingId(id)) {
+		return res.status(400).send('Post does not exist');
+	}
+
 	try {
-		if (req.session.userid) {
-			const postId = req.query.id;
-		
-			if(!postId || postId === "")
-				throw "Could not fetch post details for this post";
-		const post = await posts.getPost(postId);
-		if(post)
-			res.json( {
-			title: post.title,
-			body: post.body,
-			posterId: post.posterId,
-			topics: post.topics,
-			thread: post.thread,
-			popularity: post.popularity,
-			timeStamp: post.metaData.timeStamp });
-		else
-			res.send(400).send("Could not fetch post details for this post");
-		}
-		else
-			throw "Please sing in first";
-	} catch (error) {
-		console.log(error);
-		res.status(500).send(error);
+		const post = await posts.getPost(id);
+		res.json(post);
+	} catch (e) {
+		return res.status(400).send(e);
 	}
 });
 
-router.get('/getPostByTitle', async (req, res) => {
+router.get('/search', async (req, res) => {
 	// MODIFY uncomment when finished
 	// if (!req.session.userid) {
 	// 	res.status(403).send('No permisssion');
@@ -80,11 +72,9 @@ router.get('/getMyPosts', async (req, res) => {
 
 	try {
 		if (req.session.userid) {
-		const postList = await posts.getMyPosts(req.session.userid);
-		if(postList)
-			res.json(postList);
-		else
-			res.send(400).send("No Posts");
+			const postList = await posts.getMyPosts(req.session.userid);
+			if (postList) res.json(postList);
+			else res.send(400).send('No Posts');
 		}
 	} catch (error) {
 		console.log(error);

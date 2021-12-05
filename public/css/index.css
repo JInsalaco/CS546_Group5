@@ -101,7 +101,7 @@ ul {
 
 .header__input {
 	margin-right: 30px;
-	max-width: 300px;
+	width: 500px;
 }
 
 .header__avatar-profile a {
