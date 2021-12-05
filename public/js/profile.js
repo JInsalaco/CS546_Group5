@@ -128,6 +128,10 @@ Vue.createApp({
 				}
 			});
 		};
+		const handleProfileCancel = () => {
+			userFormDisable.value = true;
+			userForm.value = JSON.parse(sessionStorage['USER_INFO']);
+		};
 
 		const handlePhoneInput = value => {
 			userForm.value.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
@@ -174,6 +178,7 @@ Vue.createApp({
 			userFormDisable,
 			handleImageUpload,
 			handleSubmit,
+			handleProfileCancel,
 			handlePhoneInput,
 			rules,
 			postRules,

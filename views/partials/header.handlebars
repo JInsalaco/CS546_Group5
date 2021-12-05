@@ -52,6 +52,7 @@
 	</template>
 </el-dialog>
 
+{{#if showSeatcdInput}}
 <el-dialog v-model='detailDialog' title="Preview" destroy-on-close>
 	<div class='posts__preview'>
 		<h2 class='post__title'>\{{postDetail.title}}</h2>
@@ -70,3 +71,4 @@
 		<article class='post__content' v-html="postDetail.content">
 	</div>
 </el-dialog>
+{{/if}}
