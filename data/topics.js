@@ -1,5 +1,5 @@
 const mongoCollections = require('../config/mongoCollections');
-const utils = require('./utils');
+const utils = require('../utils');
 const topics = mongoCollections.topics;
 const { ObjectId } = require('mongodb');
 

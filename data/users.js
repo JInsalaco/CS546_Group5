@@ -1,6 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
-const utils = require('./utils');
+const utils = require('../utils');
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
@@ -176,7 +176,7 @@ async function editUser(id, email, firstname, lastname, phoneNumber, gender, DOB
 		bio: bio,
 		profilePic: user.profilePic,
 		posts: user.posts,
-		threads: user.threads,
+		thread: user.thread,
 		friends: user.friends,
 		anonymous: false
 	};
@@ -185,7 +185,7 @@ async function editUser(id, email, firstname, lastname, phoneNumber, gender, DOB
 	if (checkUser) throw 'No changes made to the user profile';
 
 	const userCollection = await users();
-	const updateInfo = await userCollection.updateOne({ _id: id }, { $set: newUser });
+	const updateInfo = await userCollection.updateOne({ _id: utils.stringToObjectID(id) }, { $set: newUser });
 
 	// Check if the update was made in MongoDB
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {

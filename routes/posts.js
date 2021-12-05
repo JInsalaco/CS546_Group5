@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { posts } = require('../data');
-const { errorCheckingId } = require('../utils/utils');
+const { errorCheckingId } = require('../utils');
 
 router.get('/getDetail', async (req, res) => {
 	// MODIFY uncomment when finished
@@ -164,19 +164,15 @@ router.post('/like', async (req, res) => {
 	try {
 		if (req.session.userid) {
 			const postId = req.query.id;
-		
-			if(!postId || postId === "")
-				throw "Could not fetch post details for this post";
-		const postPopularity = await posts.updatePopularity(postId,req.session.userid,1);
-		if(postPopularity)
-			res.json( {
-				postPopularity
-			 });
-		else
-			res.send(400).send("Could not fetch post details for this post");
-		}
-		else
-			throw "Please sing in first";
+
+			if (!postId || postId === '') throw 'Could not fetch post details for this post';
+			const postPopularity = await posts.updatePopularity(postId, req.session.userid, 1);
+			if (postPopularity)
+				res.json({
+					postPopularity
+				});
+			else res.send(400).send('Could not fetch post details for this post');
+		} else throw 'Please sing in first';
 	} catch (error) {
 		console.log(error);
 		res.status(500).send(error);
@@ -186,19 +182,15 @@ router.post('/undoLike', async (req, res) => {
 	try {
 		if (req.session.userid) {
 			const postId = req.query.id;
-		
-			if(!postId || postId === "")
-				throw "Could not fetch post details for this post";
-		const postPopularity = await posts.updatePopularity(postId,req.session.userid,0);
-		if(postPopularity)
-			res.json( {
-				postPopularity
-			 });
-		else
-			res.send(400).send("Could not fetch post details for this post");
-		}
-		else
-			throw "Please sing in first";
+
+			if (!postId || postId === '') throw 'Could not fetch post details for this post';
+			const postPopularity = await posts.updatePopularity(postId, req.session.userid, 0);
+			if (postPopularity)
+				res.json({
+					postPopularity
+				});
+			else res.send(400).send('Could not fetch post details for this post');
+		} else throw 'Please sing in first';
 	} catch (error) {
 		console.log(error);
 		res.status(500).send(error);

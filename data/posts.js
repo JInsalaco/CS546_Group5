@@ -1,35 +1,28 @@
 const mongoCollections = require('../config/mongoCollections');
-const utils = require('./utils');
+const utils = require('../utils');
 const userData = require('./users');
 const topicData = require('./topics');
 const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
-const { errorCheckingId } = require('../utils/utils');
 
-async function updatePopularity(postId, userId,counter){
+async function updatePopularity(postId, userId, counter) {
 	const pid = utils.stringToObjectID(postId);
 	const postCollection = await posts();
 	const post = await postCollection.findOne({ _id: pid });
 	let popularityList = [];
 	let popularity = post.popularity;
-	if(popularity)
-		popularityList = popularity;
-	
-	if(counter === 1){
-		if(postId in popularityList)
-			return popularityList.length;
+	if (popularity) popularityList = popularity;
+
+	if (counter === 1) {
+		if (postId in popularityList) return popularityList.length;
 		popularityList.push(userId);
 		const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity: popularityList } });
-		if (updateInfo.modifiedCount === 0) 
-			throw 'Error: could not update popularity';
-	}
-	else if(counter === 0){
-		if(postId in popularityList)
-			return popularityList.length;
+		if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
+	} else if (counter === 0) {
+		if (postId in popularityList) return popularityList.length;
 		popularityList.pop(userId);
 		const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity: popularityList } });
-		if (updateInfo.modifiedCount === 0) 
-			throw 'Error: could not update popularity';
+		if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
 	}
 	return popularityList.length;
 	// popularityObj[userId] = val;
@@ -39,14 +32,16 @@ async function updatePopularity(postId, userId,counter){
 	// return overallPopularity(popularityObj);
 }
 
-async function getMyPosts(id){		//get myposts using req.session.userid as posterID
-	if (!id) 
-		throw "No Permissipn, please sign in";
-	
-		const postCollection = await posts();
-		let postList = await postCollection.find({ posterId: id},{ projection: { _id: 1, title: 1} }).sort({ 'metaData.timeStamp': 1 }).toArray();
-		return postList;
-	
+async function getMyPosts(id) {
+	//get myposts using req.session.userid as posterID
+	if (!id) throw 'No Permissipn, please sign in';
+
+	const postCollection = await posts();
+	let postList = await postCollection
+		.find({ posterId: id }, { projection: { _id: 1, title: 1 } })
+		.sort({ 'metaData.timeStamp': 1 })
+		.toArray();
+	return postList;
 }
 // Add a post to the Pond
 async function getPostsByTitle(title) {
@@ -57,7 +52,7 @@ async function getPostsByTitle(title) {
 }
 
 const getPosts = async ({ topicId, pageSize, pageNumber }) => {
-	if (errorCheckingId(topicId)) throw 'topicId invalid';
+	if (utils.errorCheckingId(topicId)) throw 'topicId invalid';
 	if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
 
 	const postCollection = await posts();

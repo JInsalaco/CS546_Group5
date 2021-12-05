@@ -3,7 +3,7 @@ const { users: usersData, topics: topicsData, posts: postsData, comments: commen
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const Mock = require('mockjs');
-const { toObjectId } = require('../utils/utils');
+const { stringToObjectID } = require('../data/utils');
 
 const getAllUsers = async () => await usersData.getAllUsers();
 const getAllTopics = async () => await topicsData.getAllTopics();
@@ -90,7 +90,7 @@ const loadDefaultPosts = async () => {
 		const { posts } = await usersData.getUser(posterId);
 		posts.push(post._id);
 
-		await userCollection.updateOne({ _id: toObjectId(posterId) }, { $set: { posts } });
+		await userCollection.updateOne({ _id: stringToObjectID(posterId) }, { $set: { posts } });
 	}
 };
 
@@ -136,13 +136,13 @@ const loadDefaultComments = async () => {
 		lastCount += commentCount;
 		const thread = COMMENTS.map(item => item._id);
 		// update the post
-		await postCollection.updateOne({ _id: toObjectId(post._id) }, { $set: { thread } });
+		await postCollection.updateOne({ _id: stringToObjectID(post._id) }, { $set: { thread } });
 		// update the user
 		for (let comment of COMMENTS) {
 			const { thread: threads } = await usersData.getUser(comment.posterId);
 			threads.push(comment._id);
 
-			await userCollection.updateOne({ _id: toObjectId(comment.posterId) }, { $set: { thread: threads } });
+			await userCollection.updateOne({ _id: stringToObjectID(comment.posterId) }, { $set: { thread: threads } });
 		}
 	}
 };
