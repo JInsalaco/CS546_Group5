@@ -114,16 +114,13 @@ const composition = {
 		const postDetail = ref({});
 		const querySearchPost = (queryString, cb) => {
 			http.get('/posts/search', { title: queryString }).then(res => {
-				console.log(res);
 				cb(res);
 			});
 		};
 		const handlePostSelected = item => {
 			const { _id } = item;
 			http.get('/posts/getDetail', { id: _id }).then(res => {
-				console.log(res);
 				postDetail.value = formatPostDetail(res);
-				console.log(postDetail.value);
 				detailDialog.value = true;
 			});
 		};
