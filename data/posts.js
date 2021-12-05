@@ -6,6 +6,39 @@ const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
 const { errorCheckingId } = require('../utils/utils');
 
+async function updatePopularity(postId, userId,counter){
+	const pid = utils.stringToObjectID(postId);
+	const postCollection = await posts();
+	const post = await postCollection.findOne({ _id: pid });
+	let popularityList = [];
+	let popularity = post.popularity;
+	if(popularity)
+		popularityList = popularity;
+	
+	if(counter === 1){
+		if(postId in popularityList)
+			return popularityList.length;
+		popularityList.push(userId);
+		const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity: popularityList } });
+		if (updateInfo.modifiedCount === 0) 
+			throw 'Error: could not update popularity';
+	}
+	else if(counter === 0){
+		if(postId in popularityList)
+			return popularityList.length;
+		popularityList.pop(userId);
+		const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity: popularityList } });
+		if (updateInfo.modifiedCount === 0) 
+			throw 'Error: could not update popularity';
+	}
+	return popularityList.length;
+	// popularityObj[userId] = val;
+	// const updateInfo = postCollection.updateOne({ _id: cid }, { $set: { popularity: popularityObj } });
+	// if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
+	// const overallPopularity = popularityObj => Object.values(popularityObj).reduce((a, b) => a + b);
+	// return overallPopularity(popularityObj);
+}
+
 async function getMyPosts(id){		//get myposts using req.session.userid as posterID
 	if (!id) 
 		throw "No Permissipn, please sign in";
@@ -221,12 +254,12 @@ async function editPost(posterId, postId, title, body, topics) {
 		popularity: 1 (like) -1 (dislike)
 		// Needs testing
 */
-async function updatePopularity(id, popularity) {
-	const postCollection = await posts();
-	const post = await postCollection.getPost(id);
-	if (post === null) throw 'Post does not exist';
-	post.metaData.popularity.id = popularity;
-}
+// async function updatePopularity(id, popularity) {
+// 	const postCollection = await posts();
+// 	const post = await postCollection.getPost(id);
+// 	if (post === null) throw 'Post does not exist';
+// 	post.metaData.popularity.id = popularity;
+// }
 
 function errorCheckingPost(title, body) {
 	// Input not provided
