@@ -75,3 +75,15 @@ const sysAlert = (msg, type = 'success') => {
 	const title = type.charAt(0).toUpperCase() + type.slice(1);
 	ElNotification({ title, message: msg, type });
 };
+
+/**
+ * save history to session
+ * @param {string} id the id of post
+ */
+const saveHistory = id => {
+	let history = JSON.parse(sessionStorage['HISTORY'] ?? '[]');
+	history.push(id);
+	history = [...new Set(history)];
+
+	sessionStorage['HISTORY'] = JSON.stringify(history);
+};

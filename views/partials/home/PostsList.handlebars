@@ -16,8 +16,7 @@
     <article class='post__content' :class="{omit: showMoreDetailIndex !== index}" v-html="item.content">
     </article>
     <div class='post__operation-container flex'>
-      <el-button type="info" class="aside-h" size="mini" round
-                 @click="showMoreDetailIndex = showMoreDetailIndex === index ? null : index">
+      <el-button type="info" class="aside-h" size="mini" round @click="handleSeeMore(index, item._id)">
         \{{showMoreDetailIndex === index ? 'Hide' : 'See More'}}
       </el-button>
       <i v-if="auth" class="iconfont icon-like post__operation-like" @click="handleLikes('1234')"></i>

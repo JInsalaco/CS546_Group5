@@ -21,6 +21,10 @@ const composition = {
 			pageNumber: 1,
 			pageSize: 5
 		});
+		const show = reactive({
+			showMoreDetailIndex: null,
+			showComment: null
+		});
 		const disabledLoad = ref(true);
 		const postList = ref([]);
 		const loadMorePost = () => {
@@ -35,13 +39,14 @@ const composition = {
 		};
 
 		const formatPostDetail = postData => {
-			const { body, title, username, firstname, lastname, timeStamp, topics, popularity, profilePic } = postData;
+			const { _id, body, title, username, firstname, lastname, timeStamp, topics, popularity, profilePic } = postData;
 			const topicsList = TOPICS.value.filter(item => topics.includes(item._id));
 			const content = body
 				.split('\n')
 				.map(item => `<p>${item}</p>`)
 				.join('');
 			return {
+				_id,
 				title,
 				content,
 				name: username || `${firstname} ${lastname}`,
@@ -53,6 +58,10 @@ const composition = {
 		};
 		// TODO
 		const handleLikes = id => {};
+		const handleSeeMore = (index, id) => {
+			show.showMoreDetailIndex = show.showMoreDetailIndex === index ? null : index;
+			saveHistory(id);
+		};
 
 		/************************************************************* Topics *************************************************************/
 		const currentTopic = ref(null);
@@ -93,10 +102,6 @@ const composition = {
 		};
 
 		/************************************************************* Comment *************************************************************/
-		const show = reactive({
-			showMoreDetailIndex: null,
-			showComment: null
-		});
 		const comment = reactive(new Comment());
 		const handleSubmitComment = () => {}; // TODO: submit comment
 
@@ -120,6 +125,7 @@ const composition = {
 		const handlePostSelected = item => {
 			const { _id } = item;
 			http.get('/posts/getDetail', { id: _id }).then(res => {
+				saveHistory(_id);
 				postDetail.value = formatPostDetail(res);
 				detailDialog.value = true;
 			});
@@ -139,6 +145,7 @@ const composition = {
 			disabledLoad,
 			postList,
 			handleLikes,
+			handleSeeMore,
 			loadMorePost,
 			handlePublish,
 			openPostDialog,
