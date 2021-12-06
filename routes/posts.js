@@ -17,8 +17,8 @@ router.get('/getDetail', async (req, res) => {
 	try {
 		const post = await posts.getPost(id);
 		res.json(post);
-	} catch (e) {
-		return res.status(400).send(e);
+	} catch (error) {
+		return res.status(400).send(error?.message ?? error);
 	}
 });
 
@@ -33,8 +33,8 @@ router.get('/search', async (req, res) => {
 	try {
 		const postList = await posts.getPostsByTitle(title);
 		res.status(200).json(postList);
-	} catch (e) {
-		return res.status(400).send(e);
+	} catch (error) {
+		return res.status(400).send(error?.message ?? error);
 	}
 });
 
@@ -96,27 +96,29 @@ router.post('/add', async (req, res) => {
 		const result = await posts.addPost(posterId, title, body, topics);
 		if (result) res.status(200).send('Posted Successfully, check your feed!');
 		else res.status(500).send('Internal server error, please try again after some time');
-	} catch (e) {
-		return res.status(400).send(e);
+	} catch (error) {
+		return res.status(400).send(error?.message ?? error);
 	}
 });
 
-router.delete('/:id', async (req, res) => {
-	const idCheck = errorCheckingId(req.params.id);
-	if (!idCheck) {
-		return res.status(400).send('Post does not exist');
+router.delete('/', async (req, res) => {
+	// MODIFY uncomment when finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permisssion');
+	// 	return;
+	// }
+
+	const idCheck = errorCheckingId(req.body.id);
+	if (idCheck) {
+		return res.status(400).send('Invalid Id');
 	}
 
 	try {
-		if (!req.session.userid) {
-			return res.redirect('/partials/authorize/SignInForm');
-		} else {
-			const post = await posts.deletePost(req.params.id);
-			if (post.deleted === true) res.status(200).send('Posted Deleted!');
-			else res.status(500).send('Internal server error, please try again after some time');
-		}
-	} catch (e) {
-		return res.status(400).send(e);
+		const post = await posts.deletePost(req.body.id);
+		if (post.deleted === true) res.status(200).send('Posted Deleted!');
+		else throw 'Deleted faild!';
+	} catch (error) {
+		return res.status(500).send(error?.message ?? error);
 	}
 });
 
@@ -137,8 +139,8 @@ router.put('/:id', async (req, res) => {
 			const equalPost = posts.editComparison(post.body, body, post.topics, topics);
 			if (!equalPost) return res.status(404).send('No updates made');
 		}
-	} catch (e) {
-		return res.status(400).send(e);
+	} catch (error) {
+		return res.status(400).send(error?.message ?? error);
 	}
 
 	try {
@@ -155,8 +157,8 @@ router.put('/:id', async (req, res) => {
 			popularity: post.popularity,
 			timePosted: post.metaData.timeStamp
 		});
-	} catch (e) {
-		return res.status(400).send(e);
+	} catch (error) {
+		return res.status(400).send(error?.message ?? error);
 	}
 });
 

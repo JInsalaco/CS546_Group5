@@ -88,8 +88,8 @@ router.post('/edit', async (req, res) => {
 			const userInfo = handleUserInfo(newUser);
 			if (newUser) res.json({ msg: 'Profile edited successfully', user: userInfo });
 		} else throw 'Could not edit profile';
-	} catch (e) {
-		res.status(400).send(e);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
 	}
 });
 

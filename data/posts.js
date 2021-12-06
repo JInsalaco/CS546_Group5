@@ -179,7 +179,7 @@ async function deletePost(id) {
 	if (!post) throw 'Post not found';
 
 	// Delete
-	const deletionInfo = await postCollection.deleteOne({ _id: id });
+	const deletionInfo = await postCollection.deleteOne({ _id: utils.stringToObjectID(id) });
 
 	// Check deletion worked
 	if (deletionInfo.deletedCount === 0) {

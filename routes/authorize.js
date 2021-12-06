@@ -23,8 +23,8 @@ router.post('/signup', async (req, res) => {
 		userData.checkUserData(email, password, firstname, lastname, phoneNumber);
 		var newUser = await userData.addUser(email, password, firstname, lastname, phoneNumber);
 		if (newUser) res.status(200).send('Signed up successfully');
-	} catch (e) {
-		res.status(400).send(e);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
 	}
 });
 
@@ -45,8 +45,8 @@ router.post('/signin', async (req, res) => {
 			const userInfo = handleUserInfo(user);
 			res.json(userInfo);
 		}
-	} catch (e) {
-		res.status(400).send(e); //need to render
+	} catch (error) {
+		res.status(400).send(error?.message ?? error); //need to render
 	}
 });
 
