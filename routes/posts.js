@@ -198,7 +198,7 @@ router.post('/undoLike', async (req, res) => {
 	}
 });
 
-router.post('/hisroty', async (req, res) => {
+router.post('/history', async (req, res) => {
 	// MODIFY uncomment when finished
 	// if (!req.session.userid) {
 	// 	res.status(403).send('No permisssion');

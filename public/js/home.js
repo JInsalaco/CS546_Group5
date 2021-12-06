@@ -38,24 +38,6 @@ const composition = {
 			});
 		};
 
-		const formatPostDetail = postData => {
-			const { _id, body, title, username, firstname, lastname, timeStamp, topics, popularity, profilePic } = postData;
-			const topicsList = TOPICS.value.filter(item => topics.includes(item._id));
-			const content = body
-				.split('\n')
-				.map(item => `<p>${item}</p>`)
-				.join('');
-			return {
-				_id,
-				title,
-				content,
-				name: username || `${firstname} ${lastname}`,
-				createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm'),
-				topicsList,
-				popularity,
-				profilePic
-			};
-		};
 		// TODO
 		const handleLikes = id => {};
 		const handleSeeMore = (index, id) => {
@@ -65,12 +47,11 @@ const composition = {
 
 		/************************************************************* Topics *************************************************************/
 		const currentTopic = ref(null);
-		onMounted(() => {
-			http.get('/topics/getAll').then(res => {
-				TOPICS.value = res;
+		onMounted(() =>
+			getTopics().then(res => {
 				currentTopic.value = res[0]._id;
-			});
-		});
+			})
+		);
 		watch(currentTopic, newVal => {
 			postList.value = [];
 			pageConfig.pageNumber = 1;

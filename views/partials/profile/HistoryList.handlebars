@@ -2,10 +2,10 @@
   <h2>History</h2>
 
   <div v-if="true" class="table-container">
-    <el-table :data="tableData" stripe style="width: 100%" :show-header="false">
+    <el-table :data="historyList" stripe style="width: 100%" :show-header="false">
       <el-table-column prop="title" show-overflow-tooltip>
         <template #default="{row}">
-          <el-link type="primary">\{{row.title}}</el-link>
+          <el-link type="primary" @click="getHisoryDetail(row._id)">\{{row.title}}</el-link>
         </template>
       </el-table-column>
       <el-table-column>
@@ -21,4 +21,5 @@
   </div>
 
   <el-empty v-else description="No Data"></el-empty>
+
 </div>

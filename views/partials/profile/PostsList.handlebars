@@ -3,7 +3,7 @@
 
   <div v-if="true" class="table-container">
     <el-table :data="tableData" stripe style="width: 100%" :show-header="false">
-      <el-table-column prop="title" width="250">
+      <el-table-column prop="title">
         <template #default="{row}">
           <el-link type="primary" @click="handleGetPostdetail('1234')">\{{row.title}}</el-link>
         </template>

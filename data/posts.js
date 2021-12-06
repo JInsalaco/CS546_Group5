@@ -264,7 +264,11 @@ const getMultiplePosts = async ids => {
 	let postList = await postCollection.find({ _id: { $in: ids } }).toArray();
 
 	postList = await handlePost(postList);
-	return utils.objectIdToString(postList);
+	const res = postList.map(item => {
+		const { _id, profilePic, username, firstname, lastname, timeStamp, title } = item;
+		return { _id, profilePic, username, firstname, lastname, timeStamp, title };
+	});
+	return utils.objectIdToString(res);
 };
 
 function errorCheckingPost(title, body) {

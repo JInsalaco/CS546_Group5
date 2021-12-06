@@ -94,6 +94,7 @@ Vue.createApp({
 				userAuth.userInfo = null;
 				userForm.value = new User();
 			}
+			getTopics();
 		});
 
 		/************************************************************* Information *************************************************************/
@@ -199,6 +200,37 @@ Vue.createApp({
 			);
 		});
 
+		/************************************************************* History *************************************************************/
+		const historyList = ref([]);
+		const postDetailDialog = ref(false);
+		const postDetail = ref({});
+		const getHisory = () => {
+			const ids = JSON.parse(sessionStorage['HISTORY'] ?? '[]');
+			if (!ids.length) return;
+
+			http.post('/posts/history', { ids }).then(res => {
+				historyList.value = res.map(item => {
+					const { _id, profilePic, username, firstname, lastname, timeStamp, title } = item;
+					return {
+						_id,
+						title,
+						author: {
+							url: profilePic,
+							name: username || `${firstname} ${lastname}`
+						},
+						createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm')
+					};
+				});
+			});
+		};
+		onMounted(() => getHisory());
+		const getHisoryDetail = id => {
+			http.get('/posts/getDetail', { id }).then(res => {
+				postDetail.value = formatPostDetail(res);
+				postDetailDialog.value = true;
+			});
+		};
+
 		return {
 			...toRefs(userAuth),
 			userForm,
@@ -227,6 +259,10 @@ Vue.createApp({
 			profileBg,
 			profileSummary,
 			profileDetail,
+			historyList,
+			postDetailDialog,
+			getHisoryDetail,
+			postDetail,
 			tableData, // CLEAR
 			friendsData // CLEAR
 		};

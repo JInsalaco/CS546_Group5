@@ -1,8 +1,8 @@
 <div class="profile__info flex-c">
   <img class="profile-bg" :src="profileBg" alt="profile background">
   <div class="user__avatar flex-c">
-    <el-upload v-loading="uploading" class="aside-v" :show-file-list="false" :before-upload="handleImageUpload"
-               :class="{'hide-border': !userForm.profilePic}">
+    <el-upload v-loading="uploading" class="aside-v" action="" :show-file-list="false"
+               :before-upload="handleImageUpload" :class="{'hide-border': !userForm.profilePic}">
       <el-avatar v-if="userForm.profilePic" :size="100" :src="userForm.profilePic" alt="avatar"></el-avatar>
       <i v-else class="iconfont icon-add user__avatar-icon"></i>
     </el-upload>
