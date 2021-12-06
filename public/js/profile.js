@@ -82,7 +82,6 @@ Vue.createApp({
 		});
 		const userForm = ref(new User());
 		const userFormRef = ref();
-		const userFormDisable = ref(true);
 
 		onMounted(() => {
 			const USER_INFO = sessionStorage['USER_INFO'];
@@ -99,6 +98,35 @@ Vue.createApp({
 
 		/************************************************************* Information *************************************************************/
 		const uploading = ref(false);
+		const profileDialog = ref(false);
+		const profileBg = ref('');
+		onMounted(() => {
+			const hour = dayjs().hour();
+			if (hour >= 8 && hour <= 17) {
+				profileBg.value = '/public/static/USA0.png';
+			} else if (hour > 17 && hour <= 20) {
+				profileBg.value = '/public/static/USA1.png';
+			} else {
+				profileBg.value = '/public/static/USA2.png';
+			}
+		});
+
+		// MODIFY
+		const profileSummary = computed(() => ({
+			posts: tableData.length,
+			likes: tableData.length,
+			friends: friendsData.length
+		}));
+		const profileDetail = computed(() => {
+			const { bio, DOB, email, phoneNumber } = userForm;
+			return [
+				{ title: 'About Me', content: bio },
+				{ title: 'Date of Birth', content: DOB },
+				{ title: 'Email', content: email },
+				{ title: 'Phone', content: phoneNumber }
+			];
+		});
+
 		const handleImageUpload = file => {
 			uploading.value = true;
 			const formData = new FormData();
@@ -114,14 +142,11 @@ Vue.createApp({
 		};
 
 		const handleSubmit = () => {
-			userFormDisable.value = true;
 			userFormRef.value.validate(valid => {
 				if (valid) {
 					http.post('/profile/edit', userForm.value).then(msg => {
-						ElMessage.success(msg);
-						['email', 'firstname', 'lastname', 'phoneNumber', 'username'].forEach(item =>
-							setSession(item, userForm.value[item])
-						);
+						sysAlert(msg);
+						Object.keys(userForm).forEach(key => setSession(item, userForm.value[key]));
 					});
 				} else {
 					return false;
@@ -129,7 +154,7 @@ Vue.createApp({
 			});
 		};
 		const handleProfileCancel = () => {
-			userFormDisable.value = true;
+			profileDialog.value = false;
 			userForm.value = JSON.parse(sessionStorage['USER_INFO']);
 		};
 
@@ -175,7 +200,6 @@ Vue.createApp({
 			...toRefs(userAuth),
 			userForm,
 			userFormRef,
-			userFormDisable,
 			handleImageUpload,
 			handleSubmit,
 			handleProfileCancel,
@@ -196,6 +220,10 @@ Vue.createApp({
 			handleEditConfirm,
 			showAddFriendsDialog,
 			...toRefs(addFriendsConfig),
+			profileDialog,
+			profileBg,
+			profileSummary,
+			profileDetail,
 			tableData, // CLEAR
 			friendsData // CLEAR
 		};

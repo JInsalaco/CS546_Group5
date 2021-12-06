@@ -1,16 +1,35 @@
 <div class="profile__info flex-c">
-  <h2>Information</h2>
+  <img class="profile-bg" :src="profileBg" alt="profile background">
   <div class="user__avatar flex-c">
-    <el-upload v-loading="uploading" class="aside-v" action="" :show-file-list="false"
-               :before-upload="handleImageUpload" :class="{'hide-border': !userForm.profilePic}">
-      <el-avatar v-if="userForm.profilePic" :size="100" :src="userForm.profilePic" class="user__avatar"></el-avatar>
+    <el-upload v-loading="uploading" class="aside-v" :show-file-list="false" :before-upload="handleImageUpload"
+               :class="{'hide-border': !userForm.profilePic}">
+      <el-avatar v-if="userForm.profilePic" :size="100" :src="userForm.profilePic"></el-avatar>
       <i v-else class="iconfont icon-add user__avatar-icon"></i>
     </el-upload>
-    <el-link v-show="userFormDisable" type="primary" class="user-link-edit" @click="userFormDisable = !userFormDisable">
+    <el-link type="primary" class="user-link-edit" @click="profileDialog = true">
       Edit Profile
     </el-link>
   </div>
 
+  <h2 class="info__name">\{{ `${userForm.firstname} ${userForm.lastname}` }}</h2>
+  <div>\{{userForm.DOB}}</div>
+
+  <div class="info__summary-container flex">
+    <div v-for="(item, key) in profileSummary" :key="key" class="info__summary flex-c">
+      <h3>\{{item}}</h3>
+      <span>\{{key}}</span>
+    </div>
+  </div>
+
+  <dl class="info__detail-container">
+    <template v-for="item in profileDetail" v-if="item" :key="item.title">
+      <dt>\{{item.title}}</dt>
+      <dd>\{{item.content}}</dd>
+    </template>
+  </dl>
+</div>
+
+<el-dialog v-model='profileDialog' title='Edit Profile' destroy-on-close>
   <el-form ref="userFormRef" :rules="rules" :model="userForm" label-width="80px" class="info__form"
            :disabled="userFormDisable">
     <el-form-item label="Username" prop='username'>
@@ -58,10 +77,10 @@
     <el-form-item label="Bio" prop="bio">
       <el-input v-model="userForm.bio" type="textarea" :rows="5"></el-input>
     </el-form-item>
-
-    <el-form-item class="form-btn-container" v-show="!userFormDisable">
-      <el-button type="primary" @click="handleSubmit"> Save </el-button>
-      <el-button type="danger" @click="handleProfileCancel" plain> Cancel </el-button>
-    </el-form-item>
   </el-form>
-</div>
+
+  <template #footer>
+    <el-button type="primary" @click="handleSubmit">Save</el-button>
+    <el-button @click="handleProfileCancel">Cancel</el-button>
+  </template>
+</el-dialog>

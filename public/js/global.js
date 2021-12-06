@@ -66,3 +66,8 @@ const addFriendsConfig = reactive({
 		console.log(item);
 	}
 });
+
+const sysAlert = (msg, type = 'success') => {
+	const title = type.charAt(0).toUpperCase() + type.slice(1);
+	ElNotification({ title, message: msg, type });
+};

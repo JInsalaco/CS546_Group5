@@ -5,7 +5,7 @@
 	<a class="aside-h header__title-container" href="/">
 		<h1 class="header__title">The Pond</h1>
 	</a>
-	{{#if showSeatcdInput}}
+	{{#if showSearchInput}}
 	<div>
 		<el-autocomplete class="header__input" v-model="searchTerm" :trigger-on-focus="false" clearable
 										 :fetch-suggestions="querySearchPost" @select="handlePostSelected" placeholder="Type to search"
@@ -52,7 +52,7 @@
 	</template>
 </el-dialog>
 
-{{#if showSeatcdInput}}
+{{#if showSearchInput}}
 <el-dialog v-model='detailDialog' title="Preview" destroy-on-close>
 	<div class='posts__preview'>
 		<h2 class='post__title'>\{{postDetail.title}}</h2>

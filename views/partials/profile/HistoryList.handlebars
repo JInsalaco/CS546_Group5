@@ -1,0 +1,24 @@
+<div class="profile__history flex-c">
+  <h2>History</h2>
+
+  <div v-if="true" class="table-container">
+    <el-table :data="tableData" stripe style="width: 100%" :show-header="false">
+      <el-table-column prop="title" show-overflow-tooltip>
+        <template #default="{row}">
+          <el-link type="primary">\{{row.title}}</el-link>
+        </template>
+      </el-table-column>
+      <el-table-column>
+        <template #default="{row}">
+          <span class="flex cell__cus">
+            <el-avatar :src="row.author.url" class="aside-h"></el-avatar>
+            <span class="aside-h">\{{row.author.name}}</span>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column show-overflow-tooltip prop="createTime" align="right" />
+    </el-table>
+  </div>
+
+  <el-empty v-else description="No Data"></el-empty>
+</div>
