@@ -11,25 +11,19 @@ router.get('/:type', (req, res) => {
 		} else {
 			res.render('home', { title: 'The Pond', showHeader: true, scriptUrl: ['home.js'] });
 		}
-	} catch(e) {
-		return res.status(500).json({ error: e });
+	} catch (error) {
+		return res.status(500).send(error);
 	}
 });
 
 router.post('/signup', async (req, res) => {
 	try {
-		// let userInfo = req.body;
-		// let firstname = userInfo.firstname;
-		// let lastname = userInfo.lastname;
-		// let email = userInfo.email;
-		// let phoneNumber = userInfo.phoneNumber;
-		// let password = userInfo.password;
 		const { firstname, lastname, email, phoneNumber, password } = req.body;
 		userData.checkUserData(email, password, firstname, lastname, phoneNumber);
 		var newUser = await userData.addUser(email, password, firstname, lastname, phoneNumber);
-		if (newUser) res.status(200).send('Signed up successfully'); //Need to redirect here to private session/home login
+		if (newUser) res.status(200).send('Signed up successfully');
 	} catch (e) {
-		res.status(400).send(e); //need to render
+		res.status(400).send(e);
 	}
 });
 
@@ -42,18 +36,13 @@ router.post('/signin', async (req, res) => {
 			throw 'You must supply valid username or password';
 		if (email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1) throw 'You must supply valid username or password';
 		if (password.length < 8 || password.length > 15) throw 'You must supply valid username or password';
-		let user = await userData.authenticateUser(email, password);
-		if (user) {
-			req.session.userid = user.user._id;
-			res.json({
-				id: user.user._id,
-				username: user.user.username,
-				firstname: user.user.firstname,
-				lastname: user.user.lastname,
-				profilePic: user.user.profilePic,
-				phoneNumber: user.user.phoneNumber,
-				email: user.user.email
-			});
+
+		const { authenticated, user } = await userData.authenticateUser(email, password);
+		if (authenticated) {
+			req.session.userid = user._id;
+
+			['_id', 'hashedPwd', 'posts', 'threads', 'friends', 'anonymous'].forEach(key => delete user[key]);
+			res.json(user);
 		}
 	} catch (e) {
 		res.status(400).send(e); //need to render
