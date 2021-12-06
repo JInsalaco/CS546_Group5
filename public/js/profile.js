@@ -199,6 +199,12 @@ Vue.createApp({
 				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
 			);
 		});
+		const handleDeletePost = id => {
+			http.delete('/posts', { id }).then(msg => {
+				sysAlert(msg);
+				// TODO delete the post in list
+			});
+		};
 
 		/************************************************************* History *************************************************************/
 		const historyList = ref([]);
@@ -263,6 +269,7 @@ Vue.createApp({
 			postDetailDialog,
 			getHisoryDetail,
 			postDetail,
+			handleDeletePost,
 			tableData, // CLEAR
 			friendsData // CLEAR
 		};

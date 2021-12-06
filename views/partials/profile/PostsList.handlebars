@@ -10,12 +10,12 @@
       </el-table-column>
       <el-table-column prop="createTime" align="right" />
       <el-table-column fixed="right" width="150">
-        <template #default>
+        <template #default="{row}">
           <span class="aside-h cell__cus opt-btn" @click="handlePostEdit('1234')">
             <i class="iconfont icon-edit"></i>
             Edit
           </span>
-          <el-popconfirm title="Are you sure to delete this?">
+          <el-popconfirm title="Are you sure to delete this?" @confirm="handleDeletePost(row._id)">
             <template #reference>
               <span class="aside-h cell__cus opt-btn">
                 <i class="iconfont icon-delete"></i>
