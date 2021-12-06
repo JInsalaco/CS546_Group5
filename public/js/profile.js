@@ -174,6 +174,15 @@ Vue.createApp({
 		const postsForm = ref();
 		const postForm = ref(null);
 		const createTime = computed(() => dayjs(postForm.value?.metaData?.timeStamp).format('MM/DD/YYYY HH:mm'));
+		const myPostList = ref([]);
+
+		onMounted(() => getMyPosts());
+		const getMyPosts = () => {
+			http.get('/posts/getMyPosts').then(res => {
+				console.log(res);
+				myPostList.value = res;
+			});
+		};
 
 		const handleGetPostdetail = id => {
 			getPostDetail(id);
@@ -202,7 +211,8 @@ Vue.createApp({
 		const handleDeletePost = id => {
 			http.delete('/posts', { id }).then(msg => {
 				sysAlert(msg);
-				// TODO delete the post in list
+				const index = myPostList.value.findIndex(item => item._id === id);
+				myPostList.value.splice(1, index);
 			});
 		};
 
@@ -230,7 +240,7 @@ Vue.createApp({
 			});
 		};
 		onMounted(() => getHisory());
-		const getHisoryDetail = id => {
+		const onPostDetail = id => {
 			http.get('/posts/getDetail', { id }).then(res => {
 				postDetail.value = formatPostDetail(res);
 				postDetailDialog.value = true;
@@ -267,9 +277,10 @@ Vue.createApp({
 			profileDetail,
 			historyList,
 			postDetailDialog,
-			getHisoryDetail,
+			onPostDetail,
 			postDetail,
 			handleDeletePost,
+			myPostList,
 			tableData, // CLEAR
 			friendsData // CLEAR
 		};

@@ -71,13 +71,9 @@ router.get('/getMyPosts', async (req, res) => {
 	// }
 
 	try {
-		if (req.session.userid) {
-			const postList = await posts.getMyPosts(req.session.userid);
-			if (postList) res.json(postList);
-			else res.send(400).send('No Posts');
-		}
+		const postList = await posts.getMyPosts(req.session.userid);
+		if (postList) res.json(postList);
 	} catch (error) {
-		console.log(error);
 		res.status(500).send(error?.message ?? error);
 	}
 });
@@ -124,23 +120,25 @@ router.delete('/', async (req, res) => {
 
 // User able to change title?
 router.put('/:id', async (req, res) => {
+	// MODIFY uncomment when finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permisssion');
+	// 	return;
+	// }
+
 	const idCheck = errorCheckingId(req.params.id);
-	if (!idCheck) {
-		return res.status(400).send('Post does not exist');
+	if (idCheck) {
+		return res.status(400).send('Invalid Id');
 	}
 
 	const { title, body, topics } = req.body;
 	try {
-		if (!req.session.userid) {
-			return res.redirect('/partials/authorize/SignInForm');
-		} else {
-			posts.errorCheckingPost(title, body);
-			const post = await posts.getPost(req.params.id);
-			const equalPost = posts.editComparison(post.body, body, post.topics, topics);
-			if (!equalPost) return res.status(404).send('No updates made');
-		}
+		posts.errorCheckingPost(title, body);
+		const post = await posts.getPost(req.params.id);
+		const equalPost = posts.editComparison(post.body, body, post.topics, topics);
+		if (!equalPost) return res.status(400).send('No updates made');
 	} catch (error) {
-		return res.status(400).send(error?.message ?? error);
+		return res.status(500).send(error?.message ?? error);
 	}
 
 	try {
@@ -169,10 +167,7 @@ router.post('/like', async (req, res) => {
 
 			if (!postId || postId === '') throw 'Could not fetch post details for this post';
 			const postPopularity = await posts.updatePopularity(postId, req.session.userid, 1);
-			if (postPopularity)
-				res.json({
-					postPopularity
-				});
+			if (postPopularity) res.json({ postPopularity });
 			else res.send(400).send('Could not fetch post details for this post');
 		} else throw 'Please sing in first';
 	} catch (error) {

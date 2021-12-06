@@ -37,11 +37,13 @@ async function getMyPosts(id) {
 	if (!id) throw 'No Permissipn, please sign in';
 
 	const postCollection = await posts();
-	let postList = await postCollection
-		.find({ posterId: id }, { projection: { _id: 1, title: 1 } })
-		.sort({ 'metaData.timeStamp': 1 })
-		.toArray();
-	return postList;
+	let postList = await postCollection.find({ posterId: id }, { projection: { _id: 1, title: 1 } }).toArray();
+
+	const res = postList.map(item => {
+		const { _id, title } = item;
+		return { _id: utils.objectIdToString(_id), title };
+	});
+	return utils.objectIdToString(res);
 }
 // Add a post to the Pond
 async function getPostsByTitle(title) {

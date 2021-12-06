@@ -1,11 +1,11 @@
 <div class="profile__posts flex-c">
   <h2>My Posts</h2>
 
-  <div v-if="true" class="table-container">
-    <el-table :data="tableData" stripe style="width: 100%" :show-header="false">
+  <div v-if="myPostList.length" class="table-container">
+    <el-table :data="myPostList" stripe style="width: 100%" :show-header="false">
       <el-table-column prop="title">
         <template #default="{row}">
-          <el-link type="primary" @click="handleGetPostdetail('1234')">\{{row.title}}</el-link>
+          <el-link type="primary" @click="onPostDetail(row._id)">\{{row.title}}</el-link>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" align="right" />
