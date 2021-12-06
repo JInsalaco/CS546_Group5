@@ -39,7 +39,11 @@ const composition = {
 		};
 
 		// TODO
-		const handleLikes = id => {};
+		const handleLikes = id => {
+			http.post('posts/like', { id }).then(res => {
+				console.log(res);
+			});
+		};
 		const handleSeeMore = (index, id) => {
 			show.showMoreDetailIndex = show.showMoreDetailIndex === index ? null : index;
 			saveHistory(id);

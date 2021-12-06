@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userData = require('../data/users');
-const { handleUserInfo } = require('../utils');
+const { handleUserInfo, objectIdToString } = require('../utils');
 
 router.get('/:type', (req, res) => {
 	try {
@@ -40,7 +40,7 @@ router.post('/signin', async (req, res) => {
 
 		const { authenticated, user } = await userData.authenticateUser(email, password);
 		if (authenticated) {
-			req.session.userid = user._id;
+			req.session.userid = objectIdToString(user._id);
 
 			const userInfo = handleUserInfo(user);
 			res.json(userInfo);

@@ -5,31 +5,25 @@ const topicData = require('./topics');
 const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
 
-async function updatePopularity(postId, userId, counter) {
+async function updatePopularity(postId, userId) {
 	const pid = utils.stringToObjectID(postId);
 	const postCollection = await posts();
-	const post = await postCollection.findOne({ _id: pid });
-	let popularityList = [];
-	let popularity = post.popularity;
-	if (popularity) popularityList = popularity;
+	const { popularity } = await postCollection.findOne({ _id: pid });
 
-	if (counter === 1) {
-		if (postId in popularityList) return popularityList.length;
-		popularityList.push(userId);
-		const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity: popularityList } });
-		if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
-	} else if (counter === 0) {
-		if (postId in popularityList) return popularityList.length;
-		popularityList.pop(userId);
-		const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity: popularityList } });
-		if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
+	let likeStatus;
+	if (popularity.includes(userId)) {
+		const index = popularity.findIndex(item => item === userId);
+		popularity.splice(1, index);
+		likeStatus = false;
+	} else {
+		popularity.push(userId);
+		likeStatus = true;
 	}
-	return popularityList.length;
-	// popularityObj[userId] = val;
-	// const updateInfo = postCollection.updateOne({ _id: cid }, { $set: { popularity: popularityObj } });
-	// if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
-	// const overallPopularity = popularityObj => Object.values(popularityObj).reduce((a, b) => a + b);
-	// return overallPopularity(popularityObj);
+
+	const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity } });
+	if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
+
+	return { popularity: popularity.length, likeStatus };
 }
 
 async function getMyPosts(id) {

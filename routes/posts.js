@@ -2,6 +2,9 @@ const router = require('express').Router();
 const { posts } = require('../data');
 const { errorCheckingId } = require('../utils');
 
+/**
+ * DONE
+ */
 router.get('/getDetail', async (req, res) => {
 	// MODIFY uncomment when finished
 	// if (!req.session.userid) {
@@ -22,6 +25,9 @@ router.get('/getDetail', async (req, res) => {
 	}
 });
 
+/**
+ * DONE
+ */
 router.get('/search', async (req, res) => {
 	// MODIFY uncomment when finished
 	// if (!req.session.userid) {
@@ -38,6 +44,9 @@ router.get('/search', async (req, res) => {
 	}
 });
 
+/**
+ * DONE
+ */
 router.get('/getPosts', async (req, res) => {
 	// MODIFY uncomment when finished
 	// if (!req.session.userid) {
@@ -50,7 +59,6 @@ router.get('/getPosts', async (req, res) => {
 		if (errorCheckingId(topicId)) throw 'topicId invalid';
 		if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
 	} catch (error) {
-		console.log(error);
 		res.status(400).send(error?.message ?? error);
 		return;
 	}
@@ -59,25 +67,30 @@ router.get('/getPosts', async (req, res) => {
 		const postList = await posts.getPosts(req.query);
 		res.json(postList);
 	} catch (error) {
-		console.log(error);
 		res.status(500).send(error?.message ?? error);
 	}
 });
+
+/**
+ * DONE
+ */
 router.get('/getMyPosts', async (req, res) => {
-	// MODIFY uncomment when finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permisssion');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
 	try {
 		const postList = await posts.getMyPosts(req.session.userid);
-		if (postList) res.json(postList);
+		res.json(postList);
 	} catch (error) {
 		res.status(500).send(error?.message ?? error);
 	}
 });
 
+/**
+ * DONE
+ */
 router.post('/add', async (req, res) => {
 	if (!req.session.userid) {
 		res.status(403).send('No permission');
@@ -87,7 +100,6 @@ router.post('/add', async (req, res) => {
 	try {
 		const { title, body, topics } = req.body;
 		posts.errorCheckingPost(title, body);
-		// const topicResult = await topicData.getAllTopicTitles(topics);
 		const posterId = req.session.userid;
 		const result = await posts.addPost(posterId, title, body, topics);
 		if (result) res.status(200).send('Posted Successfully, check your feed!');
@@ -97,12 +109,14 @@ router.post('/add', async (req, res) => {
 	}
 });
 
+/**
+ * DONE
+ */
 router.delete('/', async (req, res) => {
-	// MODIFY uncomment when finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permisssion');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
 	const idCheck = errorCheckingId(req.body.id);
 	if (idCheck) {
@@ -160,47 +174,37 @@ router.put('/:id', async (req, res) => {
 	}
 });
 
+/**
+ * DONE
+ */
 router.post('/like', async (req, res) => {
-	try {
-		if (req.session.userid) {
-			const postId = req.query.id;
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
-			if (!postId || postId === '') throw 'Could not fetch post details for this post';
-			const postPopularity = await posts.updatePopularity(postId, req.session.userid, 1);
-			if (postPopularity) res.json({ postPopularity });
-			else res.send(400).send('Could not fetch post details for this post');
-		} else throw 'Please sing in first';
+	const { id } = req.body;
+	if (errorCheckingId(id)) {
+		res.status(400).send(error);
+		return;
+	}
+
+	try {
+		const result = await posts.updatePopularity(id, req.session.userid);
+		res.json(result);
 	} catch (error) {
-		console.log(error);
 		res.status(500).send(error?.message ?? error);
 	}
 });
 
-router.post('/undoLike', async (req, res) => {
-	try {
-		if (req.session.userid) {
-			const postId = req.query.id;
-
-			if (!postId || postId === '') throw 'Could not fetch post details for this post';
-			const postPopularity = await posts.updatePopularity(postId, req.session.userid, 0);
-			if (postPopularity)
-				res.json({
-					postPopularity
-				});
-			else res.send(400).send('Could not fetch post details for this post');
-		} else throw 'Please sing in first';
-	} catch (error) {
-		console.log(error);
-		res.status(500).send(error?.message ?? error);
-	}
-});
-
+/**
+ * DONE
+ */
 router.post('/history', async (req, res) => {
-	// MODIFY uncomment when finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permisssion');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
 	const { ids } = req.body;
 	try {

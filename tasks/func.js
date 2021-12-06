@@ -3,7 +3,7 @@ const { users: usersData, topics: topicsData, posts: postsData, comments: commen
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const Mock = require('mockjs');
-const { stringToObjectID } = require('../data/utils');
+const { stringToObjectID } = require('../utils');
 
 const getAllUsers = async () => await usersData.getAllUsers();
 const getAllTopics = async () => await topicsData.getAllTopics();
