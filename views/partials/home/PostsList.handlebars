@@ -3,7 +3,7 @@
   <li v-for='(item, index) in postList' :key='item' class='post__list-item'>
     <h2 class='post__title'>\{{item.title}}</h2>
     <div class='post__info-container flex'>
-      <el-avatar :size="50" :src="item.profilePic"></el-avatar>
+      <el-avatar :size="50" :src="item.profilePic" alt="avatar"></el-avatar>
       <span class='post__user-info'>
         <div class='user-info__username'>\{{item.name}}</div>
         <div class='user-info__time'>\{{item.createTime}}</div>

@@ -15,7 +15,7 @@
 
 	<div v-if="auth">
 		<el-dropdown>
-			<el-avatar :size="40" :src="userInfo?.profilePic ?? '/public/img/default.png'"></el-avatar>
+			<el-avatar :size="40" :src="userInfo?.profilePic ?? '/public/img/default.png'" alt="avatar"></el-avatar>
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item class="header__avatar-profile">
@@ -58,7 +58,7 @@
 		<h2 class='post__title'>\{{postDetail.title}}</h2>
 
 		<div class='post__info-container flex'>
-			<el-avatar :size="50" :src="postDetail.profilePic"></el-avatar>
+			<el-avatar :size="50" :src="postDetail.profilePic" alt="avatar"></el-avatar>
 			<span class='post__user-info'>
 				<div class='user-info__username'>\{{postDetail.name}}</div>
 				<div class='user-info__time'>\{{postDetail.createTime}}</div>
