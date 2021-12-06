@@ -118,9 +118,9 @@ Vue.createApp({
 			friends: friendsData.length
 		}));
 		const profileDetail = computed(() => {
-			const { bio, DOB, email, phoneNumber } = userForm;
+			const { bio, DOB, email, phoneNumber } = userForm.value;
 			return [
-				{ title: 'About Me', content: bio },
+				{ title: 'About Me', content: bio.replaceAll('\n', '<br />') },
 				{ title: 'Date of Birth', content: DOB },
 				{ title: 'Email', content: email },
 				{ title: 'Phone', content: phoneNumber }
@@ -148,6 +148,7 @@ Vue.createApp({
 						const { msg, user } = res;
 						sysAlert(msg);
 						updateUserInfo(user);
+						userForm.value = { ...userForm.value, ...user };
 						profileDialog.value = false;
 					});
 				} else {

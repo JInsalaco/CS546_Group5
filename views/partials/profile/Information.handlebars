@@ -21,12 +21,12 @@
     </div>
   </div>
 
-  <dl class="info__detail-container">
-    <template v-for="item in profileDetail" v-if="item" :key="item.title">
-      <dt>\{{item.title}}</dt>
-      <dd>\{{item.content}}</dd>
-    </template>
-  </dl>
+  <ul class="info__detail-container">
+    <li class="flex aside-v" v-for="item in profileDetail" :key="item.title">
+      <span class="detail-label aside-h">\{{item.title}}</span>
+      <span class="detail-content aside-h" v-html="item.content"></span>
+    </li>
+  </ul>
 </div>
 
 <el-dialog v-model='profileDialog' title='Edit Profile' destroy-on-close>

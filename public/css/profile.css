@@ -85,19 +85,17 @@
 
 .info__detail-container {
 	align-self: self-start;
-	margin: 25px 15%;
+	margin: 30px 15%;
 }
-.info__detail-container dt,
-.info__detail-container dd {
-	margin-block-start: 1em;
-	margin-block-end: 1em;
-}
-.info__detail-container dt {
+.info__detail-container .detail-label {
 	font-weight: bold;
 	font-size: 1.17em;
+	vertical-align: baseline;
+	min-width: 120px;
 }
-.info__detail-container dd {
+.info__detail-container .detail-content {
 	color: var(--font-color-grey);
+	line-height: 1.5em;
 }
 
 .table-container {
