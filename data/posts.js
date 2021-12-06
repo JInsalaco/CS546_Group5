@@ -130,7 +130,7 @@ async function addPost(posterId, title, body, topics) {
 		posterId: sid,
 		topics: topicTitles,
 		thread: [],
-		popularity: {},
+		popularity: [],
 		metaData: {
 			timeStamp: new Date().getTime(),
 			archived: false,

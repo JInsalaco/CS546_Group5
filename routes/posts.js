@@ -7,10 +7,10 @@ const { errorCheckingId } = require('../utils');
  */
 router.get('/getDetail', async (req, res) => {
 	// MODIFY uncomment when finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permisssion');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
 	const { id } = req.query;
 	if (errorCheckingId(id)) {
@@ -30,10 +30,10 @@ router.get('/getDetail', async (req, res) => {
  */
 router.get('/search', async (req, res) => {
 	// MODIFY uncomment when finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permisssion');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
 	const { title } = req.query;
 	try {
@@ -49,10 +49,10 @@ router.get('/search', async (req, res) => {
  */
 router.get('/getPosts', async (req, res) => {
 	// MODIFY uncomment when finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permisssion');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
 	const { topicId, pageSize, pageNumber } = req.query;
 	try {
