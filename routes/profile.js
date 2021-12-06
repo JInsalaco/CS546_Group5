@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { formidable } = require('formidable');
 const fs = require('fs');
 const userData = require('../data/users');
+const { handleUserInfo } = require('../utils');
 
 router.get('/', (req, res) => {
 	// MODIFY uncomment this when project is finished
@@ -84,7 +85,8 @@ router.post('/edit', async (req, res) => {
 				bio
 			);
 
-			if (newUser) res.json({ msg: 'Profile edited successfully', user: newUser });
+			const userInfo = handleUserInfo(newUser);
+			if (newUser) res.json({ msg: 'Profile edited successfully', user: userInfo });
 		} else throw 'Could not edit profile';
 	} catch (e) {
 		res.status(400).send(e);

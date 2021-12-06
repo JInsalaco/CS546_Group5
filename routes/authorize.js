@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userData = require('../data/users');
+const { handleUserInfo } = require('../utils');
 
 router.get('/:type', (req, res) => {
 	try {
@@ -41,8 +42,8 @@ router.post('/signin', async (req, res) => {
 		if (authenticated) {
 			req.session.userid = user._id;
 
-			['_id', 'hashedPwd', 'posts', 'thread', 'friends', 'anonymous'].forEach(key => delete user[key]);
-			res.json(user);
+			const userInfo = handleUserInfo(user);
+			res.json(userInfo);
 		}
 	} catch (e) {
 		res.status(400).send(e); //need to render

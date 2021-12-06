@@ -54,8 +54,17 @@ function objectIdToString(id) {
 	return id.toString();
 }
 
+const handleUserInfo = userInfo => {
+	const props = ['firstname', 'lastname', 'phoneNumber', 'email', 'gender', 'DOB', 'username', 'bio', 'profilePic'];
+	return props.reduce((pre, cur) => {
+		pre[cur] = userInfo[cur];
+		return pre;
+	}, {});
+};
+
 module.exports = {
 	errorCheckingId,
 	stringToObjectID,
-	objectIdToString
+	objectIdToString,
+	handleUserInfo
 };
