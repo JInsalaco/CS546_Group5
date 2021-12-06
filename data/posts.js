@@ -254,18 +254,18 @@ async function editPost(posterId, postId, title, body, topics) {
 	return { updated: true };
 }
 
-/*
-	@updatePopularity: add a user who liked or disliked the post
-		id: Unique id of the post
-		popularity: 1 (like) -1 (dislike)
-		// Needs testing
-*/
-// async function updatePopularity(id, popularity) {
-// 	const postCollection = await posts();
-// 	const post = await postCollection.getPost(id);
-// 	if (post === null) throw 'Post does not exist';
-// 	post.metaData.popularity.id = popularity;
-// }
+const getMultiplePosts = async ids => {
+	for (let id of ids) {
+		if (utils.errorCheckingId(id)) throw 'Invalid Id';
+	}
+
+	ids = ids.map(item => utils.stringToObjectID(item));
+	const postCollection = await posts();
+	let postList = await postCollection.find({ _id: { $in: ids } }).toArray();
+
+	postList = await handlePost(postList);
+	return utils.objectIdToString(postList);
+};
 
 function errorCheckingPost(title, body) {
 	// Input not provided
@@ -319,5 +319,6 @@ module.exports = {
 	getPostsByTitle,
 	getPosts,
 	getAllPosts,
-	getMyPosts
+	getMyPosts,
+	getMultiplePosts
 };

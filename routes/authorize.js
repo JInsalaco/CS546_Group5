@@ -13,7 +13,7 @@ router.get('/:type', (req, res) => {
 			res.render('home', { title: 'The Pond', showHeader: true, scriptUrl: ['home.js'] });
 		}
 	} catch (error) {
-		return res.status(500).send(error);
+		return res.status(500).send(error?.message ?? error);
 	}
 });
 

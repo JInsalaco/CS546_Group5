@@ -51,7 +51,7 @@ router.get('/getPosts', async (req, res) => {
 		if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
 	} catch (error) {
 		console.log(error);
-		res.status(400).send(error);
+		res.status(400).send(error?.message ?? error);
 		return;
 	}
 
@@ -60,7 +60,7 @@ router.get('/getPosts', async (req, res) => {
 		res.json(postList);
 	} catch (error) {
 		console.log(error);
-		res.status(500).send(error);
+		res.status(500).send(error?.message ?? error);
 	}
 });
 router.get('/getMyPosts', async (req, res) => {
@@ -78,7 +78,7 @@ router.get('/getMyPosts', async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
-		res.status(500).send(error);
+		res.status(500).send(error?.message ?? error);
 	}
 });
 
@@ -175,9 +175,10 @@ router.post('/like', async (req, res) => {
 		} else throw 'Please sing in first';
 	} catch (error) {
 		console.log(error);
-		res.status(500).send(error);
+		res.status(500).send(error?.message ?? error);
 	}
 });
+
 router.post('/undoLike', async (req, res) => {
 	try {
 		if (req.session.userid) {
@@ -193,7 +194,33 @@ router.post('/undoLike', async (req, res) => {
 		} else throw 'Please sing in first';
 	} catch (error) {
 		console.log(error);
-		res.status(500).send(error);
+		res.status(500).send(error?.message ?? error);
 	}
 });
+
+router.post('/hisroty', async (req, res) => {
+	// MODIFY uncomment when finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permisssion');
+	// 	return;
+	// }
+
+	const { ids } = req.body;
+	try {
+		for (let id of ids) {
+			if (errorCheckingId(id)) throw 'Invalid Id';
+		}
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
+	}
+
+	try {
+		const postList = await posts.getMultiplePosts(ids);
+		res.json(postList);
+	} catch (error) {
+		res.status(500).send(error?.message ?? error);
+	}
+});
+
 module.exports = router;
