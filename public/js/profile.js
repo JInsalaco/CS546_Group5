@@ -135,7 +135,7 @@ Vue.createApp({
 				.post('/profile/upload', formData)
 				.then(res => {
 					userForm.value.profilePic = res.path;
-					setSession('profilePic', res.path);
+					setUserInfo('profilePic', res.path);
 				})
 				.finally(() => setTimeout(() => (uploading.value = false), 1000));
 			return false;
@@ -144,9 +144,11 @@ Vue.createApp({
 		const handleSubmit = () => {
 			userFormRef.value.validate(valid => {
 				if (valid) {
-					http.post('/profile/edit', userForm.value).then(msg => {
+					http.post('/profile/edit', userForm.value).then(res => {
+						const { msg, user } = res;
 						sysAlert(msg);
-						Object.keys(userForm).forEach(key => setSession(item, userForm.value[key]));
+						updateUserInfo(user);
+						profileDialog.value = false;
 					});
 				} else {
 					return false;

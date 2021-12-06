@@ -6,7 +6,7 @@ const userData = require('../data/users');
 router.get('/', (req, res) => {
 	// MODIFY uncomment this when project is finished
 	// if (!req.session.userid) {
-	// 	res.status(403).redirect('/');
+	// 	res.status(403).send('No permission');
 	// 	return;
 	// }
 	res.render('profile', { title: 'Profile', showHeader: true, scriptUrl: ['profile.js'] });
@@ -42,6 +42,12 @@ router.post('/upload', async (req, res) => {
 });
 
 router.post('/edit', async (req, res) => {
+	// MODIFY uncomment this when project is finished
+	// if (!req.session.userid) {
+	// 	res.status(403).send('No permission');
+	// 	return;
+	// }
+
 	try {
 		if (req.body) {
 			let username = '',

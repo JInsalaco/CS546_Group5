@@ -42,10 +42,14 @@ const handleLogout = () => {
 	});
 };
 
-const setSession = (key, value) => {
+const setUserInfo = (key, value) => {
 	const userInfo = JSON.parse(sessionStorage['USER_INFO']);
 	userInfo[key] = value;
 	sessionStorage['USER_INFO'] = JSON.stringify(userInfo);
+};
+
+const updateUserInfo = newUserInfo => {
+	sessionStorage['USER_INFO'] = JSON.stringify(newUserInfo);
 };
 
 const showSearchInput = ref(true);
