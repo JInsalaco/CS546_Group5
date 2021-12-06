@@ -41,7 +41,7 @@ router.post('/signin', async (req, res) => {
 		if (authenticated) {
 			req.session.userid = user._id;
 
-			['_id', 'hashedPwd', 'posts', 'threads', 'friends', 'anonymous'].forEach(key => delete user[key]);
+			['_id', 'hashedPwd', 'posts', 'thread', 'friends', 'anonymous'].forEach(key => delete user[key]);
 			res.json(user);
 		}
 	} catch (e) {

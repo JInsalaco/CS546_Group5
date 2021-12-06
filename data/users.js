@@ -58,7 +58,7 @@ async function addUser(email, password, firstname, lastname, phoneNumber) {
 		bio: '',
 		profilePic: '/public/img/default.png',
 		posts: [],
-		threads: [],
+		thread: [],
 		friends: [],
 		anonymous: false
 	};
