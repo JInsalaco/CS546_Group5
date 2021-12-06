@@ -23,7 +23,7 @@ async function updatePopularity(postId, userId) {
 	const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity } });
 	if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
 
-	return { popularity: popularity.length, likeStatus };
+	return likeStatus;
 }
 
 async function getMyPosts(id) {
@@ -47,7 +47,7 @@ async function getPostsByTitle(title) {
 	return postList.map(item => ({ _id: item._id, title: item.title }));
 }
 
-const getPosts = async ({ topicId, pageSize, pageNumber }) => {
+const getPosts = async ({ topicId, pageSize, pageNumber }, userid) => {
 	if (utils.errorCheckingId(topicId)) throw 'topicId invalid';
 	if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
 
@@ -59,17 +59,17 @@ const getPosts = async ({ topicId, pageSize, pageNumber }) => {
 		.limit(+pageSize)
 		.toArray();
 
-	postList = await handlePost(postList);
+	postList = await handlePost(postList, userid);
 	return postList;
 };
 
-const handlePost = async inputPost => {
+const handlePost = async (inputPost, userid) => {
 	let res;
 	if (Array.isArray(inputPost)) {
 		res = [];
 		for (let post of inputPost) {
 			post = await getUserInfoToPost(post);
-
+			userid && (post.popularity = post.popularity.includes(userid));
 			res.push(post);
 		}
 	} else {

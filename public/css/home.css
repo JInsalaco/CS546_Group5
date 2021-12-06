@@ -61,6 +61,9 @@ h2.post__title {
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 }
+.icon-like-fill {
+	color: var(--primary-color);
+}
 
 .operation__btn-response {
 	padding: 5px 10px;

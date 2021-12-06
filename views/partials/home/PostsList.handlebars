@@ -19,7 +19,8 @@
       <el-button type="info" class="aside-h" size="mini" round @click="handleSeeMore(index, item._id)">
         \{{showMoreDetailIndex === index ? 'Hide' : 'See More'}}
       </el-button>
-      <i v-if="auth" class="iconfont icon-like post__operation-like" @click="handleLikes(item._id)"></i>
+      <i v-if="auth" class="iconfont post__operation-like" :class="item.popularity ? 'icon-like-fill' : 'icon-like'"
+         @click="handleLikes(index, item._id)"></i>
     </div>
     <el-form v-if="auth" inline :model="comment" class="form__comment flex">
       <el-form-item class="form-item__input">

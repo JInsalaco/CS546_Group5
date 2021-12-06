@@ -64,7 +64,7 @@ router.get('/getPosts', async (req, res) => {
 	}
 
 	try {
-		const postList = await posts.getPosts(req.query);
+		const postList = await posts.getPosts(req.query, req.session.userid);
 		res.json(postList);
 	} catch (error) {
 		res.status(500).send(error?.message ?? error);

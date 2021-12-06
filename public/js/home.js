@@ -38,10 +38,9 @@ const composition = {
 			});
 		};
 
-		// TODO
-		const handleLikes = id => {
+		const handleLikes = (index, id) => {
 			http.post('posts/like', { id }).then(res => {
-				console.log(res);
+				postList.value[index].popularity = res;
 			});
 		};
 		const handleSeeMore = (index, id) => {
