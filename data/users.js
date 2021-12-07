@@ -110,7 +110,7 @@ async function getUserFriends(userId) {
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: uid });
 	if (!user) throw 'User does not exist';
-	let friendList = user.friends;
+	let friendList = [];
 	user.friends.forEach(async friendId => {
 		let friend = await getUser(friendId);
 		friendList.push(friend);
