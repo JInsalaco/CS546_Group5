@@ -48,7 +48,7 @@ async function getPostsByTitle(title) {
 }
 
 const getPosts = async ({ topicId, pageSize, pageNumber }, userid) => {
-	if (utils.errorCheckingId(topicId)) throw 'topicId invalid';
+	utils.errorCheckingId(topicId);
 	if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
 
 	const postCollection = await posts();
@@ -68,8 +68,7 @@ const handlePost = async (inputPost, userid) => {
 	if (Array.isArray(inputPost)) {
 		res = [];
 		for (let post of inputPost) {
-			post = await getUserInfoToPost(post);
-			userid && (post.popularity = post.popularity.includes(userid));
+			post = await getUserInfoToPost(post, userid);
 			res.push(post);
 		}
 	} else {
@@ -79,10 +78,11 @@ const handlePost = async (inputPost, userid) => {
 	return res;
 };
 
-const getUserInfoToPost = async post => {
+const getUserInfoToPost = async (post, userid) => {
 	post.timeStamp = post.metaData.timeStamp;
 	const poster = await userData.getUser(post.posterId);
 	poster && ['firstname', 'lastname', 'username', 'profilePic'].forEach(item => (post[item] = poster[item]));
+	userid && (post.popularity = post.popularity.includes(userid));
 	delete post.thread;
 	delete post.posterId;
 	delete post.metaData;
@@ -133,7 +133,7 @@ async function addPost(posterId, title, body, topics) {
 	return post;
 }
 
-async function getPost(id) {
+async function getPost(id, needHandle = true) {
 	// Get the id as an ObjectId, will return if valid
 	let oid = utils.stringToObjectID(id);
 
@@ -143,7 +143,7 @@ async function getPost(id) {
 
 	// Check if the post was found
 	if (post === null) throw 'Post not found';
-	post = await handlePost(post);
+	needHandle && (post = await handlePost(post));
 
 	return post;
 }
@@ -234,7 +234,7 @@ async function editPost(posterId, postId, title, body, topics) {
 
 const getMultiplePosts = async ids => {
 	for (let id of ids) {
-		if (utils.errorCheckingId(id)) throw 'Invalid Id';
+		utils.errorCheckingId(id);
 	}
 
 	ids = ids.map(item => utils.stringToObjectID(item));
@@ -268,7 +268,7 @@ function errorCheckingPost(title, body, topics) {
 	if (!Array.isArray(topics)) throw 'Topics should be an array';
 	if (topics.length < 1 || topics.length > 3) throw 'Topics should be at least 1 and at most 3';
 	for (let topicId of topics) {
-		if (utils.errorCheckingId(topicId)) throw 'Invalid topic id';
+		utils.errorCheckingId(topicId);
 	}
 }
 
@@ -303,12 +303,7 @@ async function getPostPopularity(id) {
 }
 
 const updateThread = async (postId, threadId) => {
-	postId = utils.stringToObjectID(postId);
-	const postCollection = await posts();
-	const post = await postCollection.findOne({ _id: postId });
-	if (!post) throw 'Post no found';
-
-	const { thread } = post;
+	const { thread } = getPost(postId, false);
 	thread.push(utils.objectIdToString(threadId));
 	const updateInfo = postCollection.updateOne({ _id: postId }, { $set: { thread } });
 	if (updateInfo.modifiedCount === 0) throw 'Could not update popularity';

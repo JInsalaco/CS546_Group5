@@ -1,4 +1,5 @@
 const posts = require('./posts');
+const users = require('./users');
 const { comments } = require('../config/mongoCollections');
 const utils = require('../utils');
 
@@ -46,12 +47,40 @@ async function deleteComment(commentId) {
 	return { deleted: true };
 }
 
-async function getCommentById(id) {
+async function getComments(postId, userId) {
+	const { thread } = await posts.getPost(postId, false);
+	const threadIds = thread.map(item => utils.stringToObjectID(item));
 	const commentCollection = await comments();
-	const comment = commentCollection.findOne({ _id: id });
-	if (comment) return comment;
-	else return false;
+	const commentsInPost = await commentCollection
+		.find({ _id: { $in: threadIds } })
+		.sort({ 'metaData.timeStamp': -1 })
+		.toArray();
+
+	const commentList = await handleComments(commentsInPost, userId);
+	return commentList;
 }
+
+const handleComments = async (comments, userId) => {
+	const res = [];
+	for (let comment of comments) {
+		comment = await getUserInfoToComment(comment, userId);
+		res.push(comment);
+	}
+
+	return res;
+};
+
+const getUserInfoToComment = async (comment, userId) => {
+	comment._id = utils.objectIdToString(comment._id);
+	comment.timeStamp = comment.metaData.timeStamp;
+	const poster = await users.getUser(comment.posterId);
+	comment.poster = {};
+	poster && ['firstname', 'lastname', 'username', 'profilePic'].forEach(item => (comment.poster[item] = poster[item]));
+	userId && (comment.popularity = comment.popularity.includes(userId));
+	delete comment.metaData;
+
+	return comment;
+};
 
 const getAllComments = async (skip, count) => {
 	const commentCollection = await comments();
@@ -69,6 +98,6 @@ module.exports = {
 	createComment,
 	commentPopularity,
 	deleteComment,
-	getCommentById,
+	getComments,
 	getAllComments
 };

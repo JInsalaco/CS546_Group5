@@ -6,8 +6,11 @@ const { errorCheckingId } = require('../utils');
  */
 router.get('/getDetail', async (req, res) => {
 	const { id } = req.query;
-	if (errorCheckingId(id)) {
-		return res.status(400).send('Post does not exist');
+	try {
+		errorCheckingId(id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
 	}
 
 	try {
@@ -37,7 +40,7 @@ router.get('/search', async (req, res) => {
 router.get('/getPosts', async (req, res) => {
 	const { topicId, pageSize, pageNumber } = req.query;
 	try {
-		if (errorCheckingId(topicId)) throw 'topicId invalid';
+		errorCheckingId(topicId);
 		if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
 	} catch (error) {
 		res.status(400).send(error?.message ?? error);
@@ -103,9 +106,11 @@ router.delete('/', async (req, res) => {
 		return;
 	}
 
-	const idCheck = errorCheckingId(req.body.id);
-	if (idCheck) {
-		return res.status(400).send('Invalid Id');
+	try {
+		errorCheckingId(req.body.id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
 	}
 
 	try {
@@ -125,9 +130,11 @@ router.put('/:id', async (req, res) => {
 	// 	return;
 	// }
 
-	const idCheck = errorCheckingId(req.params.id);
-	if (idCheck) {
-		return res.status(400).send('Invalid Id');
+	try {
+		errorCheckingId(req.params.id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
 	}
 
 	const { title, body, topics } = req.body;
@@ -169,8 +176,10 @@ router.post('/like', async (req, res) => {
 	}
 
 	const { id } = req.body;
-	if (errorCheckingId(id)) {
-		res.status(400).send(error);
+	try {
+		errorCheckingId(id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
 		return;
 	}
 
@@ -194,7 +203,7 @@ router.post('/history', async (req, res) => {
 	const { ids } = req.body;
 	try {
 		for (let id of ids) {
-			if (errorCheckingId(id)) throw 'Invalid Id';
+			errorCheckingId(id);
 		}
 	} catch (error) {
 		res.status(400).send(error?.message ?? error);
@@ -210,26 +219,31 @@ router.post('/history', async (req, res) => {
 });
 
 //TODO: Finish Testing
-router.get('/getComments/:id', async (req, res) => {
+router.get('/getComments', async (req, res) => {
 	if (!req.session.userid) {
 		res.status(403).send('No permisssion');
 		return;
 	}
 
+	const { id: postId } = req.query;
+	try {
+		errorCheckingId(postId);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+	}
+
 	const uid = req.session.userid;
 	try {
-		const comment = await comments.getCommentById(uid);
-		let posterId = comment.posterId;
-		const { profilePic, username, lastname, firstname } = await users.getUser(posterId);
-		let posterInfo = { profilePic, username, lastname, firstname };
-		let commentInfo = [{ poster: posterInfo }, comment.body, { metaData: comment.metaData }];
-		res.json(commentInfo);
+		const commentList = await comments.getComments(postId, uid);
+		res.json(commentList);
 	} catch (error) {
 		res.status(500).send(error?.message ?? error);
 	}
 });
 
-//TODO: Finish Testing
+/**
+ * DONE
+ */
 router.post('/addComment', async (req, res) => {
 	if (!req.session.userid) {
 		res.status(403).send('No permisssion');
