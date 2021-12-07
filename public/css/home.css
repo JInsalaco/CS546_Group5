@@ -307,10 +307,10 @@ h2.post__title {
 .form__comment .el-form-item {
 	margin-bottom: 0;
 }
-.form__comment .form-item__input {
+.form__comment {
 	flex-grow: 1;
 }
-.form__comment .form-item__input .el-input__inner {
+.form__comment .el-input__inner {
 	background: var(--bg-grey);
 	border: none;
 	border-radius: 50px;
@@ -326,10 +326,12 @@ h2.post__title {
 .comment__bar .icon-down[data-show-list='true'] {
 	transform: rotate(180deg);
 }
-.comment__info {
+.comment-item > div:first-child {
 	align-items: center;
 }
-.comment__info .comment__info-time {
+.comment__body {
+	margin-left: 50px;
+}
+.comment__info-time {
 	margin-left: auto;
-	color: var(--font-color-grey);
 }

@@ -61,7 +61,7 @@ const composition = {
 			getPostList({ ...pageConfig, topicId: newVal });
 		});
 
-		/************************************************************* Create Post *************************************************************/
+		/************************************************************* Add Post *************************************************************/
 		const showDialog = reactive({ showPostDialog: false });
 		const postsForm = ref();
 		const postForm = ref(null);
@@ -76,6 +76,10 @@ const composition = {
 				if (valid) {
 					http.post('/posts/add', postForm.value).then(msg => {
 						ElNotification({ title: 'Success', message: msg, type: 'success' });
+						if (postForm.value.topics.includes(currentTopic.value)) {
+							postList.value = [];
+							getPostList({ pageNumber: 1, pageSize: 5, topicId: currentTopic.value });
+						}
 						postsForm.value.resetFields();
 						showDialog.showPostDialog = false;
 					});
@@ -86,8 +90,19 @@ const composition = {
 		};
 
 		/************************************************************* Comment *************************************************************/
-		const comment = reactive(new Comment());
-		const handleSubmitComment = () => {}; // TODO: submit comment
+		const handleSubmitComment = (postId, comment) => {
+			if (!comment) {
+				ElMessage.warning('The comment cannot be true');
+				return;
+			}
+
+			console.log(postId, comment);
+
+			http.post('/posts/addComment', { body: comment, postId }).then(msg => {
+				sysAlert(msg);
+				// TODO re-get the comments
+			});
+		};
 
 		/************************************************************* Profile *************************************************************/
 		const showFriendsList = ref(true);
@@ -136,7 +151,6 @@ const composition = {
 			displayName,
 			handleLogout,
 			...toRefs(show),
-			comment,
 			handleSubmitComment,
 			TOPICS,
 			showAddFriendsDialog,

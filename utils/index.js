@@ -1,11 +1,9 @@
 const { ObjectId } = require('bson');
 
 function errorCheckingId(id) {
-	if (!id) return true;
-	if (typeof id !== 'string') return true;
-	if (id.trim() === '') return true;
-	if (!ObjectId.isValid(id)) return true;
-	return false;
+	if (!id) throw 'The id is not provided';
+	if (typeof id !== 'string' || id.trim() === '') throw 'The id is not a string or is an empty string';
+	if (!ObjectId.isValid(id)) throw 'The id is invalid';
 }
 
 // Funciton that checks if the id provided passes error checking

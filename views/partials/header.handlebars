@@ -7,7 +7,7 @@
 	</a>
 	{{#if showSearchInput}}
 	<div>
-		<el-autocomplete class="header__input" v-model="searchTerm" :trigger-on-focus="false" clearable
+		<el-autocomplete class="header__input" v-model="searchTerm" label="search" :trigger-on-focus="false" clearable
 										 :fetch-suggestions="querySearchPost" @select="handlePostSelected" placeholder="Type to search"
 										 value-key="title" />
 	</div>
