@@ -93,4 +93,43 @@ router.post('/edit', async (req, res) => {
 	}
 });
 
+//TODO: Finish Testing
+router.post('/addFriend', async (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).send('No permission');
+		return;
+	}
+
+	try {
+		const { email } = req.body;
+		if (
+			!email ||
+			email.trim() == '' ||
+			email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1
+		)
+			res.status(400).send('Email is a required field, please enter valid email');
+
+		const friend = await userData.addFriend(req.session.userid, email);
+		if (friend) res.status(200).send(`${friend.firstname} added as a friend!`)
+		else res.status(404).send("Friend could not be added");
+	} catch(e) {
+		res.status(500).send('Internal Server Error');
+	}
+})
+
+//TODO: Finish Testing
+router.get('/friends', async (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).send('No permission');
+		return;
+	}
+	try {
+		const friendList = await userData.getUserFriends(req.session.userid);
+		console.log(friendList);
+		if (friendList) res.status(200).send(friendList)
+		else res.status(404).send("Friend list could not be retrieved");
+	} catch(e) {
+		res.status(500).send('Internal Server Error');
+	}
+})
 module.exports = router;
