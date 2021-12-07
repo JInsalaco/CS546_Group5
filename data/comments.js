@@ -54,7 +54,7 @@ const getAllComments = async (skip, count) => {
 	const commentCollection = await comments();
 	const commentList = await commentCollection
 		.find({})
-		.sort({ 'metaDara.timeStamp': 1 })
+		.sort({ 'metaData.timeStamp': 1 })
 		.skip(skip)
 		.limit(count)
 		.toArray();
