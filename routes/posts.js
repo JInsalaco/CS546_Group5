@@ -1,7 +1,6 @@
 const router = require('express').Router();
-const { posts } = require('../data');
+const { posts, users, comments } = require('../data');
 const { errorCheckingId } = require('../utils');
-const { comments } = require('../data/comments');
 /**
  * DONE
  */
@@ -216,17 +215,13 @@ router.get('/getComments/:id', async (req, res) => {
 		res.status(403).send('No permisssion');
 		return;
 	}
+
 	const uid = req.session.userid;
 	try {
 		const comment = await comments.getCommentById(uid);
 		let posterId = comment.posterId;
-		const userProfile = await posts.getUser(posterId);
-		let posterInfo = {
-			profilePic: userProfile.profilePic,
-			username: userProfile.username,
-			lastname: userProfile.lastname,
-			firstname: userProfile.firstname
-		};
+		const { profilePic, username, lastname, firstname } = await users.getUser(posterId);
+		let posterInfo = { profilePic, username, lastname, firstname };
 		let commentInfo = [{ poster: posterInfo }, comment.body, { metaData: comment.metaData }];
 		res.json(commentInfo);
 	} catch (error) {
@@ -240,10 +235,11 @@ router.post('/addComment', async (req, res) => {
 		res.status(403).send('No permisssion');
 		return;
 	}
+
 	let uid = req.session.userid;
-	const { id, body } = req.body;
+	const { body } = req.body;
 	try {
-		const comment = await comments.createComment(uid, id, body);
+		const comment = await comments.createComment(uid, body);
 		console.log(comment);
 		res.json(comment);
 	} catch (error) {

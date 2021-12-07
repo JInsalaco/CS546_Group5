@@ -1,16 +1,14 @@
 const { comments } = require('../config/mongoCollections');
 const utils = require('../utils');
 
-async function createComment(posterId, thread, body) {
+async function createComment(posterId, body) {
 	const commentCollection = await comments();
-	const d = new Date();
 	const newComment = {
-		body: body,
-		posterId: posterId,
-		thread: thread,
-		popularity: {},
+		body,
+		posterId,
+		popularity: [],
 		metaData: {
-			timeStamp: d,
+			timeStamp: new Date().getTime(),
 			archived: false,
 			flags: 0
 		}
