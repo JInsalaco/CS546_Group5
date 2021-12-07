@@ -93,15 +93,16 @@ async function authenticateUser(email, password) {
 /*
  * Appends user ID to friends list
  */
-async function addFriend(userId, friendId) {
+async function addFriend(userId, email) {
 	let uid = utils.stringToObjectID(userId);
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: uid });
 	let friendsList = user.friends;
-	let updatedFriendsList = friendsList.push(friendId);
+	const friend = await userCollection.findOne({ email: email });
+	let updatedFriendsList = friendsList.push(friend._id);
 	const newInsertInformation = await userCollection.updateOne({ _id: uid }, { $set: { friends: updatedFriendsList } });
 	if (newInsertInformation.modifiedCount === 0) throw 'Error: Could not add friend';
-	return newInsertInformation;
+	return friend;
 }
 
 async function getUserFriends(userId) {
@@ -109,7 +110,12 @@ async function getUserFriends(userId) {
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: uid });
 	if (!user) throw 'Error: User does not exist';
-	return user.friends;
+	let friendList = user.friends
+	user.friends.forEach(async (friendId) => {
+		let friend = await getUser(friendId);
+		friendList.push(friend);
+	})
+	return friendList;
 }
 
 async function getUser(id) {
