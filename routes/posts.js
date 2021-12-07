@@ -48,12 +48,6 @@ router.get('/search', async (req, res) => {
  * DONE
  */
 router.get('/getPosts', async (req, res) => {
-	// MODIFY uncomment when finished
-	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
-		return;
-	}
-
 	const { topicId, pageSize, pageNumber } = req.query;
 	try {
 		if (errorCheckingId(topicId)) throw 'topicId invalid';
