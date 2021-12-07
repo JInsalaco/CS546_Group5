@@ -133,6 +133,8 @@ async function addPost(posterId, title, body, topics) {
 	return post;
 }
 
+// Trying to make git work
+
 async function getPost(id) {
 	// Get the id as an ObjectId, will return if valid
 	let oid = utils.stringToObjectID(id);
