@@ -61,7 +61,7 @@ const composition = {
 			getPostList({ ...pageConfig, topicId: newVal });
 		});
 
-		/************************************************************* Create Post *************************************************************/
+		/************************************************************* Add Post *************************************************************/
 		const showDialog = reactive({ showPostDialog: false });
 		const postsForm = ref();
 		const postForm = ref(null);
@@ -76,6 +76,10 @@ const composition = {
 				if (valid) {
 					http.post('/posts/add', postForm.value).then(msg => {
 						ElNotification({ title: 'Success', message: msg, type: 'success' });
+						if (postForm.value.topics.includes(currentTopic.value)) {
+							postList.value = [];
+							getPostList({ pageNumber: 1, pageSize: 5, topicId: currentTopic.value });
+						}
 						postsForm.value.resetFields();
 						showDialog.showPostDialog = false;
 					});

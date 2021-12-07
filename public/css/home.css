@@ -326,10 +326,12 @@ h2.post__title {
 .comment__bar .icon-down[data-show-list='true'] {
 	transform: rotate(180deg);
 }
-.comment__info {
+.comment-item > div:first-child {
 	align-items: center;
 }
-.comment__info .comment__info-time {
+.comment__body {
+	margin-left: 50px;
+}
+.comment__info-time {
 	margin-left: auto;
-	color: var(--font-color-grey);
 }

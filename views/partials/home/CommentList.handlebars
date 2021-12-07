@@ -1,10 +1,10 @@
 <ul v-if="showComment === index" class="comment-list">
-  <li class="comment-item" v-for="item in 3" :key="item">
-    <div class="comment__info flex">
+  <li class="comment-item  aside-v" v-for="item in 3" :key="item">
+    <div class="flex">
       <el-avatar src="/public/static/avatar.png" class="aside-h" alt="avatar"></el-avatar>
-      <span class="comment__info-user aside-h">Shihao</span>
+      <div class="comment__info-user aside-h">Shihao</div>
       <span class="comment__info-time">11/29/2021 14:58</span>
     </div>
-    <p>Sounds good!!</p>
+    <div class="comment__body">Sounds good!!</div>
   </li>
 </ul>
