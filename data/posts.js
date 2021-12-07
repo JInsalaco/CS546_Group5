@@ -308,6 +308,15 @@ const getAllPosts = async () => {
 	return utils.objectIdToString(postList);
 };
 
+async function getPostPopularity(id) {
+	const sid = utils.objectIdToString(id);
+	let post = await this.getPost(sid);
+
+	if (!post) throw 'Post not found';
+	let popularityCount = post.popularity;
+	return popularityCount.length;
+}
+
 module.exports = {
 	addPost,
 	getPost,
@@ -320,5 +329,6 @@ module.exports = {
 	getPosts,
 	getAllPosts,
 	getMyPosts,
-	getMultiplePosts
+	getMultiplePosts,
+	getPostPopularity
 };
