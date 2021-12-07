@@ -335,3 +335,8 @@ h2.post__title {
 .comment__info-time {
 	margin-left: auto;
 }
+.post__comment-like {
+	margin-left: 10px;
+	cursor: pointer;
+	font-size: 20px;
+}

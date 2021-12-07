@@ -24,13 +24,13 @@
     </div>
     <div class="form__comment flex">
       <el-input class="aside-h" label="comment" v-model="item.comment" placeholder="Add a comment"></el-input>
-      <el-button class="aside-h" type="primary" @click="handleSubmitComment(item._id, item.comment)" circle>
+      <el-button class="aside-h" type="primary" @click="handleSubmitComment(item._id, item.comment, index)" circle>
         <i class="iconfont icon-send"></i>
       </el-button>
     </div>
 
-    <div v-if="item.commentList.length" class="post__comment-container">
-      <div class="comment__bar" @click="showComment = showComment === index ? null : index">
+    <div class="post__comment-container">
+      <div class="comment__bar" @click="handleShowComments(index, item._id)">
         <i class="iconfont icon-down" :data-show-list="showComment === index"></i>
       </div>
       <el-collapse-transition>

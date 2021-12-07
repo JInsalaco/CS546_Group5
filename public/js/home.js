@@ -90,17 +90,41 @@ const composition = {
 		};
 
 		/************************************************************* Comment *************************************************************/
-		const handleSubmitComment = (postId, comment) => {
+		const handleSubmitComment = (postId, comment, index) => {
 			if (!comment) {
 				ElMessage.warning('The comment cannot be true');
 				return;
 			}
 
-			console.log(postId, comment);
-
 			http.post('/posts/addComment', { body: comment, postId }).then(msg => {
 				sysAlert(msg);
-				// TODO re-get the comments
+				getComments(postId, index);
+			});
+		};
+		const handleShowComments = (index, postId) => {
+			show.showComment = show.showComment === index ? null : index;
+			getComments(postId, index);
+		};
+
+		const getComments = async (id, index) => {
+			http.get('/posts/getComments', { id }).then(res => {
+				postList.value[index].commentList = handleComments(res);
+			});
+		};
+
+		const handleComments = commentList => {
+			return commentList.map(item => {
+				const {
+					poster: { firstname, lastname, username },
+					timeStamp
+				} = item;
+				item.poster.name = username || `${firstname} ${lastname}`;
+				delete item.poster.firstname;
+				delete item.poster.lastname;
+				delete item.poster.username;
+
+				item.timeStamp = dayjs(timeStamp).format('MM/DD/YYYY HH:mm');
+				return item;
 			});
 		};
 
@@ -159,7 +183,8 @@ const composition = {
 			detailDialog,
 			postDetail,
 			querySearchPost,
-			handlePostSelected
+			handlePostSelected,
+			handleShowComments
 		};
 	}
 };
