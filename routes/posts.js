@@ -6,12 +6,6 @@ const { comments } = require('../data/comments');
  * DONE
  */
 router.get('/getDetail', async (req, res) => {
-	// MODIFY uncomment when finished
-	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
-		return;
-	}
-
 	const { id } = req.query;
 	if (errorCheckingId(id)) {
 		return res.status(400).send('Post does not exist');
@@ -29,12 +23,6 @@ router.get('/getDetail', async (req, res) => {
  * DONE
  */
 router.get('/search', async (req, res) => {
-	// MODIFY uncomment when finished
-	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
-		return;
-	}
-
 	const { title } = req.query;
 	try {
 		const postList = await posts.getPostsByTitle(title);
@@ -91,11 +79,15 @@ router.post('/add', async (req, res) => {
 		return;
 	}
 
+	const { title, body, topics } = req.body;
 	try {
-		const { title, body, topics } = req.body;
-		posts.errorCheckingPost(title, body);
-		const posterId = req.session.userid;
-		const result = await posts.addPost(posterId, title, body, topics);
+		posts.errorCheckingPost(title, body, topics);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+	}
+
+	try {
+		const result = await posts.addPost(req.session.userid, title, body, topics);
 		if (result) res.status(200).send('Posted Successfully, check your feed!');
 		else res.status(500).send('Internal server error, please try again after some time');
 	} catch (error) {
@@ -224,8 +216,8 @@ router.get('/getComments/:id', async (req, res) => {
 		res.status(403).send('No permisssion');
 		return;
 	}
-	const uid = req.session.userid
-	try{
+	const uid = req.session.userid;
+	try {
 		const comment = await comments.getCommentById(uid);
 		let posterId = comment.posterId;
 		const userProfile = await posts.getUser(posterId);
@@ -234,14 +226,13 @@ router.get('/getComments/:id', async (req, res) => {
 			username: userProfile.username,
 			lastname: userProfile.lastname,
 			firstname: userProfile.firstname
-		}
-		let commentInfo = [{poster:posterInfo}, comment.body, {metaData: comment.metaData}]
+		};
+		let commentInfo = [{ poster: posterInfo }, comment.body, { metaData: comment.metaData }];
 		res.json(commentInfo);
-
-	} catch(error) {
+	} catch (error) {
 		res.status(500).send(error?.message ?? error);
 	}
-})
+});
 
 //TODO: Finish Testing
 router.post('/addComment', async (req, res) => {
@@ -250,13 +241,14 @@ router.post('/addComment', async (req, res) => {
 		return;
 	}
 	let uid = req.session.userid;
-	const {id,body} =req.body;
-	try{
-		const comment = await comments.createComment(uid,id,body);
+	const { id, body } = req.body;
+	try {
+		const comment = await comments.createComment(uid, id, body);
 		console.log(comment);
 		res.json(comment);
 	} catch (error) {
 		res.status(500).send(error?.message ?? error);
 	}
-})
+});
+
 module.exports = router;

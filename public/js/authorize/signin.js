@@ -34,7 +34,7 @@ const rules = {
 Vue.createApp({
 	setup() {
 		const signInForm = ref();
-		const form = reactive({ email: '', password: '' });
+		const form = reactive({ email: 'sxiong5@stevens.edu', password: 'Xsh031023' });
 
 		const handleSubmit = () => {
 			signInForm.value.validate(valid => {

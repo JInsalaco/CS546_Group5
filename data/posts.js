@@ -54,7 +54,7 @@ const getPosts = async ({ topicId, pageSize, pageNumber }, userid) => {
 	const postCollection = await posts();
 	let postList = await postCollection
 		.find({ topics: { $elemMatch: { $eq: topicId } } })
-		.sort({ 'metaData.timeStamp': 1 })
+		.sort({ 'metaData.timeStamp': -1 })
 		.skip(+pageNumber - 1)
 		.limit(+pageSize)
 		.toArray();
@@ -91,44 +91,26 @@ const getUserInfoToPost = async post => {
 };
 
 async function addPost(posterId, title, body, topics) {
-	errorCheckingPost(title, body);
+	errorCheckingPost(title, body, topics);
 
 	// Check for user
 	const sid = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sid);
-	//if (user === null) throw 'User does not exist';
-	var topicTitles = [];
+
 	// Check for topic
-	if (topics) {
-		if (topics.length > 0 && topics.length < 4) {
-			const topicListDB = await topicData.getAllTopics();
-			utils.stringToObjectID(topics);
-			// const inputTopics = await topicData.getTopicTitles(topics);
-			// Iterate and check that each topic is valid
-			for (let i = 0; i < topics.length; i++) {
-				let userTopic = topics[i];
-				let title = await topicData.getTopicbyId(userTopic);
-				topicTitles.push(title);
-				let topicFlag = true;
-				for (let j = 0; j < topicListDB.length && topicFlag; j++) {
-					if (topicListDB[j]._id === userTopic) {
-						topicFlag = false;
-					}
-				}
-				if (topicFlag) {
-					throw 'Topic does not exist';
-				}
-			}
-		}
+	const allTopics = await topicData.getAllTopics();
+	const allTopicsIds = allTopics.map(item => item._id);
+	for (let topicId of topics) {
+		if (!allTopicsIds.includes(topicId)) throw 'Topic does not exist';
 	}
 
 	// New Post
 	const postCollection = await posts();
 	const post = {
-		title: title,
-		body: body,
+		title,
+		body,
 		posterId: sid,
-		topics: topicTitles,
+		topics,
 		thread: [],
 		popularity: [],
 		metaData: {
@@ -267,24 +249,27 @@ const getMultiplePosts = async ids => {
 	return utils.objectIdToString(res);
 };
 
-function errorCheckingPost(title, body) {
+function errorCheckingPost(title, body, topics) {
 	// Input not provided
 	if (!title) throw 'No title provided';
 	if (!body) throw 'No post content provided';
-	// if (posterId) throw "No user provided";
+	if (!topics) throw 'No topics provided';
 
 	// Input not of type string or empty
 	if (typeof title !== 'string') throw 'Title is not a string';
 	else if (title.trim() === '') throw 'Title is an empty string';
+
 	if (typeof body !== 'string') throw 'Body is not a string';
 	else if (body.trim() === '') throw 'Body is an empty string';
-	// if (typeof posterId !== 'string') throw "User is not a string";
-	// else if (posterId.trim() === "") throw "User is an empty string";
 
 	// Max character 3000
 	if (body.length > 3000) throw 'Maximum characters reached';
 
-	return;
+	if (!Array.isArray(topics)) throw 'Topics should be an array';
+	if (topics.length < 1 || topics.length > 3) throw 'Topics should be at least 1 and at most 3';
+	for (let topicId of topics) {
+		if (utils.errorCheckingId(topicId)) throw 'Invalid topic id';
+	}
 }
 
 function editComparison(oldBody, newBody, oldTopics, newTopics) {
