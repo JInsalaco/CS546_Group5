@@ -133,13 +133,7 @@ async function addPost(posterId, title, body, topics) {
 	return post;
 }
 
-<<<<<<< HEAD
-// Trying to make git work
-
-async function getPost(id) {
-=======
 async function getPost(id, needHandle = true) {
->>>>>>> origin/develop
 	// Get the id as an ObjectId, will return if valid
 	let oid = utils.stringToObjectID(id);
 
