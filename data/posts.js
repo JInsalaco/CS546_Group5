@@ -313,9 +313,7 @@ async function getPostPopularity(id) {
 	let post = await this.getPost(sid);
 
 	if (!post) throw 'Post not found';
-
 	let popularityCount = post.popularity;
-
 	return popularityCount.length;
 }
 
