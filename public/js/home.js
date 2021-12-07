@@ -90,8 +90,19 @@ const composition = {
 		};
 
 		/************************************************************* Comment *************************************************************/
-		const comment = reactive(new Comment());
-		const handleSubmitComment = () => {}; // TODO: submit comment
+		const handleSubmitComment = (postId, comment) => {
+			if (!comment) {
+				ElMessage.warning('The comment cannot be true');
+				return;
+			}
+
+			console.log(postId, comment);
+
+			http.post('/posts/addComment', { body: comment, postId }).then(msg => {
+				sysAlert(msg);
+				// TODO re-get the comments
+			});
+		};
 
 		/************************************************************* Profile *************************************************************/
 		const showFriendsList = ref(true);
@@ -140,7 +151,6 @@ const composition = {
 			displayName,
 			handleLogout,
 			...toRefs(show),
-			comment,
 			handleSubmitComment,
 			TOPICS,
 			showAddFriendsDialog,

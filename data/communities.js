@@ -20,7 +20,7 @@ async function createCommunity(title, description, owner) {
 	};
 
 	const insertInfo = await communitiesList.insertOne(newCommunity);
-	if (insertInfo.insertedCount === 0) throw 'Error: Could not add topic';
+	if (insertInfo.insertedCount === 0) throw 'Could not add topic';
 
 	return insertInfo;
 }
@@ -29,7 +29,7 @@ async function deleteCommunity(id) {
 	let oid = utils.stringToObjectID(id);
 	const communitiesList = await communities();
 	const deletedCommunity = await communitiesList.findOne({ _id: oid });
-	if (!deletedCommunity) throw 'Error: Community DNE';
+	if (!deletedCommunity) throw 'Community DNE';
 
 	const deletionInfo = await communitiesList.deleteOne({ _id: oid });
 	if (deletionInfo.deletedCount === 0) {
@@ -51,7 +51,7 @@ async function joinCommunity(communityId, memberId) {
 	let membersList = joinedCommunity.members;
 	let newMembersList = membersList.push(memberId);
 	const newInsertInformation = await communitiesList.updateOne({ _id: oid }, { $set: { members: newMembersList } });
-	if (newInsertInformation.modifiedCount === 0) throw 'Error: Could not add friend';
+	if (newInsertInformation.modifiedCount === 0) throw 'Could not add friend';
 	return newInsertInformation;
 }
 async function leaveCommunity(communityId, memberId) {

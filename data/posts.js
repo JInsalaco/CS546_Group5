@@ -21,7 +21,7 @@ async function updatePopularity(postId, userId) {
 	}
 
 	const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity } });
-	if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
+	if (updateInfo.modifiedCount === 0) throw 'Could not update popularity';
 
 	return likeStatus;
 }
@@ -302,6 +302,20 @@ async function getPostPopularity(id) {
 	return popularityCount.length;
 }
 
+const updateThread = async (postId, threadId) => {
+	postId = utils.stringToObjectID(postId);
+	const postCollection = await posts();
+	const post = await postCollection.findOne({ _id: postId });
+	if (!post) throw 'Post no found';
+
+	const { thread } = post;
+	thread.push(utils.objectIdToString(threadId));
+	const updateInfo = postCollection.updateOne({ _id: postId }, { $set: { thread } });
+	if (updateInfo.modifiedCount === 0) throw 'Could not update popularity';
+
+	return { update: true };
+};
+
 module.exports = {
 	addPost,
 	getPost,
@@ -315,5 +329,6 @@ module.exports = {
 	getAllPosts,
 	getMyPosts,
 	getMultiplePosts,
-	getPostPopularity
+	getPostPopularity,
+	updateThread
 };

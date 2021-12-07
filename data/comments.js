@@ -1,7 +1,8 @@
+const posts = require('./posts');
 const { comments } = require('../config/mongoCollections');
 const utils = require('../utils');
 
-async function createComment(posterId, body) {
+async function createComment(posterId, body, postId) {
 	const commentCollection = await comments();
 	const newComment = {
 		body,
@@ -14,9 +15,13 @@ async function createComment(posterId, body) {
 		}
 	};
 	const insertInfo = await commentCollection.insertOne(newComment);
-	if (insertInfo.insertedCount === 0) throw 'Error: Could not add topic';
+	if (insertInfo.insertedCount === 0) throw 'Could not add topic';
 
-	return insertInfo;
+	// update the post
+	const { update } = await posts.updateThread(postId, insertInfo.insertedId);
+	if (!update) throw 'Can not update thread in post';
+
+	return { update };
 }
 
 async function commentPopularity(commentId, userId, val) {
@@ -26,7 +31,7 @@ async function commentPopularity(commentId, userId, val) {
 	let popularityObj = comment.popularity;
 	popularityObj[userId] = val;
 	const updateInfo = commentCollection.updateOne({ _id: cid }, { $set: { popularity: popularityObj } });
-	if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
+	if (updateInfo.modifiedCount === 0) throw 'could not update popularity';
 	const overallPopularity = popularityObj => Object.values(popularityObj).reduce((a, b) => a + b);
 	return overallPopularity(popularityObj);
 }

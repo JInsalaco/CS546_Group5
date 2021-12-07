@@ -22,18 +22,14 @@
       <i v-if="auth" class="iconfont post__operation-like" :class="item.popularity ? 'icon-like-fill' : 'icon-like'"
          @click="handleLikes(index, item._id)"></i>
     </div>
-    <el-form v-if="auth" inline :model="comment" class="form__comment flex">
-      <el-form-item class="form-item__input">
-        <el-input label="comment" v-model="comment.body" placeholder="Add a comment"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="handleSubmitComment" circle>
-          <i class="iconfont icon-send"></i>
-        </el-button>
-      </el-form-item>
-    </el-form>
+    <div class="form__comment flex">
+      <el-input class="aside-h" label="comment" v-model="item.comment" placeholder="Add a comment"></el-input>
+      <el-button class="aside-h" type="primary" @click="handleSubmitComment(item._id, item.comment)" circle>
+        <i class="iconfont icon-send"></i>
+      </el-button>
+    </div>
 
-    <div class="post__comment-container">
+    <div v-if="item.commentList.length" class="post__comment-container">
       <div class="comment__bar" @click="showComment = showComment === index ? null : index">
         <i class="iconfont icon-down" :data-show-list="showComment === index"></i>
       </div>

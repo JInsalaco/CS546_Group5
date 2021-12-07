@@ -237,11 +237,12 @@ router.post('/addComment', async (req, res) => {
 	}
 
 	let uid = req.session.userid;
-	const { body } = req.body;
+	const { body, postId } = req.body;
 	try {
-		const comment = await comments.createComment(uid, body);
-		console.log(comment);
-		res.json(comment);
+		const { update } = await comments.createComment(uid, body, postId);
+		if (!update) throw 'Comment add faild';
+
+		res.status(200).send('Comment add successfully');
 	} catch (error) {
 		res.status(500).send(error?.message ?? error);
 	}

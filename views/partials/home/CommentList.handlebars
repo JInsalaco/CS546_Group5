@@ -1,5 +1,5 @@
 <ul v-if="showComment === index" class="comment-list">
-  <li class="comment-item  aside-v" v-for="item in 3" :key="item">
+  <li class="comment-item  aside-v" v-for="com in item.comment" :key="com">
     <div class="flex">
       <el-avatar src="/public/static/avatar.png" class="aside-h" alt="avatar"></el-avatar>
       <div class="comment__info-user aside-h">Shihao</div>

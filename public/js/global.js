@@ -10,16 +10,6 @@ class Posts {
 	}
 }
 
-class Comment {
-	constructor(obj = {}) {
-		const { body, posterId, popularity, metaData } = obj;
-		this.body = body ?? '';
-		this.posterId = posterId ?? '';
-		this.popularity = popularity ?? {};
-		this.metaData = metaData ?? { timeStamp: new Date().getTime(), archived: false, flags: 0 };
-	}
-}
-
 class User {
 	constructor() {
 		this.firstname = '';
@@ -109,6 +99,8 @@ const formatPostDetail = postData => {
 		createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm'),
 		topicsList,
 		popularity,
-		profilePic
+		profilePic,
+		comment: '',
+		commentList: []
 	};
 };
