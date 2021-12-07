@@ -1,6 +1,26 @@
-<main class="page__profile">
+<main class="page__profile flex">
   {{> profile/FriendsList}}
   {{> profile/LikesList}}
   {{> profile/Information}}
+  {{> profile/HistoryList}}
   {{> profile/PostsList}}
+
+  <el-dialog v-model='postDetailDialog' title="Preview" destroy-on-close>
+    <div class='posts__preview'>
+      <h2 class='post__title'>\{{postDetail.title}}</h2>
+
+      <div class='post__info-container flex'>
+        <el-avatar :size="50" :src="postDetail.profilePic" alt="avatar"></el-avatar>
+        <span class='post__user-info'>
+          <div class='user-info__username'>\{{postDetail.name}}</div>
+          <div class='user-info__time'>\{{postDetail.createTime}}</div>
+        </span>
+        <div class="tag-container">
+          <span v-for="topic in postDetail.topicsList" :key="topic._id" class='post__tag aside-h'
+                :style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
+        </div>
+      </div>
+      <article class='post__content' v-html="postDetail.content">
+    </div>
+  </el-dialog>
 </main>

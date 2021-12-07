@@ -1,7 +1,6 @@
-//const { users } = require('../config/mongoCollections');
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
-const utils = require('./utils');
+const utils = require('../utils');
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
@@ -59,7 +58,7 @@ async function addUser(email, password, firstname, lastname, phoneNumber) {
 		bio: '',
 		profilePic: '/public/img/default.png',
 		posts: [],
-		threads: [],
+		thread: [],
 		friends: [],
 		anonymous: false
 	};
@@ -79,12 +78,13 @@ async function authenticateUser(email, password) {
 	if (email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1) throw 'You must supply valid username or password';
 	if (password.length < 8 || password.length > 15) throw 'Password must be between 8 and 15 characters';
 	email = email.toLowerCase();
+
 	const userCollection = await users();
-	const user = await userCollection.findOne({ email: email });
+	const user = await userCollection.findOne({ email });
 	if (user) {
 		let match = await bcrypt.compare(password, user.hashedPwd);
 		if (match) {
-			return { authenticated: true, user: user };
+			return { authenticated: true, user };
 		}
 	}
 	throw 'Invalid username or password';
@@ -93,37 +93,37 @@ async function authenticateUser(email, password) {
 /*
  * Appends user ID to friends list
  */
-async function addFriend(userId, friendId) {
+async function addFriend(userId, email) {
 	let uid = utils.stringToObjectID(userId);
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: uid });
 	let friendsList = user.friends;
-	let updatedFriendsList = friendsList.push(friendId);
+	const friend = await userCollection.findOne({ email: email });
+	let updatedFriendsList = friendsList.push(friend._id);
 	const newInsertInformation = await userCollection.updateOne({ _id: uid }, { $set: { friends: updatedFriendsList } });
 	if (newInsertInformation.modifiedCount === 0) throw 'Error: Could not add friend';
-	return newInsertInformation;
+	return friend;
 }
 
 async function getUserFriends(userId) {
 	let uid = utils.stringToObjectID(userId);
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: uid });
-	if(!user) throw "Error: User does not exist";
-	return user.friends;
+	if (!user) throw 'Error: User does not exist';
+	let friendList = user.friends
+	user.friends.forEach(async (friendId) => {
+		let friend = await getUser(friendId);
+		friendList.push(friend);
+	})
+	return friendList;
 }
-
-// async function getAllUserPosts(id) {
-// 	// Find the user whose posts will be returned
-// 	const user = await getUser(id);
-// 	return user.posts;
-// }
 
 async function getUser(id) {
 	let oid = utils.stringToObjectID(id);
 	const userCollection = await users();
 	const user = await userCollection.findOne({ _id: oid });
 	if (user === null) throw 'User not found';
-	utils.objectIdToString([user]);
+	user._id = utils.objectIdToString(user._id);
 
 	return user;
 }
@@ -131,9 +131,8 @@ async function getUser(id) {
 async function getAllUsers() {
 	const userCollection = await users();
 	const usersList = await userCollection.find({}).toArray();
-	utils.objectIdToString(usersList);
 
-	return usersList;
+	return utils.objectIdToString(usersList);
 }
 
 // Remove a restaurant
@@ -178,7 +177,7 @@ async function editUser(id, email, firstname, lastname, phoneNumber, gender, DOB
 		bio: bio,
 		profilePic: user.profilePic,
 		posts: user.posts,
-		threads: user.threads,
+		thread: user.thread,
 		friends: user.friends,
 		anonymous: false
 	};
@@ -187,7 +186,7 @@ async function editUser(id, email, firstname, lastname, phoneNumber, gender, DOB
 	if (checkUser) throw 'No changes made to the user profile';
 
 	const userCollection = await users();
-	const updateInfo = await userCollection.updateOne({ _id: id }, { $set: newUser });
+	const updateInfo = await userCollection.updateOne({ _id: utils.stringToObjectID(id) }, { $set: newUser });
 
 	// Check if the update was made in MongoDB
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) {
@@ -223,43 +222,6 @@ function equalUser(user1, user2) {
 		user1.bio === user2.bio
 	) {
 		return true;
-		// let postsFlag, threadsFlag, friendsFlag = false;
-
-		// if (user1.posts.length !== user2.posts.length) return false;
-		// let postList1 = user1.posts.sort();
-		// let postList2 = user2.posts.sort();
-
-		// for (let i = 0; i < postList1.length; i++) {
-		//     if (postList1[i] !== postList2[i]) {
-		//         postsFlag = true;
-		//     }
-		// }
-
-		// if (postsFlag) return false;
-
-		// if (user1.threads.length !== user2.threads.length) return false;
-		// let tList1 = user1.threads.sort();
-		// let tList2 = user2.threads.sort();
-
-		// for (let i = 0; i < tList1.length; i++) {
-		//     if (tList1[i] !== tList2[i]) {
-		//         threadsFlag = true;
-		//     }
-		// }
-
-		// if (threadsFlag) return false;
-
-		// if (user1.friends.length !== user2.friends.length) return false;
-		// let friendList1 = user1.friends.sort();
-		// let friendsList2 = user2.friends.sort();
-
-		// for (let i = 0; i < friendList1.length; i++) {
-		//     if (friendList1[i] !== friendsList2[i]) {
-		//         friendsFlag = true;
-		//     }
-		// }
-
-		// if (friendsFlag) return false;
 	}
 
 	return false;
@@ -273,7 +235,6 @@ module.exports = {
 	getUser,
 	updateUser,
 	getUserFriends,
-	// getAllUserPosts,
 	getAllUsers,
 	editUser,
 	deleteUser,

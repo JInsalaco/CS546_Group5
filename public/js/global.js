@@ -1,4 +1,4 @@
-const { ref, reactive, toRefs, computed, nextTick, onMounted } = Vue;
+const { ref, reactive, toRefs, computed, nextTick, onMounted, watch } = Vue;
 const { ElLoading, ElMessage, ElNotification } = ElementPlus;
 
 class Posts {
@@ -42,15 +42,17 @@ const handleLogout = () => {
 	});
 };
 
-const setSession = (key, value) => {
+const setUserInfo = (key, value) => {
 	const userInfo = JSON.parse(sessionStorage['USER_INFO']);
 	userInfo[key] = value;
 	sessionStorage['USER_INFO'] = JSON.stringify(userInfo);
 };
 
-const showSearchInput = ref(true);
+const updateUserInfo = newUserInfo => {
+	sessionStorage['USER_INFO'] = JSON.stringify(newUserInfo);
+};
 
-let TOPICS = ref([]);
+const showSearchInput = ref(true);
 
 const postRules = {
 	topics: [{ required: true, message: 'You must select at least 1 topics', trigger: 'change' }],
@@ -66,3 +68,47 @@ const addFriendsConfig = reactive({
 		console.log(item);
 	}
 });
+
+const sysAlert = (msg, type = 'success') => {
+	const title = type.charAt(0).toUpperCase() + type.slice(1);
+	ElNotification({ title, message: msg, type });
+};
+
+let TOPICS = ref([]);
+const getTopics = () => {
+	return http.get('/topics/getAll').then(res => {
+		TOPICS.value = res;
+		return res;
+	});
+};
+
+/**
+ * save history to session
+ * @param {string} id the id of post
+ */
+const saveHistory = id => {
+	let history = JSON.parse(sessionStorage['HISTORY'] ?? '[]');
+	history.push(id);
+	history = [...new Set(history)];
+
+	sessionStorage['HISTORY'] = JSON.stringify(history);
+};
+
+const formatPostDetail = postData => {
+	const { _id, body, title, username, firstname, lastname, timeStamp, topics, popularity, profilePic } = postData;
+	const topicsList = TOPICS.value.filter(item => topics.includes(item._id));
+	const content = body
+		.split('\n')
+		.map(item => `<p>${item}</p>`)
+		.join('');
+	return {
+		_id,
+		title,
+		content,
+		name: username || `${firstname} ${lastname}`,
+		createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm'),
+		topicsList,
+		popularity,
+		profilePic
+	};
+};

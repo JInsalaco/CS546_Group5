@@ -1,92 +1,118 @@
 const mongoCollections = require('../config/mongoCollections');
-const utils = require('./utils');
+const utils = require('../utils');
 const userData = require('./users');
 const topicData = require('./topics');
 const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
-const { errorCheckingId } = require('../utils/utils');
 
+async function updatePopularity(postId, userId) {
+	const pid = utils.stringToObjectID(postId);
+	const postCollection = await posts();
+	const { popularity } = await postCollection.findOne({ _id: pid });
+
+	let likeStatus;
+	if (popularity.includes(userId)) {
+		const index = popularity.findIndex(item => item === userId);
+		popularity.splice(1, index);
+		likeStatus = false;
+	} else {
+		popularity.push(userId);
+		likeStatus = true;
+	}
+
+	const updateInfo = await postCollection.updateOne({ _id: pid }, { $set: { popularity } });
+	if (updateInfo.modifiedCount === 0) throw 'Error: could not update popularity';
+
+	return likeStatus;
+}
+
+async function getMyPosts(id) {
+	//get myposts using req.session.userid as posterID
+	if (!id) throw 'No Permissipn, please sign in';
+
+	const postCollection = await posts();
+	let postList = await postCollection.find({ posterId: id }, { projection: { _id: 1, title: 1 } }).toArray();
+
+	const res = postList.map(item => {
+		const { _id, title } = item;
+		return { _id: utils.objectIdToString(_id), title };
+	});
+	return utils.objectIdToString(res);
+}
 // Add a post to the Pond
 async function getPostsByTitle(title) {
 	const postCollection = await posts();
-	let postList = await postCollection.find({ title }).sort({ 'metaData.timeStamp': 1 }).toArray();
+	let postList = await postCollection.find({ title: RegExp(title) }).toArray();
 	postList = await handlePost(postList);
-	return postList;
+	return postList.map(item => ({ _id: item._id, title: item.title }));
 }
 
-const getPosts = async ({ topicId, pageSize, pageNumber }) => {
-	if (errorCheckingId(topicId)) throw 'topicId invalid';
+const getPosts = async ({ topicId, pageSize, pageNumber }, userid) => {
+	if (utils.errorCheckingId(topicId)) throw 'topicId invalid';
 	if (isNaN(+pageSize) || isNaN(+pageNumber)) throw 'pageSize or pageNumber invalid';
 
 	const postCollection = await posts();
 	let postList = await postCollection
 		.find({ topics: { $elemMatch: { $eq: topicId } } })
-		.sort({ 'metaData.timeStamp': 1 })
+		.sort({ 'metaData.timeStamp': -1 })
 		.skip(+pageNumber - 1)
 		.limit(+pageSize)
 		.toArray();
 
-	postList = await handlePost(postList);
+	postList = await handlePost(postList, userid);
 	return postList;
 };
 
-const handlePost = async postList => {
-	let res = [];
-	for (let post of postList) {
-		post.timeStamp = post.metaData.timeStamp;
-		const poster = await userData.getUser(post.posterId);
-		poster && ['firstname', 'lastname', 'username'].forEach(item => (post[item] = poster[item]));
-		delete post.thread;
-		delete post.posterId;
-		delete post.metaData;
-
-		res.push(post);
+const handlePost = async (inputPost, userid) => {
+	let res;
+	if (Array.isArray(inputPost)) {
+		res = [];
+		for (let post of inputPost) {
+			post = await getUserInfoToPost(post);
+			userid && (post.popularity = post.popularity.includes(userid));
+			res.push(post);
+		}
+	} else {
+		res = await getUserInfoToPost(inputPost);
 	}
 
 	return res;
 };
 
+const getUserInfoToPost = async post => {
+	post.timeStamp = post.metaData.timeStamp;
+	const poster = await userData.getUser(post.posterId);
+	poster && ['firstname', 'lastname', 'username', 'profilePic'].forEach(item => (post[item] = poster[item]));
+	delete post.thread;
+	delete post.posterId;
+	delete post.metaData;
+
+	return post;
+};
+
 async function addPost(posterId, title, body, topics) {
-	errorCheckingPost(title, body);
+	errorCheckingPost(title, body, topics);
 
 	// Check for user
 	const sid = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sid);
-	//if (user === null) throw 'User does not exist';
-	var topicTitles = [];
+
 	// Check for topic
-	if (topics) {
-		if (topics.length > 0 && topics.length < 4) {
-			const topicListDB = await topicData.getAllTopics();
-			utils.stringToObjectID(topics);
-			// const inputTopics = await topicData.getTopicTitles(topics);
-			// Iterate and check that each topic is valid
-			for (let i = 0; i < topics.length; i++) {
-				let userTopic = topics[i];
-				let title = await topicData.getTopicbyId(userTopic);
-				topicTitles.push(title);
-				let topicFlag = true;
-				for (let j = 0; j < topicListDB.length && topicFlag; j++) {
-					if (topicListDB[j]._id === userTopic) {
-						topicFlag = false;
-					}
-				}
-				if (topicFlag) {
-					throw 'Topic does not exist';
-				}
-			}
-		}
+	const allTopics = await topicData.getAllTopics();
+	const allTopicsIds = allTopics.map(item => item._id);
+	for (let topicId of topics) {
+		if (!allTopicsIds.includes(topicId)) throw 'Topic does not exist';
 	}
 
 	// New Post
 	const postCollection = await posts();
 	const post = {
-		title: title,
-		body: body,
+		title,
+		body,
 		posterId: sid,
-		topics: topicTitles,
+		topics,
 		thread: [],
-		popularity: {},
+		popularity: [],
 		metaData: {
 			timeStamp: new Date().getTime(),
 			archived: false,
@@ -113,11 +139,11 @@ async function getPost(id) {
 
 	// Look for post in the database
 	const postCollection = await posts();
-	const post = await postCollection.findOne({ _id: oid });
+	let post = await postCollection.findOne({ _id: oid });
 
 	// Check if the post was found
 	if (post === null) throw 'Post not found';
-	utils.objectIdToString([post]);
+	post = await handlePost(post);
 
 	return post;
 }
@@ -131,7 +157,7 @@ async function deletePost(id) {
 	if (!post) throw 'Post not found';
 
 	// Delete
-	const deletionInfo = await postCollection.deleteOne({ _id: id });
+	const deletionInfo = await postCollection.deleteOne({ _id: utils.stringToObjectID(id) });
 
 	// Check deletion worked
 	if (deletionInfo.deletedCount === 0) {
@@ -206,37 +232,44 @@ async function editPost(posterId, postId, title, body, topics) {
 	return { updated: true };
 }
 
-/*
-	@updatePopularity: add a user who liked or disliked the post
-		id: Unique id of the post
-		popularity: 1 (like) -1 (dislike)
-		// Needs testing
-*/
-async function updatePopularity(id, popularity) {
-	const postCollection = await posts();
-	const post = await postCollection.getPost(id);
-	if (post === null) throw 'Post does not exist';
-	post.metaData.popularity.id = popularity;
-}
+const getMultiplePosts = async ids => {
+	for (let id of ids) {
+		if (utils.errorCheckingId(id)) throw 'Invalid Id';
+	}
 
-function errorCheckingPost(title, body) {
+	ids = ids.map(item => utils.stringToObjectID(item));
+	const postCollection = await posts();
+	let postList = await postCollection.find({ _id: { $in: ids } }).toArray();
+
+	postList = await handlePost(postList);
+	const res = postList.map(item => {
+		const { _id, profilePic, username, firstname, lastname, timeStamp, title } = item;
+		return { _id, profilePic, username, firstname, lastname, timeStamp, title };
+	});
+	return utils.objectIdToString(res);
+};
+
+function errorCheckingPost(title, body, topics) {
 	// Input not provided
 	if (!title) throw 'No title provided';
 	if (!body) throw 'No post content provided';
-	// if (posterId) throw "No user provided";
+	if (!topics) throw 'No topics provided';
 
 	// Input not of type string or empty
 	if (typeof title !== 'string') throw 'Title is not a string';
 	else if (title.trim() === '') throw 'Title is an empty string';
+
 	if (typeof body !== 'string') throw 'Body is not a string';
 	else if (body.trim() === '') throw 'Body is an empty string';
-	// if (typeof posterId !== 'string') throw "User is not a string";
-	// else if (posterId.trim() === "") throw "User is an empty string";
 
 	// Max character 3000
 	if (body.length > 3000) throw 'Maximum characters reached';
 
-	return;
+	if (!Array.isArray(topics)) throw 'Topics should be an array';
+	if (topics.length < 1 || topics.length > 3) throw 'Topics should be at least 1 and at most 3';
+	for (let topicId of topics) {
+		if (utils.errorCheckingId(topicId)) throw 'Invalid topic id';
+	}
 }
 
 function editComparison(oldBody, newBody, oldTopics, newTopics) {
@@ -253,6 +286,22 @@ function editComparison(oldBody, newBody, oldTopics, newTopics) {
 	return true;
 }
 
+const getAllPosts = async () => {
+	const postCollection = await posts();
+	const postList = await postCollection.find({}).toArray();
+
+	return utils.objectIdToString(postList);
+};
+
+async function getPostPopularity(id) {
+	const sid = utils.objectIdToString(id);
+	let post = await this.getPost(sid);
+
+	if (!post) throw 'Post not found';
+	let popularityCount = post.popularity;
+	return popularityCount.length;
+}
+
 module.exports = {
 	addPost,
 	getPost,
@@ -262,5 +311,9 @@ module.exports = {
 	errorCheckingPost,
 	editComparison,
 	getPostsByTitle,
-	getPosts
+	getPosts,
+	getAllPosts,
+	getMyPosts,
+	getMultiplePosts,
+	getPostPopularity
 };

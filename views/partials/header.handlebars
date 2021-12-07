@@ -5,17 +5,17 @@
 	<a class="aside-h header__title-container" href="/">
 		<h1 class="header__title">The Pond</h1>
 	</a>
-	{{#if showSeatcdInput}}
+	{{#if showSearchInput}}
 	<div>
-		<el-autocomplete class="header__input" v-model="searchConfig.searchTerm"
-										 :fetch-suggestions="searchConfig.querySearchPost" @select="searchConfig.handlePostSelected"
-										 placeholder="Type to search" />
+		<el-autocomplete class="header__input" v-model="searchTerm" :trigger-on-focus="false" clearable
+										 :fetch-suggestions="querySearchPost" @select="handlePostSelected" placeholder="Type to search"
+										 value-key="title" />
 	</div>
 	{{/if}}
 
 	<div v-if="auth">
 		<el-dropdown>
-			<el-avatar :size="40" :src="userInfo?.profilePic ?? '/public/img/default.png'"></el-avatar>
+			<el-avatar :size="40" :src="userInfo?.profilePic ?? '/public/img/default.png'" alt="avatar"></el-avatar>
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item class="header__avatar-profile">
@@ -51,3 +51,24 @@
 		</span>
 	</template>
 </el-dialog>
+
+{{#if showSearchInput}}
+<el-dialog v-model='detailDialog' title="Preview" destroy-on-close>
+	<div class='posts__preview'>
+		<h2 class='post__title'>\{{postDetail.title}}</h2>
+
+		<div class='post__info-container flex'>
+			<el-avatar :size="50" :src="postDetail.profilePic" alt="avatar"></el-avatar>
+			<span class='post__user-info'>
+				<div class='user-info__username'>\{{postDetail.name}}</div>
+				<div class='user-info__time'>\{{postDetail.createTime}}</div>
+			</span>
+			<div class="tag-container">
+				<span v-for="topic in postDetail.topicsList" :key="topic._id" class='post__tag aside-h'
+							:style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
+			</div>
+		</div>
+		<article class='post__content' v-html="postDetail.content">
+	</div>
+</el-dialog>
+{{/if}}

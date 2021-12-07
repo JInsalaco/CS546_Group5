@@ -8,7 +8,7 @@ router.get('/getAll', async (_, res) => {
 	try {
 		allTopics = await getAllTopics();
 	} catch (error) {
-		res.status(500).send(error);
+		res.status(500).send(error?.message ?? error);
 	}
 
 	if (allTopics) {

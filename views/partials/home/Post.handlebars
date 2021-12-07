@@ -23,7 +23,7 @@
 				<el-input v-model='postForm.title' placeholder="Type your title here!"></el-input>
 			</el-form-item>
 			<div class='post__info-container flex'>
-				<img class='post__avatar-img' :src="userInfo?.profilePic ?? '/public/img/default.png'" alt='' />
+				<el-avatar :size="50" :src="userInfo?.profilePic ?? '/public/img/default.png'" alt="avatar"></el-avatar>
 				<span class='post__user-info'>
 					<div class='user-info__username'>\{{displayName}}</div>
 					<div class='user-info__time'>\{{createTime}}</div>

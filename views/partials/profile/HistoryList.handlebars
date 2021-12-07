@@ -1,11 +1,11 @@
-<div class="profile__like-list flex-c">
-  <h2>My Likes</h2>
+<div class="profile__history flex-c">
+  <h2>History</h2>
 
-  <div v-if="true" class="table-container">
-    <el-table :data="tableData" stripe style="width: 100%" :show-header="false">
+  <div v-if="historyList.length" class="table-container">
+    <el-table :data="historyList" stripe style="width: 100%" :show-header="false">
       <el-table-column prop="title" show-overflow-tooltip>
         <template #default="{row}">
-          <el-link type="primary">\{{row.title}}</el-link>
+          <el-link type="primary" @click="onPostDetail(row._id)">\{{row.title}}</el-link>
         </template>
       </el-table-column>
       <el-table-column>

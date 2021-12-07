@@ -1,27 +1,46 @@
 .page__profile {
 	height: calc(100vh - 70px);
 	display: grid;
-	grid-template-columns: 1.5fr 1.5fr 2fr;
-	grid-template-rows: 1.5fr 1fr;
+	grid-template-columns: repeat(3, 1fr) 1.5fr;
+	grid-template-rows: 1fr 1fr;
 	grid-gap: 30px;
 	padding: 50px 30px 30px;
 }
 
-.page__profile > div {
+.page__profile > div[class^='profile__']:not(.profile__info) {
 	background-color: #fff;
 	border-radius: var(--radius-default);
 	padding: 20px 30px;
 }
 
 .profile__posts {
-	grid-column-start: 1;
-	grid-column-end: 3;
+	grid-column-start: 3;
+	grid-column-end: 4;
 }
 
 .profile__info {
 	grid-row-end: -1;
-	grid-row-start: -3;
-	grid-column-start: 3;
+	grid-row-start: 1;
+	grid-column-start: 4;
+	background-color: #fff;
+	border-radius: var(--radius-default);
+	overflow: hidden;
+	align-items: center;
+}
+
+.profile__like-list {
+	grid-column-end: 4;
+	grid-column-start: 2;
+}
+
+.profile__history {
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+.profile-bg {
+	width: 100%;
+	opacity: 0.7;
 }
 
 .profile__info .info__form,
@@ -30,23 +49,53 @@
 	margin: 5% auto;
 }
 .user__avatar {
-	width: 200px;
-	height: 200px;
+	/* width: 200px;
+	height: 200px; */
 	align-items: center;
 	justify-content: center;
 	position: relative;
+	top: -50px;
 	margin: 0 auto;
 }
+
 .user-link-edit {
-	position: absolute;
-	bottom: 10px;
+	position: relative;
+	top: 15px;
 }
 
-.form-btn-container > .el-form-item__content {
-	display: flex;
+.info__name {
+	margin-top: 0;
 }
-.form-btn-container > .el-form-item__content > button {
-	flex-grow: 1;
+
+.info__summary-container {
+	width: 70%;
+	justify-content: space-around;
+}
+.info__summary {
+	justify-content: center;
+	align-items: center;
+}
+.info__summary > h3 {
+	color: var(--primary-color);
+}
+.info__summary > span {
+	font-weight: bold;
+	text-transform: capitalize;
+}
+
+.info__detail-container {
+	align-self: self-start;
+	margin: 30px 15%;
+}
+.info__detail-container .detail-label {
+	font-weight: bold;
+	font-size: 1.17em;
+	vertical-align: baseline;
+	min-width: 120px;
+}
+.info__detail-container .detail-content {
+	color: var(--font-color-grey);
+	line-height: 1.5em;
 }
 
 .table-container {

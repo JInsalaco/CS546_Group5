@@ -16,13 +16,49 @@ const composition = {
 			}
 		});
 
+		/************************************************************* Post List *************************************************************/
+		const pageConfig = reactive({
+			pageNumber: 1,
+			pageSize: 5
+		});
+		const show = reactive({
+			showMoreDetailIndex: null,
+			showComment: null
+		});
+		const disabledLoad = ref(true);
+		const postList = ref([]);
+		const loadMorePost = () => {
+			pageConfig.pageNumber++;
+			getPostList({ ...pageConfig, topicId: currentTopic.value });
+		};
+		const getPostList = params => {
+			http.get('/posts/getPosts', params).then(res => {
+				disabledLoad.value = res.length < pageConfig.pageSize;
+				postList.value.push(...res.map(item => formatPostDetail(item)));
+			});
+		};
+
+		const handleLikes = (index, id) => {
+			http.post('posts/like', { id }).then(res => {
+				postList.value[index].popularity = res;
+			});
+		};
+		const handleSeeMore = (index, id) => {
+			show.showMoreDetailIndex = show.showMoreDetailIndex === index ? null : index;
+			saveHistory(id);
+		};
+
 		/************************************************************* Topics *************************************************************/
 		const currentTopic = ref(null);
-		onMounted(() => {
-			http.get('/topics/getAll').then(res => {
-				TOPICS.value = res;
+		onMounted(() =>
+			getTopics().then(res => {
 				currentTopic.value = res[0]._id;
-			});
+			})
+		);
+		watch(currentTopic, newVal => {
+			postList.value = [];
+			pageConfig.pageNumber = 1;
+			getPostList({ ...pageConfig, topicId: newVal });
 		});
 
 		/************************************************************* Create Post *************************************************************/
@@ -49,19 +85,7 @@ const composition = {
 			});
 		};
 
-		/************************************************************* Post List *************************************************************/
-		const topicsNum = ref(5); // CLEAR
-		const loadMorePost = () => {
-			topicsNum.value += 2;
-		};
-		// TODO
-		const handleLikes = id => {};
-
 		/************************************************************* Comment *************************************************************/
-		const show = reactive({
-			showMoreDetailIndex: null,
-			showComment: null
-		});
 		const comment = reactive(new Comment());
 		const handleSubmitComment = () => {}; // TODO: submit comment
 
@@ -74,13 +98,22 @@ const composition = {
 		});
 
 		/************************************************************* Search *************************************************************/
-		const searchConfig = reactive({
-			searchTerm: '',
-			querySearchPost: () => {},
-			handlePostSelected: item => {
-				console.log(item);
-			}
-		});
+		const searchTerm = ref('');
+		const detailDialog = ref(false);
+		const postDetail = ref({});
+		const querySearchPost = (queryString, cb) => {
+			http.get('/posts/search', { title: queryString }).then(res => {
+				cb(res);
+			});
+		};
+		const handlePostSelected = item => {
+			const { _id } = item;
+			http.get('/posts/getDetail', { id: _id }).then(res => {
+				saveHistory(_id);
+				postDetail.value = formatPostDetail(res);
+				detailDialog.value = true;
+			});
+		};
 
 		return {
 			...toRefs(userAuth),
@@ -92,8 +125,11 @@ const composition = {
 			createTime,
 			selectedTopics,
 			currentTopic,
-			topicsNum,
+			pageConfig,
+			disabledLoad,
+			postList,
 			handleLikes,
+			handleSeeMore,
 			loadMorePost,
 			handlePublish,
 			openPostDialog,
@@ -105,7 +141,11 @@ const composition = {
 			TOPICS,
 			showAddFriendsDialog,
 			...toRefs(addFriendsConfig),
-			searchConfig
+			searchTerm,
+			detailDialog,
+			postDetail,
+			querySearchPost,
+			handlePostSelected
 		};
 	}
 };

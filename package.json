@@ -25,6 +25,7 @@
 		"express-handlebars": "^5.3.4",
 		"express-session": "^1.17.2",
 		"formidable": "^2.0.1",
+		"mockjs": "^1.1.0",
 		"mongodb": "^4.1.4",
 		"nodemon": "^2.0.15"
 	}

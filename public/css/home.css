@@ -52,12 +52,6 @@ h2.post__title {
 	border-radius: var(--radius-default);
 }
 
-.post__avatar-img {
-	width: 50px;
-	height: 50px;
-	border-radius: var(--radius-default);
-}
-
 .post__content {
 	margin: 20px 0;
 }
@@ -66,6 +60,9 @@ h2.post__title {
 	-webkit-line-clamp: 5;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
+}
+.icon-like-fill {
+	color: var(--primary-color);
 }
 
 .operation__btn-response {

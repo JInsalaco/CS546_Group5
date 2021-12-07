@@ -20,7 +20,7 @@ instance.interceptors.response.use(
 	err => {
 		const msg = err.response.data;
 		console.log('error: ' + msg);
-		ElementPlus.ElMessage.error(msg);
+		ElementPlus.ElMessage({ type: 'error', message: msg, title: 'Error' });
 		return Promise.reject(msg);
 	}
 );

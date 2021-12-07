@@ -82,7 +82,6 @@ Vue.createApp({
 		});
 		const userForm = ref(new User());
 		const userFormRef = ref();
-		const userFormDisable = ref(true);
 
 		onMounted(() => {
 			const USER_INFO = sessionStorage['USER_INFO'];
@@ -95,10 +94,40 @@ Vue.createApp({
 				userAuth.userInfo = null;
 				userForm.value = new User();
 			}
+			getTopics();
 		});
 
 		/************************************************************* Information *************************************************************/
 		const uploading = ref(false);
+		const profileDialog = ref(false);
+		const profileBg = ref('');
+		onMounted(() => {
+			const hour = dayjs().hour();
+			if (hour >= 8 && hour <= 17) {
+				profileBg.value = '/public/static/USA0.png';
+			} else if (hour > 17 && hour <= 20) {
+				profileBg.value = '/public/static/USA1.png';
+			} else {
+				profileBg.value = '/public/static/USA2.png';
+			}
+		});
+
+		// MODIFY
+		const profileSummary = computed(() => ({
+			posts: tableData.length,
+			likes: tableData.length,
+			friends: friendsData.length
+		}));
+		const profileDetail = computed(() => {
+			const { bio, DOB, email, phoneNumber } = userForm.value;
+			return [
+				{ title: 'About Me', content: bio.replaceAll('\n', '<br />') },
+				{ title: 'Date of Birth', content: DOB },
+				{ title: 'Email', content: email },
+				{ title: 'Phone', content: phoneNumber }
+			];
+		});
+
 		const handleImageUpload = file => {
 			uploading.value = true;
 			const formData = new FormData();
@@ -107,26 +136,30 @@ Vue.createApp({
 				.post('/profile/upload', formData)
 				.then(res => {
 					userForm.value.profilePic = res.path;
-					setSession('profilePic', res.path);
+					setUserInfo('profilePic', res.path);
 				})
 				.finally(() => setTimeout(() => (uploading.value = false), 1000));
 			return false;
 		};
 
 		const handleSubmit = () => {
-			userFormDisable.value = true;
 			userFormRef.value.validate(valid => {
 				if (valid) {
-					http.post('/profile/edit', userForm.value).then(msg => {
-						ElMessage.success(msg);
-						['email', 'firstname', 'lastname', 'phoneNumber', 'username'].forEach(item =>
-							setSession(item, userForm.value[item])
-						);
+					http.post('/profile/edit', userForm.value).then(res => {
+						const { msg, user } = res;
+						sysAlert(msg);
+						updateUserInfo(user);
+						userForm.value = { ...userForm.value, ...user };
+						profileDialog.value = false;
 					});
 				} else {
 					return false;
 				}
 			});
+		};
+		const handleProfileCancel = () => {
+			profileDialog.value = false;
+			userForm.value = JSON.parse(sessionStorage['USER_INFO']);
 		};
 
 		const handlePhoneInput = value => {
@@ -141,6 +174,15 @@ Vue.createApp({
 		const postsForm = ref();
 		const postForm = ref(null);
 		const createTime = computed(() => dayjs(postForm.value?.metaData?.timeStamp).format('MM/DD/YYYY HH:mm'));
+		const myPostList = ref([]);
+
+		onMounted(() => getMyPosts());
+		const getMyPosts = () => {
+			http.get('/posts/getMyPosts').then(res => {
+				console.log(res);
+				myPostList.value = res;
+			});
+		};
 
 		const handleGetPostdetail = id => {
 			getPostDetail(id);
@@ -166,14 +208,52 @@ Vue.createApp({
 				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
 			);
 		});
+		const handleDeletePost = id => {
+			http.delete('/posts', { id }).then(msg => {
+				sysAlert(msg);
+				const index = myPostList.value.findIndex(item => item._id === id);
+				myPostList.value.splice(1, index);
+			});
+		};
+
+		/************************************************************* History *************************************************************/
+		const historyList = ref([]);
+		const postDetailDialog = ref(false);
+		const postDetail = ref({});
+		const getHisory = () => {
+			const ids = JSON.parse(sessionStorage['HISTORY'] ?? '[]');
+			if (!ids.length) return;
+
+			http.post('/posts/history', { ids }).then(res => {
+				historyList.value = res.map(item => {
+					const { _id, profilePic, username, firstname, lastname, timeStamp, title } = item;
+					return {
+						_id,
+						title,
+						author: {
+							url: profilePic,
+							name: username || `${firstname} ${lastname}`
+						},
+						createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm')
+					};
+				});
+			});
+		};
+		onMounted(() => getHisory());
+		const onPostDetail = id => {
+			http.get('/posts/getDetail', { id }).then(res => {
+				postDetail.value = formatPostDetail(res);
+				postDetailDialog.value = true;
+			});
+		};
 
 		return {
 			...toRefs(userAuth),
 			userForm,
 			userFormRef,
-			userFormDisable,
 			handleImageUpload,
 			handleSubmit,
+			handleProfileCancel,
 			handlePhoneInput,
 			rules,
 			postRules,
@@ -191,6 +271,16 @@ Vue.createApp({
 			handleEditConfirm,
 			showAddFriendsDialog,
 			...toRefs(addFriendsConfig),
+			profileDialog,
+			profileBg,
+			profileSummary,
+			profileDetail,
+			historyList,
+			postDetailDialog,
+			onPostDetail,
+			postDetail,
+			handleDeletePost,
+			myPostList,
 			tableData, // CLEAR
 			friendsData // CLEAR
 		};

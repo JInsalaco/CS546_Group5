@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userData = require('../data/users');
+const { handleUserInfo, objectIdToString } = require('../utils');
 
 router.get('/:type', (req, res) => {
 	try {
@@ -11,25 +12,19 @@ router.get('/:type', (req, res) => {
 		} else {
 			res.render('home', { title: 'The Pond', showHeader: true, scriptUrl: ['home.js'] });
 		}
-	} catch(e) {
-		return res.status(500).json({ error: e });
+	} catch (error) {
+		return res.status(500).send(error?.message ?? error);
 	}
 });
 
 router.post('/signup', async (req, res) => {
 	try {
-		// let userInfo = req.body;
-		// let firstname = userInfo.firstname;
-		// let lastname = userInfo.lastname;
-		// let email = userInfo.email;
-		// let phoneNumber = userInfo.phoneNumber;
-		// let password = userInfo.password;
 		const { firstname, lastname, email, phoneNumber, password } = req.body;
 		userData.checkUserData(email, password, firstname, lastname, phoneNumber);
 		var newUser = await userData.addUser(email, password, firstname, lastname, phoneNumber);
-		if (newUser) res.status(200).send('Signed up successfully'); //Need to redirect here to private session/home login
-	} catch (e) {
-		res.status(400).send(e); //need to render
+		if (newUser) res.status(200).send('Signed up successfully');
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
 	}
 });
 
@@ -42,21 +37,16 @@ router.post('/signin', async (req, res) => {
 			throw 'You must supply valid username or password';
 		if (email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1) throw 'You must supply valid username or password';
 		if (password.length < 8 || password.length > 15) throw 'You must supply valid username or password';
-		let user = await userData.authenticateUser(email, password);
-		if (user) {
-			req.session.userid = user.user._id;
-			res.json({
-				id: user.user._id,
-				username: user.user.username,
-				firstname: user.user.firstname,
-				lastname: user.user.lastname,
-				profilePic: user.user.profilePic,
-				phoneNumber: user.user.phoneNumber,
-				email: user.user.email
-			});
+
+		const { authenticated, user } = await userData.authenticateUser(email, password);
+		if (authenticated) {
+			req.session.userid = objectIdToString(user._id);
+
+			const userInfo = handleUserInfo(user);
+			res.json(userInfo);
 		}
-	} catch (e) {
-		res.status(400).send(e); //need to render
+	} catch (error) {
+		res.status(400).send(error?.message ?? error); //need to render
 	}
 });
 

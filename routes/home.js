@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 router.get('/', (_, res) => {
-	res.render('home', { title: 'The Pond', showHeader: true, showSeatcdInput: true, scriptUrl: ['home.js'] });
+	res.render('home', { title: 'The Pond', showHeader: true, showSearchInput: true, scriptUrl: ['home.js'] });
 });
 
 router.get('/logout', async (req, res) => {
