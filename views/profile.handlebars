@@ -6,7 +6,7 @@
   {{> profile/PostsList}}
 
   <el-dialog v-model='postDetailDialog' title="Preview" destroy-on-close>
-    <div class='posts__preview'>
+    <article class='posts__preview'>
       <h2 class='post__title'>\{{postDetail.title}}</h2>
 
       <div class='post__info-container flex'>
@@ -20,7 +20,7 @@
                 :style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
         </div>
       </div>
-      <article class='post__content' v-html="postDetail.content">
-    </div>
+      <div class='post__content' v-html="postDetail.content"></div>
+    </article>
   </el-dialog>
 </main>
