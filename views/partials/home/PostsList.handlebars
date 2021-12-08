@@ -1,19 +1,21 @@
-<ul v-if="postList.length" class='post__list-container' infinite-scroll-disabled="disabledLoad"
-    v-infinite-scroll="loadMorePost">
+<ul v-if="postList.length" class='post__list-container' v-infinite-scroll="loadMorePost"
+    :infinite-scroll-disabled="disabledLoad">
   <li v-for='(item, index) in postList' :key='item' class='post__list-item'>
-    <h2 class='post__title'>\{{item.title}}</h2>
-    <div class='post__info-container flex'>
-      <el-avatar :size="50" :src="item.profilePic" alt="avatar"></el-avatar>
-      <span class='post__user-info'>
-        <div class='user-info__username'>\{{item.name}}</div>
-        <div class='user-info__time'>\{{item.createTime}}</div>
-      </span>
-      <div class="tag-container">
-        <span v-for="topic in item.topicsList" :key="topic._id" class='post__tag aside-h'
-              :style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
+    <article>
+      <h2 class='post__title'>\{{item.title}}</h2>
+      <div class='post__info-container flex'>
+        <el-avatar :size="50" :src="item.profilePic" alt="avatar"></el-avatar>
+        <div class='post__user-info'>
+          <div class='user-info__username'>\{{item.name}}</div>
+          <div class='user-info__time'>\{{item.createTime}}</div>
+        </div>
+        <div class="tag-container">
+          <span v-for="topic in item.topicsList" :key="topic._id" class='post__tag aside-h'
+                :style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
+        </div>
       </div>
-    </div>
-    <article class='post__content' :class="{omit: showMoreDetailIndex !== index}" v-html="item.content">
+      <div class='post__content' :class="{omit: showMoreDetailIndex !== index}" v-html="item.content">
+      </div>
     </article>
     <div class='post__operation-container flex'>
       <el-button type="info" class="aside-h" size="mini" round @click="handleSeeMore(index, item._id)">
@@ -24,13 +26,13 @@
     </div>
     <div class="form__comment flex">
       <el-input class="aside-h" label="comment" v-model="item.comment" placeholder="Add a comment"></el-input>
-      <el-button class="aside-h" type="primary" @click="handleSubmitComment(item._id, item.comment)" circle>
+      <el-button class="aside-h" type="primary" @click="handleSubmitComment(item._id, item.comment, index)" circle>
         <i class="iconfont icon-send"></i>
       </el-button>
     </div>
 
-    <div v-if="item.commentList.length" class="post__comment-container">
-      <div class="comment__bar" @click="showComment = showComment === index ? null : index">
+    <div class="post__comment-container">
+      <div class="comment__bar" @click="handleShowComments(index, item._id)">
         <i class="iconfont icon-down" :data-show-list="showComment === index"></i>
       </div>
       <el-collapse-transition>

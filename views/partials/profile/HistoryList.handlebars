@@ -1,7 +1,7 @@
 <div class="profile__history flex-c">
   <h2>History</h2>
 
-  <div v-if="historyList.length" class="table-container">
+  <div class="table-container">
     <el-table :data="historyList" stripe style="width: 100%" :show-header="false">
       <el-table-column prop="title" show-overflow-tooltip>
         <template #default="{row}">
@@ -19,6 +19,4 @@
       <el-table-column show-overflow-tooltip prop="createTime" align="right" />
     </el-table>
   </div>
-
-  <el-empty v-else description="No Data"></el-empty>
 </div>

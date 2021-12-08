@@ -1,7 +1,7 @@
 <div class="profile__friend-list flex-c">
   <h2>Friends List</h2>
 
-  <div v-if="true" class="table-container">
+  <div class="table-container">
     <el-table :data="friendsData" stripe style="width: 100%" :show-header="false">
       <el-table-column>
         <template #default="{row}">
@@ -11,9 +11,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="email" align="right" />
+      <el-table-column prop="email" align="right" show-overflow-tooltip />
     </el-table>
   </div>
-
-  <el-empty v-else description="No Data"></el-empty>
 </div>

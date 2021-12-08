@@ -132,3 +132,7 @@ ul {
 	font-weight: bold;
 	color: var(--primary-color);
 }
+.sys__notice {
+	text-align: center;
+	color: var(--font-color-grey);
+}
