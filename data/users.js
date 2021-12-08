@@ -230,6 +230,16 @@ function equalUser(user1, user2) {
 	return false;
 }
 
+const updateThread = async (userId, threadId) => {
+	const { thread } = await getUser(userId);
+	thread.push(utils.objectIdToString(threadId));
+
+	const userCollection = await users();
+	const updateInfo = await userCollection.updateOne({ _id: utils.stringToObjectID(userId) }, { $set: { thread } });
+	if (updateInfo.modifiedCount === 0) throw 'Could not update popularity';
+	return { update: true };
+};
+
 module.exports = {
 	addUser,
 	checkUserData,
@@ -241,5 +251,6 @@ module.exports = {
 	getAllUsers,
 	editUser,
 	deleteUser,
-	uploadPic
+	uploadPic,
+	updateThread
 };

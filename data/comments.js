@@ -19,10 +19,14 @@ async function createComment(posterId, body, postId) {
 	if (insertInfo.insertedCount === 0) throw 'Could not add topic';
 
 	// update the post
-	const { update } = await posts.updateThread(postId, insertInfo.insertedId);
-	if (!update) throw 'Can not update thread in post';
+	const postUpdateInfo = await posts.updateThread(postId, insertInfo.insertedId);
+	if (!postUpdateInfo.update) throw 'Can not update thread in post';
 
-	return { update };
+	// update the user
+	const userUpdateInfo = await users.updateThread(posterId, insertInfo.insertedId);
+	if (!userUpdateInfo.update) throw 'Can not update thread in post';
+
+	return { update: true };
 }
 
 async function commentPopularity(commentId, userId, val) {

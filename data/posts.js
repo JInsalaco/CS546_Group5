@@ -306,6 +306,16 @@ const updateThread = async (postId, threadId) => {
 	return { update: true };
 };
 
+const getMyLike = async userId => {
+	utils.errorCheckingId(userId);
+
+	const postCollection = await posts();
+	const postList = await postCollection.find({ popularity: { $elemMatch: { $eq: userId } } }).toArray();
+	const likeList = await handlePost(postList, userId);
+
+	return utils.objectIdToString(likeList);
+};
+
 module.exports = {
 	addPost,
 	getPost,
@@ -321,5 +331,6 @@ module.exports = {
 	getMultiplePosts,
 	getPostPopularity,
 	updateThread,
-	getPostInternal
+	getPostInternal,
+	getMyLike
 };

@@ -82,17 +82,16 @@ h2.post__title {
 	width: 20%;
 }
 .body-container .nav-container__left {
-	padding: 2% 15px 0 50px;
+	padding: 3% 15px 0 50px;
 	border-right: 2px solid #f9f9f9;
 }
 
 .body-container .nav-container__right {
-	padding: 2% 20px 0;
+	padding: 3% 20px 0 2%;
 	border-left: 2px solid #f9f9f9;
 }
 
 .info__title {
-	height: 60px;
 	margin-bottom: 0;
 }
 
@@ -109,7 +108,7 @@ h2.post__title {
 
 .info__contact-container {
 	margin: 10% 0 5%;
-	padding: 30px 20px;
+	padding: 1vh 20px;
 	background-color: #fff;
 	border-radius: var(--radius-default);
 	box-shadow: var(--box-shadow);
@@ -214,10 +213,6 @@ h2.post__title {
 	opacity: 0;
 }
 
-.menu__topic-list > li {
-	align-items: center;
-}
-
 .menu__topic-list > li > .icon-point {
 	display: inline-block;
 	height: 30px;
@@ -253,6 +248,7 @@ h2.post__title {
 	cursor: pointer;
 	position: relative;
 	margin-right: 15px;
+	align-items: center;
 }
 .menu__topic-list > li > .icon-point {
 	font-size: var(--font-xs);
@@ -334,4 +330,9 @@ h2.post__title {
 }
 .comment__info-time {
 	margin-left: auto;
+}
+.post__comment-like {
+	margin-left: 10px;
+	cursor: pointer;
+	font-size: 20px;
 }

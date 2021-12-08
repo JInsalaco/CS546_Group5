@@ -1,10 +1,11 @@
 <ul v-if="showComment === index" class="comment-list">
-  <li class="comment-item  aside-v" v-for="com in item.comment" :key="com">
+  <li class="comment-item  aside-v" v-for="com in item.commentList" :key="com">
     <div class="flex">
-      <el-avatar src="/public/static/avatar.png" class="aside-h" alt="avatar"></el-avatar>
-      <div class="comment__info-user aside-h">Shihao</div>
-      <span class="comment__info-time">11/29/2021 14:58</span>
+      <el-avatar :src="com.poster.profilePic" class="aside-h" alt="avatar"></el-avatar>
+      <div class="comment__info-user aside-h">\{{ com.poster.name }}</div>
+      <span class="comment__info-time">\{{com.timeStamp}}</span>
+      <i v-if="auth" class="iconfont post__comment-like" :class="com.popularity ? 'icon-like-fill' : 'icon-like'"></i>
     </div>
-    <div class="comment__body">Sounds good!!</div>
+    <div class="comment__body">\{{com.body}}</div>
   </li>
 </ul>

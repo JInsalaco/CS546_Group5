@@ -1,11 +1,11 @@
 <div class="profile__like-list flex-c">
   <h2>My Likes</h2>
 
-  <div v-if="true" class="table-container">
-    <el-table :data="tableData" stripe style="width: 100%" :show-header="false">
+  <div class="table-container">
+    <el-table :data="myLikeList" stripe style="width: 100%" :show-header="false">
       <el-table-column prop="title" show-overflow-tooltip>
         <template #default="{row}">
-          <el-link type="primary">\{{row.title}}</el-link>
+          <el-link type="primary" @click="onPostDetail(row._id)">\{{row.title}}</el-link>
         </template>
       </el-table-column>
       <el-table-column>
@@ -19,6 +19,4 @@
       <el-table-column show-overflow-tooltip prop="createTime" align="right" />
     </el-table>
   </div>
-
-  <el-empty v-else description="No Data"></el-empty>
 </div>

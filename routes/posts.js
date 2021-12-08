@@ -260,4 +260,18 @@ router.post('/addComment', async (req, res) => {
 	}
 });
 
+router.get('/getMyLike', async (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
+
+	try {
+		const postList = await posts.getMyLike(req.session.userid);
+		res.json(postList);
+	} catch (error) {
+		res.status(500).send(error?.message ?? error);
+	}
+});
+
 module.exports = router;

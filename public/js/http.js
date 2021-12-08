@@ -18,7 +18,7 @@ const instance = axios.create(DEFAULT_CONFIG);
 instance.interceptors.response.use(
 	res => (res.status == 200 ? res.data : Promise.reject('Request error, please try again later!')),
 	err => {
-		const msg = err.response.data;
+		const msg = err?.response?.data ?? err;
 		console.log('error: ' + msg);
 		ElementPlus.ElMessage({ type: 'error', message: msg, title: 'Error' });
 		return Promise.reject(msg);
