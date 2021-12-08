@@ -34,6 +34,18 @@ async function getAllTopics() {
 	return utils.objectIdToString(topicList);
 }
 
+async function getAllTopicNames() {
+	const topicCollection = await topics();
+	const topicList = await topicCollection.find( {}, { projection: { _id: 0,  title: 1 } }).toArray();
+	let names = [];
+	
+	topicList.forEach((topic) => {
+		names.push(topic.title);
+	});
+
+	return names;
+}
+
 async function getTopicTitles(topic) {
 	const topicCollection = await topics();
 	const topicList = await topicCollection.find({
@@ -83,5 +95,6 @@ module.exports = {
 	getAllTopics,
 	getTopicTitles,
 	deleteTopic,
-	getTopicbyId
+	getTopicbyId,
+	getAllTopicNames
 };

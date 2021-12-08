@@ -39,6 +39,7 @@ async function getMyPosts(id) {
 	});
 	return utils.objectIdToString(res);
 }
+
 // Add a post to the Pond
 async function getPostsByTitle(title) {
 	const postCollection = await posts();
@@ -91,18 +92,18 @@ const getUserInfoToPost = async (post, userid) => {
 };
 
 async function addPost(posterId, title, body, topics) {
-	errorCheckingPost(title, body, topics);
+	errorCheckingPost(title, body);
 
 	// Check for user
 	const sid = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sid);
 
 	// Check for topic
-	const allTopics = await topicData.getAllTopics();
-	const allTopicsIds = allTopics.map(item => item._id);
-	for (let topicId of topics) {
-		if (!allTopicsIds.includes(topicId)) throw 'Topic does not exist';
-	}
+	let allTopicsNames = await topicData.getAllTopicNames();
+	
+	topics.forEach((topic) => {
+		if (!allTopicsNames.includes(topic)) throw "Topic not found";
+	})
 
 	// New Post
 	const postCollection = await posts();
@@ -148,6 +149,20 @@ async function getPost(id, needHandle = true) {
 	return post;
 }
 
+async function getPostInternal(id) {
+	// Get the id as an ObjectId, will return if valid
+	let oid = utils.stringToObjectID(id);
+
+	// Look for post in the database
+	const postCollection = await posts();
+	let post = await postCollection.findOne({ _id: oid });
+
+	// Check if the post was found
+	if (post === null) throw 'Post not found';
+
+	return post;
+}
+
 async function deletePost(id) {
 	// Check that post exist
 	const sid = utils.objectIdToString(id);
@@ -172,32 +187,17 @@ async function editPost(posterId, postId, title, body, topics) {
 	// Check for user
 	const sidUser = utils.objectIdToString(posterId);
 	const user = await userData.getUser(sidUser);
-	//if (user === null) throw 'User does not exist';
 
 	// Check if post exist
 	const sidPost = utils.objectIdToString(postId);
-	const post = await this.getPost(sidPost);
-	//if (post === null) throw 'Post does not exist';
+	const post = await this.getPostInternal(sidPost);
 
 	// Check for topic
-	if (topics) {
-		if (topics.length > 0 && topics.length < 4) {
-			const topicListDB = await topicData.getAllTopics();
-			// Iterate and check that each topic is valid
-			for (let i = 0; i < topics.length; topics++) {
-				let userTopic = topics[i];
-				let topicFlag = true;
-				for (let j = 0; j < topicListDB.length && topicFlag; j++) {
-					if (topicListDB[j].title === userTopic) {
-						topicFlag = false;
-					}
-				}
-				if (topicFlag) {
-					throw 'Topic does not exist';
-				}
-			}
-		}
-	}
+	let allTopicsNames = await topicData.getAllTopicNames();
+	
+	topics.forEach((topic) => {
+		if (!allTopicsNames.includes(topic)) throw "Topic not found";
+	})
 
 	// Get the old post and make the edited Post
 	// Add the lastEdit field in metaData to
@@ -249,11 +249,10 @@ const getMultiplePosts = async ids => {
 	return utils.objectIdToString(res);
 };
 
-function errorCheckingPost(title, body, topics) {
+function errorCheckingPost(title, body) {
 	// Input not provided
 	if (!title) throw 'No title provided';
 	if (!body) throw 'No post content provided';
-	if (!topics) throw 'No topics provided';
 
 	// Input not of type string or empty
 	if (typeof title !== 'string') throw 'Title is not a string';
@@ -265,11 +264,7 @@ function errorCheckingPost(title, body, topics) {
 	// Max character 3000
 	if (body.length > 3000) throw 'Maximum characters reached';
 
-	if (!Array.isArray(topics)) throw 'Topics should be an array';
-	if (topics.length < 1 || topics.length > 3) throw 'Topics should be at least 1 and at most 3';
-	for (let topicId of topics) {
-		utils.errorCheckingId(topicId);
-	}
+	return;
 }
 
 function editComparison(oldBody, newBody, oldTopics, newTopics) {
@@ -325,5 +320,6 @@ module.exports = {
 	getMyPosts,
 	getMultiplePosts,
 	getPostPopularity,
-	updateThread
+	updateThread,
+	getPostInternal
 };
