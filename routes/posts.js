@@ -274,4 +274,27 @@ router.get('/getMyLike', async (req, res) => {
 	}
 });
 
+router.post('/likeComment', async (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
+
+	const { id } = req.body;
+	
+	try {
+		errorCheckingId(id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
+	}
+
+	try{
+		const { likedComment } = await comments.likeComment(id, req.session.userid, 1);
+		res.json(likedComment);
+	} catch (error) {
+		res.status(500).send(error?.message ?? error);
+	}
+});
+
 module.exports = router;
