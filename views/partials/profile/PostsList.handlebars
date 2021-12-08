@@ -1,7 +1,7 @@
 <div class="profile__posts flex-c">
   <h2>My Posts</h2>
 
-  <div v-if="myPostList.length" class="table-container">
+  <div class="table-container">
     <el-table :data="myPostList" stripe style="width: 100%" :show-header="false">
       <el-table-column prop="title">
         <template #default="{row}">
@@ -27,8 +27,6 @@
       </el-table-column>
     </el-table>
   </div>
-
-  <el-empty v-else description="No Data"></el-empty>
 
   <el-dialog v-model='postDialogControl.showDialog' title='My Post' destroy-on-close
              :before-close="beforeClosePostDialog">
