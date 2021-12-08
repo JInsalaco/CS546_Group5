@@ -125,7 +125,6 @@ router.get('/friends', async (req, res) => {
 	}
 	try {
 		const friendList = await userData.getUserFriends(req.session.userid);
-		console.log(friendList);
 		if (friendList) res.status(200).send(friendList)
 		else res.status(404).send("Friend list could not be retrieved");
 	} catch(e) {
