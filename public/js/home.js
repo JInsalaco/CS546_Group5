@@ -98,12 +98,13 @@ const composition = {
 
 			http.post('/posts/addComment', { body: comment, postId }).then(msg => {
 				sysAlert(msg);
+				postList.value[index].comment = '';
 				getComments(postId, index);
 			});
 		};
 		const handleShowComments = (index, postId) => {
 			show.showComment = show.showComment === index ? null : index;
-			getComments(postId, index);
+			show.showComment && getComments(postId, index);
 		};
 
 		const getComments = async (id, index) => {

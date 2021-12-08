@@ -303,9 +303,10 @@ async function getPostPopularity(id) {
 }
 
 const updateThread = async (postId, threadId) => {
-	const { thread } = getPost(postId, false);
+	const { thread } = await getPost(postId, false);
 	thread.push(utils.objectIdToString(threadId));
-	const updateInfo = postCollection.updateOne({ _id: postId }, { $set: { thread } });
+	const postCollection = await posts();
+	const updateInfo = await postCollection.updateOne({ _id: utils.stringToObjectID(postId) }, { $set: { thread } });
 	if (updateInfo.modifiedCount === 0) throw 'Could not update popularity';
 
 	return { update: true };
