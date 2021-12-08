@@ -83,7 +83,7 @@ router.post('/add', async (req, res) => {
 
 	const { title, body, topics } = req.body;
 	try {
-		posts.errorCheckingPost(title, body, topics);
+		posts.errorCheckingPost(title, body);
 	} catch (error) {
 		res.status(400).send(error?.message ?? error);
 	}
@@ -122,13 +122,11 @@ router.delete('/', async (req, res) => {
 	}
 });
 
-// User able to change title?
 router.put('/:id', async (req, res) => {
-	// MODIFY uncomment when finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permisssion');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
 
 	try {
 		errorCheckingId(req.params.id);
@@ -140,7 +138,7 @@ router.put('/:id', async (req, res) => {
 	const { title, body, topics } = req.body;
 	try {
 		posts.errorCheckingPost(title, body);
-		const post = await posts.getPost(req.params.id);
+		const post = await posts.getPost(req.params.id.toString());
 		const equalPost = posts.editComparison(post.body, body, post.topics, topics);
 		if (!equalPost) return res.status(400).send('No updates made');
 	} catch (error) {
@@ -150,7 +148,7 @@ router.put('/:id', async (req, res) => {
 	try {
 		posts.errorCheckingPost(title, body);
 		let posterId = req.session.userid;
-		const result = await posts.addPost(posterId, title, body, topics);
+		const result = await posts.editPost(posterId, title, body, topics);
 		if (!result) return res.status(500).send('Internal server error, please try again after some time');
 		return res.render('post', {
 			title: post.title,
