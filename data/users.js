@@ -1,6 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
-const utils = require('../utils');
+const utils = require('../utils/index');
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
@@ -94,27 +94,30 @@ async function authenticateUser(email, password) {
  * Appends user ID to friends list
  */
 async function addFriend(userId, email) {
-	let uid = utils.stringToObjectID(userId);
+	const user = await getUser(userId);
+	let updatedFriendsList = [...user.friends];
 	const userCollection = await users();
-	const user = await userCollection.findOne({ _id: uid });
-	let friendsList = user.friends;
 	const friend = await userCollection.findOne({ email: email });
-	let updatedFriendsList = friendsList.push(friend._id);
-	const newInsertInformation = await userCollection.updateOne({ _id: uid }, { $set: { friends: updatedFriendsList } });
+	updatedFriendsList.push(friend._id);
+	const oid = utils.stringToObjectID(userId);
+	const newInsertInformation = await userCollection.updateOne({ _id: oid }, { $set: { friends: updatedFriendsList } });
 	if (newInsertInformation.modifiedCount === 0) throw 'Could not add friend';
 	return friend;
 }
 
 async function getUserFriends(userId) {
-	let uid = utils.stringToObjectID(userId);
-	const userCollection = await users();
-	const user = await userCollection.findOne({ _id: uid });
+	const user = await getUser(userId);
 	if (!user) throw 'User does not exist';
-	let friendList = user.friends;
-	user.friends.forEach(async friendId => {
-		let friend = await getUser(friendId);
-		friendList.push(friend);
-	});
+	let friendList = [];
+	const userCollection = await users();
+	const friends = await userCollection.find({ _id: { $in: user.friends } }).toArray();
+
+	friends.forEach((friend) => {
+		const { _id, firstname, lastname, username, profilePic } = friend;
+		const id = _id.toString();
+		friendList.push({ id, firstname, lastname, username, profilePic });
+	})
+
 	return friendList;
 }
 
