@@ -179,7 +179,6 @@ Vue.createApp({
 		onMounted(() => getMyPosts());
 		const getMyPosts = () => {
 			http.get('/posts/getMyPosts').then(res => {
-				console.log(res);
 				myPostList.value = res;
 			});
 		};
@@ -220,23 +219,26 @@ Vue.createApp({
 		const historyList = ref([]);
 		const postDetailDialog = ref(false);
 		const postDetail = ref({});
+		const formatPostList = list => {
+			return list.map(item => {
+				const { _id, profilePic, username, firstname, lastname, timeStamp, title } = item;
+				return {
+					_id,
+					title,
+					author: {
+						url: profilePic,
+						name: username || `${firstname} ${lastname}`
+					},
+					createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm')
+				};
+			});
+		};
 		const getHisory = () => {
 			const ids = JSON.parse(sessionStorage['HISTORY'] ?? '[]');
 			if (!ids.length) return;
 
 			http.post('/posts/history', { ids }).then(res => {
-				historyList.value = res.map(item => {
-					const { _id, profilePic, username, firstname, lastname, timeStamp, title } = item;
-					return {
-						_id,
-						title,
-						author: {
-							url: profilePic,
-							name: username || `${firstname} ${lastname}`
-						},
-						createTime: dayjs(timeStamp).format('MM/DD/YYYY HH:mm')
-					};
-				});
+				historyList.value = formatPostList();
 			});
 		};
 		onMounted(() => getHisory());
@@ -244,6 +246,16 @@ Vue.createApp({
 			http.get('/posts/getDetail', { id }).then(res => {
 				postDetail.value = formatPostDetail(res);
 				postDetailDialog.value = true;
+			});
+		};
+
+		/************************************************************* My Like *************************************************************/
+		const myLikeList = ref([]);
+		onMounted(() => getMyLike());
+
+		const getMyLike = () => {
+			http.get('/posts/getMyLike').then(res => {
+				myLikeList.value = formatPostList(res);
 			});
 		};
 
@@ -281,6 +293,7 @@ Vue.createApp({
 			postDetail,
 			handleDeletePost,
 			myPostList,
+			myLikeList,
 			tableData, // CLEAR
 			friendsData // CLEAR
 		};
