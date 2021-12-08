@@ -83,7 +83,7 @@ router.post('/add', async (req, res) => {
 
 	const { title, body, topics } = req.body;
 	try {
-		posts.errorCheckingPost(title, body, topics);
+		posts.errorCheckingPost(title, body);
 	} catch (error) {
 		res.status(400).send(error?.message ?? error);
 	}

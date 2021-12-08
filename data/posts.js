@@ -99,10 +99,10 @@ async function addPost(posterId, title, body, topics) {
 	const user = await userData.getUser(sid);
 
 	// Check for topic
-	let allTopicsNames = await topicData.getAllTopicNames();
+	let allTopicIds = await topicData.getAllTopicIds();
 	
 	topics.forEach((topic) => {
-		if (!allTopicsNames.includes(topic)) throw "Topic not found";
+		if (!allTopicIds.includes(topic)) throw "Topic not found";
 	})
 
 	// New Post
@@ -193,10 +193,10 @@ async function editPost(posterId, postId, title, body, topics) {
 	const post = await this.getPostInternal(sidPost);
 
 	// Check for topic
-	let allTopicsNames = await topicData.getAllTopicNames();
+	let allTopicIds = await topicData.getAllTopicIds();
 	
 	topics.forEach((topic) => {
-		if (!allTopicsNames.includes(topic)) throw "Topic not found";
+		if (!allTopicIds.includes(topic)) throw "Topic not found";
 	})
 
 	// Get the old post and make the edited Post
