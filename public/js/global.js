@@ -51,13 +51,48 @@ const postRules = {
 };
 
 const showAddFriendsDialog = ref(false);
-const addFriendsConfig = reactive({
-	friendId: '',
-	querySearchAsync: () => {},
-	handleFriendsSelected: item => {
-		console.log(item);
-	}
+const friendConfig = reactive({
+	firendEmail: '',
+	friendInfo: null
 });
+const querySearchFriend = (searchTerm, cb) => {
+	http.get('/profile/searchFriend', { email: searchTerm }).then(res => {
+		const infoList = res.map(item => {
+			const { _id, username, firstname, lastname, email } = item;
+			const info = `${username || `${firstname} ${lastname}`} (${email})`;
+
+			return { info, _id };
+		});
+		cb(infoList);
+	});
+};
+const handleFriendsSelected = item => {
+	const { _id: id } = item;
+	http.get('/profile/userInfo', { id }).then(res => {
+		friendConfig.friendInfo = res;
+	});
+};
+const onBrforeFriendDialogClose = () => {
+	showAddFriendsDialog.value = false;
+	setTimeout(() => {
+		friendConfig.friendInfo = null;
+		friendConfig.firendEmail = '';
+	}, 500);
+};
+const handleConfirmAddFriend = () => {
+	if (!friendConfig.friendInfo) {
+		ElMessage.warning('Please select a user first');
+		return;
+	}
+
+	const { _id: id, username, firstname, lastname } = friendConfig.friendInfo;
+	http.post('/profile/addFriend', { id }).then(res => {
+		if (res) {
+			sysAlert(`You hace add ${username || `${firstname} ${lastname}`} as your friend`);
+			onBrforeFriendDialogClose();
+		}
+	});
+};
 
 const sysAlert = (msg, noTitle, type = 'success') => {
 	const title = noTitle ?? type.charAt(0).toUpperCase() + type.slice(1);

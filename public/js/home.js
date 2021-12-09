@@ -180,13 +180,17 @@ const composition = {
 			handleSubmitComment,
 			TOPICS,
 			showAddFriendsDialog,
-			...toRefs(addFriendsConfig),
 			searchTerm,
 			detailDialog,
 			postDetail,
 			querySearchPost,
 			handlePostSelected,
-			handleShowComments
+			handleShowComments,
+			...toRefs(friendConfig),
+			querySearchFriend,
+			handleFriendsSelected,
+			onBrforeFriendDialogClose,
+			handleConfirmAddFriend
 		};
 	}
 };

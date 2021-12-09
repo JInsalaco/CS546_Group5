@@ -1,8 +1,9 @@
 const router = require('express').Router();
+const { route } = require('express/lib/application');
 const { formidable } = require('formidable');
 const fs = require('fs');
 const userData = require('../data/users');
-const { handleUserInfo } = require('../utils');
+const { handleUserInfo, errorCheckingId } = require('../utils');
 
 router.get('/', (req, res) => {
 	// MODIFY uncomment this when project is finished
@@ -43,11 +44,10 @@ router.post('/upload', async (req, res) => {
 });
 
 router.post('/edit', async (req, res) => {
-	// MODIFY uncomment this when project is finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permission');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).send('No permission');
+		return;
+	}
 
 	try {
 		if (req.body) {
@@ -93,29 +93,68 @@ router.post('/edit', async (req, res) => {
 	}
 });
 
+router.get('/searchFriend', async (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).send('No permission');
+		return;
+	}
+
+	const { email } = req.query;
+
+	try {
+		const friendList = await userData.searchFriendByEmail(email, req.session.userid);
+		res.json(friendList);
+	} catch (error) {
+		res.status(500).send(error?.message ?? error);
+	}
+});
+
+router.get('/userInfo', async (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).send('No permission');
+		return;
+	}
+
+	const { id } = req.query;
+	try {
+		errorCheckingId(id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
+	}
+
+	try {
+		const userInfo = await userData.getUser(id, 0, 0, 0);
+		res.json(userInfo);
+	} catch (error) {
+		res.status(500).send(error?.message ?? error);
+	}
+});
+
 //TODO: Finish Testing
 router.post('/addFriend', async (req, res) => {
 	if (!req.session.userid) {
 		res.status(403).send('No permission');
 		return;
 	}
+	const { id } = req.body;
+	try {
+		errorCheckingId(id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
+	}
 
 	try {
-		const { email } = req.body;
-		if (
-			!email ||
-			email.trim() == '' ||
-			email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1
-		)
-			res.status(400).send('Email is a required field, please enter valid email');
+		const { update: updateUser } = await userData.addFriend(req.session.userid, id);
+		const { update: updateFriend } = await userData.addFriend(id, req.session.userid);
+		if (!updateUser || !updateFriend) throw 'Cannot add friend';
 
-		const friend = await userData.addFriend(req.session.userid, email);
-		if (friend) res.status(200).send(`${friend.firstname} added as a friend!`)
-		else res.status(404).send("Friend could not be added");
-	} catch(e) {
-		res.status(500).send('Internal Server Error');
+		res.status(200).send(true);
+	} catch (error) {
+		res.status(500).send(error?.message ?? error);
 	}
-})
+});
 
 //TODO: Finish Testing
 router.get('/friends', async (req, res) => {
@@ -125,10 +164,11 @@ router.get('/friends', async (req, res) => {
 	}
 	try {
 		const friendList = await userData.getUserFriends(req.session.userid);
-		if (friendList) res.status(200).send(friendList)
-		else res.status(404).send("Friend list could not be retrieved");
-	} catch(e) {
+		if (friendList) res.status(200).send(friendList);
+		else res.status(404).send('Friend list could not be retrieved');
+	} catch (e) {
 		res.status(500).send('Internal Server Error');
 	}
-})
+});
+
 module.exports = router;
