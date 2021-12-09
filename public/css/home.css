@@ -160,12 +160,6 @@ h2.post__title {
 	padding-right: 15px;
 }
 
-.friends-list__email {
-	justify-self: flex-end;
-	color: grey;
-	margin-left: auto;
-}
-
 .body-container .body__content {
 	width: 60%;
 	padding-top: 2%;
