@@ -1,10 +1,11 @@
 <ul v-if="showComment === index" class="comment-list">
-  <li class="comment-item  aside-v" v-for="com in item.commentList" :key="com">
+  <li class="comment-item  aside-v" v-for="(com, idx) in item.commentList" :key="com">
     <div class="flex">
       <el-avatar :src="com.poster.profilePic" class="aside-h" alt="avatar"></el-avatar>
       <div class="comment__info-user aside-h">\{{ com.poster.name }}</div>
       <span class="comment__info-time">\{{com.timeStamp}}</span>
-      <i v-if="auth" class="iconfont post__comment-like" :class="com.popularity ? 'icon-like-fill' : 'icon-like'"></i>
+      <i v-if="auth" class="iconfont post__comment-like" :class="com.popularity ? 'icon-like-fill' : 'icon-like'"
+         @click="handleLikeComment(index, idx, com._id)"></i>
     </div>
     <div class="comment__body">\{{com.body}}</div>
   </li>

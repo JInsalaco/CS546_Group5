@@ -283,8 +283,8 @@ router.post('/likeComment', async (req, res) => {
 	}
 
 	try {
-		const { likedComment } = await comments.likeComment(id, req.session.userid, 1);
-		res.json(likedComment);
+		const likeStatus = await comments.likeComment(id, req.session.userid);
+		res.json(likeStatus);
 	} catch (error) {
 		res.status(500).send(error?.message ?? error);
 	}

@@ -98,10 +98,32 @@ const getAllComments = async (skip, count) => {
 	return utils.objectIdToString(commentList);
 };
 
+const likeComment = async (threadId, userId) => {
+	const pid = utils.stringToObjectID(threadId);
+	const commentCollection = await comments();
+	const { popularity } = await commentCollection.findOne({ _id: pid });
+
+	let likeStatus;
+	if (popularity.includes(userId)) {
+		const index = popularity.findIndex(item => item === userId);
+		popularity.splice(index, 1);
+		likeStatus = false;
+	} else {
+		popularity.push(userId);
+		likeStatus = true;
+	}
+
+	const updateInfo = await commentCollection.updateOne({ _id: pid }, { $set: { popularity } });
+	if (updateInfo.modifiedCount === 0) throw 'Could not update popularity';
+
+	return likeStatus;
+};
+
 module.exports = {
 	createComment,
 	commentPopularity,
 	deleteComment,
 	getComments,
-	getAllComments
+	getAllComments,
+	likeComment
 };
