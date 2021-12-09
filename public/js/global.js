@@ -59,8 +59,8 @@ const addFriendsConfig = reactive({
 	}
 });
 
-const sysAlert = (msg, type = 'success') => {
-	const title = type.charAt(0).toUpperCase() + type.slice(1);
+const sysAlert = (msg, noTitle, type = 'success') => {
+	const title = noTitle ?? type.charAt(0).toUpperCase() + type.slice(1);
 	ElNotification({ title, message: msg, type });
 };
 
