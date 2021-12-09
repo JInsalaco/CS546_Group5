@@ -163,6 +163,9 @@ const composition = {
 			});
 		};
 
+		/************************************************************* Friend List *************************************************************/
+		onMounted(() => sessionStorage['USER_INFO'] && getMyFriendsList());
+
 		return {
 			...toRefs(userAuth),
 			showFriendsList,
@@ -198,7 +201,8 @@ const composition = {
 			handleFriendsSelected,
 			onBrforeFriendDialogClose,
 			handleConfirmAddFriend,
-			handleLikeComment
+			handleLikeComment,
+			myFriendsList
 		};
 	}
 };

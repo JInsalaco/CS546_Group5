@@ -111,20 +111,7 @@ Vue.createApp({
 		};
 
 		/************************************************************* Friends List *************************************************************/
-		const myFriendsList = ref([]);
 		onMounted(() => getMyFriendsList());
-		const getMyFriendsList = () => {
-			http.get('/profile/friends').then(res => {
-				myFriendsList.value = res.map(item => {
-					const { username, firstname, lastname, profilePic, email } = item;
-					return {
-						name: username || `${firstname} ${lastname}`,
-						url: profilePic,
-						email
-					};
-				});
-			});
-		};
 
 		/************************************************************* Information *************************************************************/
 		const uploading = ref(false);

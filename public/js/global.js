@@ -55,6 +55,21 @@ const friendConfig = reactive({
 	firendEmail: '',
 	friendInfo: null
 });
+const myFriendsList = ref([]);
+
+const getMyFriendsList = () => {
+	http.get('/profile/friends').then(res => {
+		myFriendsList.value = res.map(item => {
+			const { username, firstname, lastname, profilePic, email } = item;
+			return {
+				name: username || `${firstname} ${lastname}`,
+				url: profilePic,
+				email
+			};
+		});
+	});
+};
+
 const querySearchFriend = (searchTerm, cb) => {
 	http.get('/profile/searchFriend', { email: searchTerm }).then(res => {
 		const infoList = res.map(item => {
@@ -90,6 +105,7 @@ const handleConfirmAddFriend = () => {
 		if (res) {
 			sysAlert(`You hace add ${username || `${firstname} ${lastname}`} as your friend`);
 			onBrforeFriendDialogClose();
+			getMyFriendsList();
 		}
 	});
 };
