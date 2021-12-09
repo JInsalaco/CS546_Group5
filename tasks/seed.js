@@ -29,11 +29,6 @@ async function main() {
 	 */
 	await loadDefaultComments();
 
-	// const user = await userData.addUser("test123@stevens.edu", "UArocks101", "Test", "Test", "(201)020-0001")
-	// const post = await postData.addPost(user._id, "New Post", "Javi is here", ['Courses']);
-	// const epost = await postData.editPost(user._id, post._id, "Upadted Post", "Javi is now gone", ['School Life', 'Events', 'Activities]);
-	// console.log(epost);
-
 	console.log('Done seeding database');
 	await db.s.client.close();
 }
