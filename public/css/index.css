@@ -136,3 +136,15 @@ ul {
 	text-align: center;
 	color: var(--font-color-grey);
 }
+.input__add-friend .el-input__inner {
+	width: 300px;
+}
+
+.friend__user-info {
+	padding-top: 30px;
+	background-color: rgba(255, 255, 255, 0.7);
+	align-items: center;
+}
+.friend__user-info > span:last-child {
+	margin-left: auto;
+}

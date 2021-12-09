@@ -93,38 +93,40 @@ async function authenticateUser(email, password) {
 /*
  * Appends user ID to friends list
  */
-async function addFriend(userId, email) {
-	const user = await getUser(userId);
-	let updatedFriendsList = [...user.friends];
+async function addFriend(userId, friendId) {
+	const { friends } = await getUser(userId);
+	friends.push(friendId);
+
 	const userCollection = await users();
-	const friend = await userCollection.findOne({ email: email });
-	updatedFriendsList.push(friend._id);
-	const oid = utils.stringToObjectID(userId);
-	const newInsertInformation = await userCollection.updateOne({ _id: oid }, { $set: { friends: updatedFriendsList } });
-	if (newInsertInformation.modifiedCount === 0) throw 'Could not add friend';
-	return friend;
+	const updateInfo = await userCollection.updateOne({ _id: utils.stringToObjectID(userId) }, { $set: { friends } });
+	if (updateInfo.modifiedCount === 0) throw 'Could not update friends';
+
+	return { update: true };
 }
 
 async function getUserFriends(userId) {
-	const user = await getUser(userId);
-	if (!user) throw 'User does not exist';
-	let friendList = [];
-	const userCollection = await users();
-	const friends = await userCollection.find({ _id: { $in: user.friends } }).toArray();
+	const { friends } = await getUser(userId);
+	const friendsIds = friends.map(item => utils.stringToObjectID(item));
 
-	friends.forEach((friend) => {
-		const { _id, firstname, lastname, username, profilePic } = friend;
-		const id = _id.toString();
-		friendList.push({ id, firstname, lastname, username, profilePic });
-	})
+	const userCollection = await users();
+	const friendList = await userCollection
+		.find(
+			{ _id: { $in: friendsIds } },
+			{ projection: { _id: 1, firstname: 1, lastname: 1, username: 1, profilePic: 1, email: 1 } }
+		)
+		.toArray();
 
 	return friendList;
 }
 
-async function getUser(id) {
+async function getUser(id, thread = 1, posts = 1, friends = 1) {
 	let oid = utils.stringToObjectID(id);
 	const userCollection = await users();
-	const user = await userCollection.findOne({ _id: oid });
+	const projection = { hashedPwd: 0 };
+	thread === 0 && (projection['thread'] = 0);
+	posts === 0 && (projection['posts'] = 0);
+	friends === 0 && (projection['friends'] = 0);
+	const user = await userCollection.findOne({ _id: oid }, { projection });
 	if (user === null) throw 'User not found';
 	user._id = utils.objectIdToString(user._id);
 
@@ -240,6 +242,24 @@ const updateThread = async (userId, threadId) => {
 	return { update: true };
 };
 
+const searchFriendByEmail = async (email, userid) => {
+	const userCollection = await users();
+	const list = await userCollection
+		.find(
+			{ email: RegExp(`.*${email}.*@stevens.edu`) },
+			{ projection: { _id: 1, username: 1, firstname: 1, lastname: 1, email: 1 } }
+		)
+		.toArray();
+
+	const friendList = utils.objectIdToString(list);
+	const index = friendList.findIndex(item => item._id === userid);
+	if (index !== -1) {
+		friendList.splice(index, 1);
+	}
+
+	return friendList;
+};
+
 module.exports = {
 	addUser,
 	checkUserData,
@@ -252,5 +272,6 @@ module.exports = {
 	editUser,
 	deleteUser,
 	uploadPic,
-	updateThread
+	updateThread,
+	searchFriendByEmail
 };

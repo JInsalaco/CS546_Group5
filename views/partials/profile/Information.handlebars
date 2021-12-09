@@ -14,19 +14,25 @@
   <h2 class="info__name">\{{ `${userForm.firstname} ${userForm.lastname}` }}</h2>
   <div>\{{userForm.DOB}}</div>
 
-  <div class="info__summary-container flex">
-    <div v-for="(item, key) in profileSummary" :key="key" class="info__summary flex-c">
-      <h3>\{{item}}</h3>
-      <span>\{{key}}</span>
-    </div>
-  </div>
+  <el-carousel style="width: 100%;" indicator-position="outside" :autoplay="false">
+    <el-carousel-item>
+      <div class="info__summary-container flex">
+        <div v-for="(item, key) in profileSummary" :key="key" class="info__summary flex-c">
+          <h3>\{{item}}</h3>
+          <span>\{{key}}</span>
+        </div>
+      </div>
+    </el-carousel-item>
 
-  <ul class="info__detail-container">
-    <li class="flex aside-v" v-for="item in profileDetail" :key="item.title">
-      <span class="detail-label aside-h">\{{item.title}}</span>
-      <span class="detail-content aside-h" v-html="item.content"></span>
-    </li>
-  </ul>
+    <el-carousel-item>
+      <ul class="info__detail-container">
+        <li class="flex aside-v" v-for="item in profileDetail" :key="item.title">
+          <span class="detail-label aside-h">\{{item.title}}</span>
+          <span class="detail-content aside-h" v-html="item.content"></span>
+        </li>
+      </ul>
+    </el-carousel-item>
+  </el-carousel>
 </div>
 
 <el-dialog v-model='profileDialog' title='Edit Profile' destroy-on-close>

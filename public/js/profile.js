@@ -1,79 +1,3 @@
-const rules = {
-	email: [
-		{
-			required: true,
-			trigger: 'change',
-			message: 'Eamil is required!'
-		},
-		{
-			pattern: /^\S+@[a-z]+\.com|edu$/,
-			trigger: 'change',
-			message: 'Invalid email format!'
-		}
-	],
-	firstname: [
-		{
-			required: true,
-			trigger: 'change',
-			message: 'Firstname is required!'
-		}
-	],
-	lastname: [
-		{
-			required: true,
-			trigger: 'change',
-			message: 'Lastname is required!'
-		}
-	],
-	phoneNumber: [
-		{
-			required: true,
-			trigger: 'change',
-			message: 'PhoneNumber is required!'
-		},
-		{
-			len: 13,
-			trigger: 'change',
-			message: 'The phone number should be 10 digits!'
-		},
-		{
-			pattern: /[\(\)\-0-9]{10}/,
-			trigger: 'change',
-			message: 'The phone number should be number!'
-		}
-	]
-};
-
-// CLEAR
-const tableData = [
-	{
-		title: 'Lecture Rescheduling',
-		author: { url: '/public/static/avatar.png', name: 'Shihao' },
-		createTime: '11/30/2021 13:00'
-	},
-	{
-		title: 'Lecture Rescheduling',
-		author: { url: '/public/static/avatar.png', name: 'Shihao' },
-		createTime: '11/30/2021 13:00'
-	},
-	{
-		title: 'Lecture Rescheduling',
-		author: { url: '/public/static/avatar.png', name: 'Shihao' },
-		createTime: '11/30/2021 13:00'
-	},
-	{
-		title: 'Lecture Rescheduling',
-		author: { url: '/public/static/avatar.png', name: 'Shihao' },
-		createTime: '11/30/2021 13:00'
-	}
-];
-const friendsData = [
-	{ name: 'Shihao', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
-	{ name: 'Riya', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
-	{ name: 'Joseph', url: '/public/static/avatar.png', email: 'example@stevens.edu' },
-	{ name: 'Javier', url: '/public/static/avatar.png', email: 'example@stevens.edu' }
-];
-
 Vue.createApp({
 	setup() {
 		const userAuth = reactive({
@@ -97,84 +21,12 @@ Vue.createApp({
 			getTopics();
 		});
 
-		/************************************************************* Information *************************************************************/
-		const uploading = ref(false);
-		const profileDialog = ref(false);
-		const profileBg = ref('');
-		onMounted(() => {
-			const hour = dayjs().hour();
-			if (hour >= 8 && hour <= 17) {
-				profileBg.value = '/public/static/USA0.png';
-			} else if (hour > 17 && hour <= 20) {
-				profileBg.value = '/public/static/USA1.png';
-			} else {
-				profileBg.value = '/public/static/USA2.png';
-			}
-		});
-
-		// MODIFY
-		const profileSummary = computed(() => ({
-			posts: tableData.length,
-			likes: tableData.length,
-			friends: friendsData.length
-		}));
-		const profileDetail = computed(() => {
-			const { bio, DOB, email, phoneNumber } = userForm.value;
-			return [
-				{ title: 'About Me', content: bio.replaceAll('\n', '<br />') },
-				{ title: 'Date of Birth', content: DOB },
-				{ title: 'Email', content: email },
-				{ title: 'Phone', content: phoneNumber }
-			];
-		});
-
-		const handleImageUpload = file => {
-			uploading.value = true;
-			const formData = new FormData();
-			formData.append('avatar', file);
-			http
-				.post('/profile/upload', formData)
-				.then(res => {
-					userForm.value.profilePic = res.path;
-					setUserInfo('profilePic', res.path);
-				})
-				.finally(() => setTimeout(() => (uploading.value = false), 1000));
-			return false;
-		};
-
-		const handleSubmit = () => {
-			userFormRef.value.validate(valid => {
-				if (valid) {
-					http.post('/profile/edit', userForm.value).then(res => {
-						const { msg, user } = res;
-						sysAlert(msg);
-						updateUserInfo(user);
-						userForm.value = { ...userForm.value, ...user };
-						profileDialog.value = false;
-					});
-				} else {
-					return false;
-				}
-			});
-		};
-		const handleProfileCancel = () => {
-			profileDialog.value = false;
-			userForm.value = JSON.parse(sessionStorage['USER_INFO']);
-		};
-
-		const handlePhoneInput = value => {
-			userForm.value.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
-		};
-
 		/************************************************************* My Post *************************************************************/
-		const postDialogControl = reactive({
-			showDialog: false,
-			edit: false
-		});
 		const postsForm = ref();
-		const postForm = ref(null);
+		const postForm = ref(new Posts());
 		const createTime = computed(() => dayjs(postForm.value?.metaData?.timeStamp).format('MM/DD/YYYY HH:mm'));
 		const myPostList = ref([]);
+		const showPostDialog = ref(false);
 
 		onMounted(() => getMyPosts());
 		const getMyPosts = () => {
@@ -183,25 +35,24 @@ Vue.createApp({
 			});
 		};
 
-		const handleGetPostdetail = id => {
-			getPostDetail(id);
-			postDialogControl.showDialog = true;
-		};
+		const selectedTopics = computed(() => TOPICS.value.filter(item => postForm.value.topics.includes(item._id)));
 		const handlePostEdit = id => {
-			getPostDetail(id);
-			postDialogControl.edit = true;
-			postDialogControl.showDialog = true;
+			showPostDialog.value = true;
+			http.get('/posts/getDetail', { id }).then(res => {
+				postForm.value = res;
+			});
 		};
-		const getPostDetail = id => {
-			// TODO get detail data from DB
-			postForm.value = { ...new Posts(), topics: [], metaData: { timeStamp: new Date().getTime() } };
-		};
-		const beforeClosePostDialog = () => {
-			postDialogControl.showDialog = false;
-			setTimeout(() => (postDialogControl.edit = false), 500);
-		};
+
 		// TODO
-		const handleEditConfirm = () => {};
+		const handleEditConfirm = () => {
+			const { _id, title, body, topics } = postForm.value;
+			http.put(`/posts/${_id}`, { title, body, topics }).then(msg => {
+				sysAlert(msg);
+				showPostDialog.value = false;
+				// refresh my post list
+				getMyPosts();
+			});
+		};
 		const displayName = computed(() => {
 			return (
 				userAuth.userInfo?.username || `${userAuth.userInfo?.firstname || '--'} ${userAuth.userInfo?.lastname || '--'}`
@@ -259,6 +110,90 @@ Vue.createApp({
 			});
 		};
 
+		/************************************************************* Friends List *************************************************************/
+		const myFriendsList = ref([]);
+		onMounted(() => getMyFriendsList());
+		const getMyFriendsList = () => {
+			http.get('/profile/friends').then(res => {
+				myFriendsList.value = res.map(item => {
+					const { username, firstname, lastname, profilePic, email } = item;
+					return {
+						name: username || `${firstname} ${lastname}`,
+						url: profilePic,
+						email
+					};
+				});
+			});
+		};
+
+		/************************************************************* Information *************************************************************/
+		const uploading = ref(false);
+		const profileDialog = ref(false);
+		const profileBg = ref('');
+		onMounted(() => {
+			const hour = dayjs().hour();
+			if (hour >= 8 && hour <= 17) {
+				profileBg.value = '/public/static/USA0.png';
+			} else if (hour > 17 && hour <= 20) {
+				profileBg.value = '/public/static/USA1.png';
+			} else {
+				profileBg.value = '/public/static/USA2.png';
+			}
+		});
+
+		const profileSummary = computed(() => ({
+			posts: myPostList.value.length,
+			likes: myLikeList.value.length,
+			friends: myFriendsList.value.length
+		}));
+		const profileDetail = computed(() => {
+			const { bio, DOB, email, phoneNumber } = userForm.value;
+			return [
+				{ title: 'About Me', content: bio.replaceAll('\n', '<br />') },
+				{ title: 'Date of Birth', content: DOB },
+				{ title: 'Email', content: email },
+				{ title: 'Phone', content: phoneNumber }
+			];
+		});
+
+		const handleImageUpload = file => {
+			uploading.value = true;
+			const formData = new FormData();
+			formData.append('avatar', file);
+			http
+				.post('/profile/upload', formData)
+				.then(res => {
+					userForm.value.profilePic = res.path;
+					setUserInfo('profilePic', res.path);
+				})
+				.finally(() => setTimeout(() => (uploading.value = false), 1000));
+			return false;
+		};
+
+		const handleSubmit = () => {
+			userFormRef.value.validate(valid => {
+				if (valid) {
+					http.post('/profile/edit', userForm.value).then(res => {
+						const { msg, user } = res;
+						sysAlert(msg);
+						updateUserInfo(user);
+						userForm.value = { ...userForm.value, ...user };
+						profileDialog.value = false;
+					});
+				} else {
+					return false;
+				}
+			});
+		};
+		const handleProfileCancel = () => {
+			profileDialog.value = false;
+			userForm.value = JSON.parse(sessionStorage['USER_INFO']);
+		};
+
+		const handlePhoneInput = value => {
+			userForm.value.phoneNumber = value.replace(/^(\d{3})(\d{3})(\d{4})$/, '($1)$2-$3');
+		};
+
 		return {
 			...toRefs(userAuth),
 			userForm,
@@ -267,22 +202,17 @@ Vue.createApp({
 			handleSubmit,
 			handleProfileCancel,
 			handlePhoneInput,
-			rules,
+			postRules,
 			postRules,
 			uploading,
 			handleLogout,
 			postsForm,
 			postForm,
 			createTime,
-			postDialogControl,
-			handleGetPostdetail,
-			handlePostEdit,
 			displayName,
 			TOPICS,
-			beforeClosePostDialog,
 			handleEditConfirm,
 			showAddFriendsDialog,
-			...toRefs(addFriendsConfig),
 			profileDialog,
 			profileBg,
 			profileSummary,
@@ -294,8 +224,15 @@ Vue.createApp({
 			handleDeletePost,
 			myPostList,
 			myLikeList,
-			tableData, // CLEAR
-			friendsData // CLEAR
+			...toRefs(friendConfig),
+			querySearchFriend,
+			handleFriendsSelected,
+			onBrforeFriendDialogClose,
+			handleConfirmAddFriend,
+			myFriendsList,
+			showPostDialog,
+			handlePostEdit,
+			selectedTopics
 		};
 	}
 })

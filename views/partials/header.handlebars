@@ -41,13 +41,22 @@
 	</div>
 </header>
 
-<el-dialog v-model="showAddFriendsDialog" title="Add Friends" width="30%" destroy-on-close>
-	<el-autocomplete v-model="friendId" :fetch-suggestions="querySearchAsync" @select="handleFriendsSelected"
-									 placeholder="Search your friend" :trigger-on-focus="false" />
+<el-dialog v-model="showAddFriendsDialog" title="Add Friends" width="30%" destroy-on-close
+					 :before-close="onBrforeFriendDialogClose">
+	<el-autocomplete class="input__add-friend" v-model="firendEmail" :fetch-suggestions="querySearchFriend" clearable
+									 @select="handleFriendsSelected" placeholder="Search your friend by email" :trigger-on-focus="false"
+									 @clear="friendInfo = null" value-key="info">
+		<template #append>@stevens.edu</template>
+	</el-autocomplete>
+	<div v-if="friendInfo" class="friend__user-info flex">
+		<el-avatar :src="friendInfo.profilePic" class="aside-h"></el-avatar>
+		<span class="aside-h">\{{friendInfo.username || `${friendInfo.firstname} ${friendInfo.lastname}`}}</span>
+		<span class="aside-h">\{{friendInfo.email}}</span>
+	</div>
 	<template #footer>
 		<span class="dialog-footer">
 			<el-button @click="showAddFriendsDialog = false">Cancel</el-button>
-			<el-button type="primary" @click="showAddFriendsDialog = false">Confirm</el-button>
+			<el-button type="primary" @click="handleConfirmAddFriend">Confirm</el-button>
 		</span>
 	</template>
 </el-dialog>

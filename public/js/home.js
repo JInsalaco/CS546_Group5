@@ -130,6 +130,13 @@ const composition = {
 			});
 		};
 
+		const handleLikeComment = (postIndex, comIndex, id) => {
+			http.post('/posts/likeComment', { id }).then(res => {
+				postList.value[postIndex].commentList[comIndex].popularity = res;
+				res ? sysAlert('Like this comment') : sysAlert('Unlike this comment', 'Success', 'warning');
+			});
+		};
+
 		/************************************************************* Profile *************************************************************/
 		const showFriendsList = ref(true);
 		const displayName = computed(() => {
@@ -180,13 +187,18 @@ const composition = {
 			handleSubmitComment,
 			TOPICS,
 			showAddFriendsDialog,
-			...toRefs(addFriendsConfig),
 			searchTerm,
 			detailDialog,
 			postDetail,
 			querySearchPost,
 			handlePostSelected,
-			handleShowComments
+			handleShowComments,
+			...toRefs(friendConfig),
+			querySearchFriend,
+			handleFriendsSelected,
+			onBrforeFriendDialogClose,
+			handleConfirmAddFriend,
+			handleLikeComment
 		};
 	}
 };
