@@ -70,6 +70,7 @@
 .info__summary-container {
 	width: 70%;
 	justify-content: space-around;
+	margin: auto;
 }
 .info__summary {
 	justify-content: center;

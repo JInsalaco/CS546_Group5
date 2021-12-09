@@ -105,17 +105,16 @@ async function addFriend(userId, friendId) {
 }
 
 async function getUserFriends(userId) {
-	const user = await getUser(userId);
-	if (!user) throw 'User does not exist';
-	let friendList = [];
-	const userCollection = await users();
-	const friends = await userCollection.find({ _id: { $in: user.friends } }).toArray();
+	const { friends } = await getUser(userId);
+	const friendsIds = friends.map(item => utils.stringToObjectID(item));
 
-	friends.forEach(friend => {
-		const { _id, firstname, lastname, username, profilePic } = friend;
-		const id = _id.toString();
-		friendList.push({ id, firstname, lastname, username, profilePic });
-	});
+	const userCollection = await users();
+	const friendList = await userCollection
+		.find(
+			{ _id: { $in: friendsIds } },
+			{ projection: { _id: 1, firstname: 1, lastname: 1, username: 1, profilePic: 1, email: 1 } }
+		)
+		.toArray();
 
 	return friendList;
 }

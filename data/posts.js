@@ -201,20 +201,7 @@ async function editPost(posterId, postId, title, body, topics) {
 	// Get the old post and make the edited Post
 	// Add the lastEdit field in metaData to
 	// show post was modified and when
-	const newPost = {
-		title: post.title,
-		body: body,
-		posterId: user._id,
-		topics: topics,
-		thread: post.thread,
-		popularity: post.popularity,
-		metaData: {
-			timeStamp: post.metaData.timeStamp,
-			lastEdit: new Date().getTime(),
-			archived: post.metaData.archived,
-			flags: post.metaData.flags
-		}
-	};
+	const newPost = { ...post, title, body, topics, metaData: { ...post.metaData, lastEdit: new Date().getTime() } };
 
 	// Check that the content of the posts are not the same
 	let equalPost = editComparison(post.body, body, post.topics, topicInput);
@@ -223,7 +210,7 @@ async function editPost(posterId, postId, title, body, topics) {
 	// Update the pre-existing post
 	if (!ObjectId.isValid(postId)) throw 'Id is not a valid ObjectID';
 	const postCollection = await posts();
-	const updateInfo = await postCollection.updateOne({ _id: postId }, { $set: newPost });
+	const updateInfo = await postCollection.updateOne({ _id: utils.stringToObjectID(postId) }, { $set: newPost });
 
 	// Ensure the update was successful
 	if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';

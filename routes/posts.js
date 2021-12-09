@@ -148,19 +148,12 @@ router.put('/:id', async (req, res) => {
 	try {
 		posts.errorCheckingPost(title, body);
 		let posterId = req.session.userid;
-		const result = await posts.editPost(posterId, title, body, topics);
-		if (!result) return res.status(500).send('Internal server error, please try again after some time');
-		return res.render('post', {
-			title: post.title,
-			body: post.body,
-			posterId: post.posterId,
-			topics: post.topics,
-			thread: post.thread,
-			popularity: post.popularity,
-			timePosted: post.metaData.timeStamp
-		});
+		const { updated } = await posts.editPost(posterId, req.params.id, title, body, topics);
+		if (!updated) throw 'Edit faild';
+
+		res.send('Edit Successfully');
 	} catch (error) {
-		return res.status(400).send(error?.message ?? error);
+		return res.status(500).send(error?.message ?? error);
 	}
 });
 
@@ -281,7 +274,7 @@ router.post('/likeComment', async (req, res) => {
 	}
 
 	const { id } = req.body;
-	
+
 	try {
 		errorCheckingId(id);
 	} catch (error) {
@@ -289,7 +282,7 @@ router.post('/likeComment', async (req, res) => {
 		return;
 	}
 
-	try{
+	try {
 		const { likedComment } = await comments.likeComment(id, req.session.userid, 1);
 		res.json(likedComment);
 	} catch (error) {

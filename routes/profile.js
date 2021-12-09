@@ -7,10 +7,10 @@ const { handleUserInfo, errorCheckingId } = require('../utils');
 
 router.get('/', (req, res) => {
 	// MODIFY uncomment this when project is finished
-	// if (!req.session.userid) {
-	// 	res.status(403).send('No permission');
-	// 	return;
-	// }
+	if (!req.session.userid) {
+		res.status(403).redirect('/');
+		return;
+	}
 	res.render('profile', { title: 'Profile', showHeader: true, scriptUrl: ['profile.js'] });
 });
 
@@ -131,7 +131,9 @@ router.get('/userInfo', async (req, res) => {
 	}
 });
 
-//TODO: Finish Testing
+/**
+ * DONE
+ */
 router.post('/addFriend', async (req, res) => {
 	if (!req.session.userid) {
 		res.status(403).send('No permission');
@@ -156,7 +158,9 @@ router.post('/addFriend', async (req, res) => {
 	}
 });
 
-//TODO: Finish Testing
+/**
+ * DONE
+ */
 router.get('/friends', async (req, res) => {
 	if (!req.session.userid) {
 		res.status(403).send('No permission');
@@ -164,8 +168,7 @@ router.get('/friends', async (req, res) => {
 	}
 	try {
 		const friendList = await userData.getUserFriends(req.session.userid);
-		if (friendList) res.status(200).send(friendList);
-		else res.status(404).send('Friend list could not be retrieved');
+		res.json(friendList);
 	} catch (e) {
 		res.status(500).send('Internal Server Error');
 	}
