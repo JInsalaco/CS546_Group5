@@ -24,7 +24,7 @@ async function createComment(posterId, body, postId) {
 
 	// update the user
 	const userUpdateInfo = await users.updateThread(posterId, insertInfo.insertedId);
-	if (!userUpdateInfo.update) throw 'Can not update thread in post';
+	if (!userUpdateInfo.update) throw 'Can not update thread in user';
 
 	return { update: true };
 }

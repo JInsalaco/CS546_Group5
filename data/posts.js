@@ -1,8 +1,7 @@
-const mongoCollections = require('../config/mongoCollections');
+const { posts } = require('../config/mongoCollections');
 const utils = require('../utils');
 const userData = require('./users');
 const topicData = require('./topics');
-const posts = mongoCollections.posts;
 const { ObjectId } = require('mongodb');
 
 async function updatePopularity(postId, userId) {
@@ -13,7 +12,7 @@ async function updatePopularity(postId, userId) {
 	let likeStatus;
 	if (popularity.includes(userId)) {
 		const index = popularity.findIndex(item => item === userId);
-		popularity.splice(1, index);
+		popularity.splice(index, 1);
 		likeStatus = false;
 	} else {
 		popularity.push(userId);
@@ -100,10 +99,10 @@ async function addPost(posterId, title, body, topics) {
 
 	// Check for topic
 	let allTopicIds = await topicData.getAllTopicIds();
-	
-	topics.forEach((topic) => {
-		if (!allTopicIds.includes(topic)) throw "Topic not found";
-	})
+
+	topics.forEach(topic => {
+		if (!allTopicIds.includes(topic)) throw 'Topic not found';
+	});
 
 	// New Post
 	const postCollection = await posts();
@@ -194,10 +193,10 @@ async function editPost(posterId, postId, title, body, topics) {
 
 	// Check for topic
 	let allTopicIds = await topicData.getAllTopicIds();
-	
-	topics.forEach((topic) => {
-		if (!allTopicIds.includes(topic)) throw "Topic not found";
-	})
+
+	topics.forEach(topic => {
+		if (!allTopicIds.includes(topic)) throw 'Topic not found';
+	});
 
 	// Get the old post and make the edited Post
 	// Add the lastEdit field in metaData to
@@ -298,9 +297,10 @@ async function getPostPopularity(id) {
 }
 
 const updateThread = async (postId, threadId) => {
-	const { thread } = getPost(postId, false);
+	const { thread } = await getPost(postId, false);
 	thread.push(utils.objectIdToString(threadId));
-	const updateInfo = postCollection.updateOne({ _id: postId }, { $set: { thread } });
+	const postCollection = await posts();
+	const updateInfo = await postCollection.updateOne({ _id: utils.stringToObjectID(postId) }, { $set: { thread } });
 	if (updateInfo.modifiedCount === 0) throw 'Could not update popularity';
 
 	return { update: true };

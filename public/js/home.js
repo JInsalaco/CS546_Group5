@@ -41,6 +41,7 @@ const composition = {
 		const handleLikes = (index, id) => {
 			http.post('posts/like', { id }).then(res => {
 				postList.value[index].popularity = res;
+				res ? sysAlert('Like this post') : sysAlert('Unlike this post', 'Success', 'warning');
 			});
 		};
 		const handleSeeMore = (index, id) => {
@@ -104,7 +105,7 @@ const composition = {
 		};
 		const handleShowComments = (index, postId) => {
 			show.showComment = show.showComment === index ? null : index;
-			show.showComment && getComments(postId, index);
+			show.showComment !== null && getComments(postId, index);
 		};
 
 		const getComments = async (id, index) => {
