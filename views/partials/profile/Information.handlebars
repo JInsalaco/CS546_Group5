@@ -26,9 +26,9 @@
 
     <el-carousel-item>
       <ul class="info__detail-container">
-        <li class="flex aside-v" v-for="item in profileDetail" :key="item.title">
-          <span class="detail-label aside-h">\{{item.title}}</span>
-          <span class="detail-content aside-h" v-html="item.content"></span>
+        <li class="aside-v" v-for="item in profileDetail" :key="item.title">
+          <div class="detail-label aside-h">\{{item.title}}</div>
+          <div class="detail-content aside-h" v-html="item.content"></div>
         </li>
       </ul>
     </el-carousel-item>

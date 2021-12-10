@@ -8,7 +8,7 @@
           <el-link type="primary" @click="onPostDetail(row._id)">\{{row.title}}</el-link>
         </template>
       </el-table-column>
-      <el-table-column>
+      <el-table-column width="200">
         <template #default="{row}">
           <span class="flex cell__cus">
             <el-avatar :src="row.author.url" class="aside-h" alt="avatar"></el-avatar>

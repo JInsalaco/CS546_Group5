@@ -43,7 +43,6 @@ Vue.createApp({
 			});
 		};
 
-		// TODO
 		const handleEditConfirm = () => {
 			const { _id, title, body, topics } = postForm.value;
 			http.put(`/posts/${_id}`, { title, body, topics }).then(msg => {
@@ -63,6 +62,14 @@ Vue.createApp({
 				sysAlert(msg);
 				const index = myPostList.value.findIndex(item => item._id === id);
 				myPostList.value.splice(1, index);
+			});
+		};
+		const handlePostArchive = id => {
+			// TODO
+			http.post('/posts/archive', { id }).then(res => {
+				res ? sysAlert('Archive Successfully') : sysAlert('Cancel Archive', 'Success', 'warning');
+				// refresh list
+				getMyPosts();
 			});
 		};
 
@@ -219,7 +226,8 @@ Vue.createApp({
 			myFriendsList,
 			showPostDialog,
 			handlePostEdit,
-			selectedTopics
+			selectedTopics,
+			handlePostArchive
 		};
 	}
 })

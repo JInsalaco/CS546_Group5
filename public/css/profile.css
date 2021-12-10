@@ -1,7 +1,7 @@
 .page__profile {
 	height: calc(100vh - 70px);
 	display: grid;
-	grid-template-columns: repeat(3, 1fr) 1.5fr;
+	grid-template-columns: repeat(6, 0.7fr) 1.5fr;
 	grid-template-rows: 1fr 1fr;
 	grid-gap: 30px;
 	padding: 50px 30px 30px;
@@ -14,14 +14,14 @@
 }
 
 .profile__posts {
-	grid-column-start: 3;
-	grid-column-end: 4;
+	grid-column-start: 4;
+	grid-column-end: 7;
 }
 
 .profile__info {
 	grid-row-end: -1;
 	grid-row-start: 1;
-	grid-column-start: 4;
+	grid-column-start: 7;
 	background-color: #fff;
 	border-radius: var(--radius-default);
 	overflow: hidden;
@@ -29,13 +29,18 @@
 }
 
 .profile__like-list {
-	grid-column-end: 4;
-	grid-column-start: 2;
+	grid-column-start: 1;
+	grid-column-end: 5;
+}
+
+.profile__friend-list {
+	grid-column-start: 5;
+	grid-column-end: 7;
 }
 
 .profile__history {
 	grid-column-start: 1;
-	grid-column-end: 3;
+	grid-column-end: 4;
 }
 
 .profile-bg {
@@ -86,11 +91,12 @@
 
 .info__detail-container {
 	align-self: self-start;
-	margin: 30px 15%;
+	margin: 30px 5%;
+	padding: 0;
 }
 .info__detail-container .detail-label {
 	font-weight: bold;
-	font-size: 1.17em;
+	font-size: 1.01;
 	vertical-align: baseline;
 	min-width: 120px;
 }

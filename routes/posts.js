@@ -274,7 +274,6 @@ router.post('/likeComment', async (req, res) => {
 	}
 
 	const { id } = req.body;
-
 	try {
 		errorCheckingId(id);
 	} catch (error) {
@@ -285,6 +284,28 @@ router.post('/likeComment', async (req, res) => {
 	try {
 		const likeStatus = await comments.likeComment(id, req.session.userid);
 		res.json(likeStatus);
+	} catch (error) {
+		res.status(500).send(error?.message ?? error);
+	}
+});
+
+router.post('/archive', async (req, res) => {
+	if (!req.session.userid) {
+		res.status(403).send('No permisssion');
+		return;
+	}
+
+	const { id } = req.body;
+	try {
+		errorCheckingId(id);
+	} catch (error) {
+		res.status(400).send(error?.message ?? error);
+		return;
+	}
+
+	try {
+		const archivedStatue = await posts.archivePost(id);
+		res.json(archivedStatue);
 	} catch (error) {
 		res.status(500).send(error?.message ?? error);
 	}

@@ -3,17 +3,25 @@
 
   <div class="table-container">
     <el-table :data="myPostList" stripe style="width: 100%" :show-header="false">
-      <el-table-column prop="title">
+      <el-table-column prop="title" show-overflow-tooltip>
         <template #default="{row}">
           <el-link type="primary" @click="onPostDetail(row._id)">\{{row.title}}</el-link>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" align="right" />
-      <el-table-column fixed="right" width="150">
+      <el-table-column>
+        <template #default="{row}">
+          <el-tag v-if="row.archived" type="warning">Archived</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" width="250">
         <template #default="{row}">
           <span class="aside-h cell__cus opt-btn" @click="handlePostEdit(row._id)">
             <i class="iconfont icon-edit"></i>
             Edit
+          </span>
+          <span class="aside-h cell__cus opt-btn" @click="handlePostArchive(row._id)">
+            <i class="iconfont icon-archive"></i>
+            \{{row.archived ? 'Unarchived' : 'Archive'}}
           </span>
           <el-popconfirm title="Are you sure to delete this?" @confirm="handleDeletePost(row._id)">
             <template #reference>

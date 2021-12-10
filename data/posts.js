@@ -30,11 +30,13 @@ async function getMyPosts(id) {
 	if (!id) throw 'No Permissipn, please sign in';
 
 	const postCollection = await posts();
-	let postList = await postCollection.find({ posterId: id }, { projection: { _id: 1, title: 1 } }).toArray();
+	let postList = await postCollection
+		.find({ posterId: id }, { projection: { _id: 1, title: 1, metaData: 1 } })
+		.toArray();
 
 	const res = postList.map(item => {
-		const { _id, title } = item;
-		return { _id: utils.objectIdToString(_id), title };
+		const { _id, title, metaData } = item;
+		return { _id: utils.objectIdToString(_id), title, archived: metaData.archived };
 	});
 	return utils.objectIdToString(res);
 }
@@ -53,7 +55,7 @@ const getPosts = async ({ topicId, pageSize, pageNumber }, userid) => {
 
 	const postCollection = await posts();
 	let postList = await postCollection
-		.find({ topics: { $elemMatch: { $eq: topicId } } })
+		.find({ topics: { $elemMatch: { $eq: topicId } }, 'metaData.archived': false })
 		.sort({ 'metaData.timeStamp': -1 })
 		.skip(+pageNumber - 1)
 		.limit(+pageSize)
@@ -303,6 +305,18 @@ const getMyLike = async userId => {
 	return utils.objectIdToString(likeList);
 };
 
+const archivePost = async postId => {
+	utils.errorCheckingId(postId);
+	const { metaData } = await getPost(postId, false);
+	metaData.archived = !metaData.archived;
+
+	const postCollection = await posts();
+	const updateInfo = await postCollection.updateOne({ _id: utils.stringToObjectID(postId) }, { $set: { metaData } });
+	if (updateInfo.modifiedCount === 0) throw 'Could not update archive';
+
+	return metaData.archived;
+};
+
 module.exports = {
 	addPost,
 	getPost,
@@ -319,5 +333,6 @@ module.exports = {
 	getPostPopularity,
 	updateThread,
 	getPostInternal,
-	getMyLike
+	getMyLike,
+	archivePost
 };
