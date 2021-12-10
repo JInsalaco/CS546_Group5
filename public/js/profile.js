@@ -65,7 +65,6 @@ Vue.createApp({
 			});
 		};
 		const handlePostArchive = id => {
-			// TODO
 			http.post('/posts/archive', { id }).then(res => {
 				res ? sysAlert('Archive Successfully') : sysAlert('Cancel Archive', 'Success', 'warning');
 				// refresh list
