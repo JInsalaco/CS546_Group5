@@ -4,41 +4,47 @@
 		"password": "Xsh031023",
 		"firstname": "Shihao",
 		"lastname": "Xiong",
-		"phoneNumber": "(551)556-4100"
+		"phoneNumber": "(551)556-4100",
+		"profilePic": "/public/img/a03ea824baf50bae1091b8b00.JPG"
 	},
 	{
 		"email": "mscott5@stevens.edu",
 		"password": "098234mS",
 		"firstname": "Michael",
 		"lastname": "Scott",
-		"phoneNumber": "(973)865-9942"
+		"phoneNumber": "(973)865-9942",
+		"profilePic": "/public/img/a03ea824baf50bae1091b8b01.JPG"
 	},
 	{
 		"email": "dshrute21@stevens.edu",
 		"password": "beets85Beets",
 		"firstname": "Dwight",
 		"lastname": "Shrute",
-		"phoneNumber": "(973)865-9942"
+		"phoneNumber": "(973)865-9942",
+		"profilePic": "/public/img/a03ea824baf50bae1091b8b02.JPG"
 	},
 	{
 		"email": "hhutty7@stevens.edu",
 		"password": "Ps2000HH",
 		"firstname": "Ha-mil",
 		"lastname": "Hutty",
-		"phoneNumber": "(201)509-1386"
+		"phoneNumber": "(201)509-1386",
+		"profilePic": "/public/img/a03ea824baf50bae1091b8b03.JPG"
 	},
 	{
 		"email": "gwashi999@stevens.edu",
 		"password": "USArocks101",
 		"firstname": "George",
 		"lastname": "Washington",
-		"phoneNumber": "(001)000-0001"
+		"phoneNumber": "(001)000-0001",
+		"profilePic": "/public/img/a03ea824baf50bae1091b8b04.JPG"
 	},
 	{
 		"email": "riyaK@stevens.edu",
 		"password": "Qwerty12345",
 		"firstname": "Riya",
 		"lastname": "Kharbanda",
-		"phoneNumber": "(001)000-9876"
+		"phoneNumber": "(001)000-9876",
+		"profilePic": "/public/img/a03ea824baf50bae1091b8b05.JPG"
 	}
 ]
