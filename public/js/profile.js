@@ -89,7 +89,7 @@ Vue.createApp({
 			if (!ids.length) return;
 
 			http.post('/posts/history', { ids }).then(res => {
-				historyList.value = formatPostList();
+				historyList.value = formatPostList(res);
 			});
 		};
 		onMounted(() => getHisory());
