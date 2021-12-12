@@ -9,6 +9,7 @@ Command:
 npm install
 
 Step 2: Seed the Database	  
+
 Command: 
 npm run seed
 
