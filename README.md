@@ -4,12 +4,12 @@ The purpose of this website is to provide students with an open forum to start d
 ## Frameworks We Use
 
 ### Vue.js
-https://v3.vuejs.org/
+https://v3.vuejs.org/ <br />
 It is a **Progressive JavaScript Framework** for building user interfaces, similar to React.js. It’s based on MVVM mode and uses **virtual DOM** to implement partial updates of the real DOM to improve website rendering efficiency. Plus, the Vue syntax brings excellent convenience to the development.
 
 
 ### Element Plus
-https://element-plus.org/en-US/
+https://element-plus.org/en-US/ <br />
 A library of **UI components** based on Vue provides various components that can be used in the HTML, making the page more friendly and good-looking.
 
 ## How to Setup:
