@@ -1,22 +1,28 @@
 # CS546_Group5
-CS546 Group 5 F21 Final Project
+## CS546 Group 5 F21 Final Project
 
-Please follow the below steps to setup our Project: 
+The Pond
 
-Step 1: Install the required packages/libraries
+## First Time Setup:
 
-Command: 
+Use npm install to download project dependencies
+
+```bash
 npm install
+```
 
-Step 2: Seed the Database	  
+## Installation:
 
-Command: 
+Begin project by running seed file 
+
+```bash
 npm run seed
+```
 
-Step 3: Start the application on local server 
-(Make sure the port 3000 is not occupied already)
+Start the application on local server port 3000
 
-Command: 
+```bash
 npm start
+```
 
-Step 4: Goto http://localhost:3000 
+Project will be running at http://localhost:3000 
