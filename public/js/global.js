@@ -1,6 +1,11 @@
 const { ref, reactive, toRefs, computed, nextTick, onMounted, watch } = Vue;
 const { ElLoading, ElMessage, ElNotification } = ElementPlus;
 
+window.onload = () => {
+	// check is there is no cookies, clear the localStorage
+	!document.cookie && localStorage.clear();
+};
+
 class Posts {
 	constructor(obj = {}) {
 		const { title, body, topics } = obj;
@@ -27,19 +32,19 @@ class User {
 const handleLogout = () => {
 	http.get('/logout').then(res => {
 		location.replace('/');
-		sessionStorage.clear();
+		localStorage.clear();
 		ElMessage.success(res);
 	});
 };
 
 const setUserInfo = (key, value) => {
-	const userInfo = JSON.parse(sessionStorage['USER_INFO']);
+	const userInfo = JSON.parse(localStorage['USER_INFO']);
 	userInfo[key] = value;
-	sessionStorage['USER_INFO'] = JSON.stringify(userInfo);
+	localStorage['USER_INFO'] = JSON.stringify(userInfo);
 };
 
 const updateUserInfo = newUserInfo => {
-	sessionStorage['USER_INFO'] = JSON.stringify(newUserInfo);
+	localStorage['USER_INFO'] = JSON.stringify(newUserInfo);
 };
 
 const showSearchInput = ref(true);
@@ -128,11 +133,11 @@ const getTopics = () => {
  * @param {string} id the id of post
  */
 const saveHistory = id => {
-	let history = JSON.parse(sessionStorage['HISTORY'] ?? '[]');
+	let history = JSON.parse(localStorage['HISTORY'] ?? '[]');
 	history.push(id);
 	history = [...new Set(history)];
 
-	sessionStorage['HISTORY'] = JSON.stringify(history);
+	localStorage['HISTORY'] = JSON.stringify(history);
 };
 
 const formatPostDetail = postData => {

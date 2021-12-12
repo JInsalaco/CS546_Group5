@@ -119,3 +119,7 @@
 .opt-btn:hover {
 	color: var(--primary-color);
 }
+.tag-archive {
+	color: #9a6700;
+	background-color: #fdf6ec;
+}

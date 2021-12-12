@@ -6,7 +6,7 @@ const composition = {
 			userInfo: null
 		});
 		onMounted(() => {
-			const USER_INFO = sessionStorage.getItem('USER_INFO');
+			const USER_INFO = localStorage.getItem('USER_INFO');
 			if (USER_INFO) {
 				userAuth.auth = true;
 				userAuth.userInfo = JSON.parse(USER_INFO);
@@ -42,6 +42,7 @@ const composition = {
 			http.post('posts/like', { id }).then(res => {
 				postList.value[index].popularity = res;
 				res ? sysAlert('Like this post') : sysAlert('Unlike this post', 'Success', 'warning');
+				saveHistory(id);
 			});
 		};
 		const handleSeeMore = (index, id) => {
@@ -98,6 +99,7 @@ const composition = {
 			}
 
 			http.post('/posts/addComment', { body: comment, postId }).then(msg => {
+				saveHistory(postId);
 				sysAlert(msg);
 				postList.value[index].comment = '';
 				getComments(postId, index);
@@ -109,9 +111,13 @@ const composition = {
 		};
 
 		const getComments = async (id, index) => {
-			http.get('/posts/getComments', { id }).then(res => {
-				postList.value[index].commentList = handleComments(res);
-			});
+			http
+				.get('/posts/getComments', { id })
+				.then(res => {
+					postList.value[index].commentList = handleComments(res);
+					saveHistory(id);
+				})
+				.catch(() => (show.showComment = null));
 		};
 
 		const handleComments = commentList => {
@@ -164,7 +170,7 @@ const composition = {
 		};
 
 		/************************************************************* Friend List *************************************************************/
-		onMounted(() => sessionStorage['USER_INFO'] && getMyFriendsList());
+		onMounted(() => localStorage['USER_INFO'] && getMyFriendsList());
 
 		return {
 			...toRefs(userAuth),

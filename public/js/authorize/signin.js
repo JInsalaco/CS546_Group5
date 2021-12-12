@@ -43,7 +43,7 @@ Vue.createApp({
 					http
 						.post('/authorize/signin', form)
 						.then(res => {
-							sessionStorage['USER_INFO'] = JSON.stringify(res);
+							localStorage['USER_INFO'] = JSON.stringify(res);
 							location.replace('/'), 1000;
 						})
 						.finally(() => loadingInstance.close());

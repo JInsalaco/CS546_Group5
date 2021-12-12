@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { route } = require('express/lib/application');
 const { formidable } = require('formidable');
 const fs = require('fs');
 const userData = require('../data/users');
@@ -16,7 +15,7 @@ router.get('/', (req, res) => {
 
 router.post('/upload', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permission');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -45,7 +44,7 @@ router.post('/upload', async (req, res) => {
 
 router.post('/edit', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permission');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -73,9 +72,8 @@ router.post('/edit', async (req, res) => {
 				req.body.email.search(/[a-z][a-z0-9]+@stevens\.edu/i) === -1
 			)
 				throw 'Email is a required field, please enter valid email';
-			var newUser = await userData.editUser(
+			const newUser = await userData.editUser(
 				req.session.userid,
-				req.body.email,
 				req.body.firstname,
 				req.body.lastname,
 				req.body.phoneNumber,
@@ -95,7 +93,7 @@ router.post('/edit', async (req, res) => {
 
 router.get('/searchFriend', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permission');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -111,7 +109,7 @@ router.get('/searchFriend', async (req, res) => {
 
 router.get('/userInfo', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permission');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -136,7 +134,7 @@ router.get('/userInfo', async (req, res) => {
  */
 router.post('/addFriend', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permission');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 	const { id } = req.body;
@@ -163,7 +161,7 @@ router.post('/addFriend', async (req, res) => {
  */
 router.get('/friends', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permission');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 	try {

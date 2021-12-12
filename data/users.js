@@ -165,25 +165,19 @@ async function uploadPic(id, path) {
 	return true;
 }
 
-async function editUser(id, email, firstname, lastname, phoneNumber, gender, DOB, username, bio) {
+async function editUser(id, firstname, lastname, phoneNumber, gender, DOB, username, bio) {
 	// checkUserData(email, password, firstname, lastname, phoneNumber, gender, DOB, username, bio);
 	const sid = utils.objectIdToString(id);
 	const user = await this.getUser(sid);
 
 	let newUser = {
-		firstname: firstname,
-		lastname: lastname,
-		phoneNumber: phoneNumber,
-		email: email,
-		hashedPwd: user.hashedPwd,
-		gender: gender,
-		DOB: DOB,
-		username: username,
-		bio: bio,
-		profilePic: user.profilePic,
-		posts: user.posts,
-		thread: user.thread,
-		friends: user.friends,
+		firstname,
+		lastname,
+		phoneNumber,
+		gender,
+		DOB,
+		username,
+		bio,
 		anonymous: false
 	};
 
@@ -220,7 +214,6 @@ function equalUser(user1, user2) {
 		user1.firstname === user2.firstname &&
 		user1.lastname === user2.lastname &&
 		user1.phoneNumber === user2.phoneNumber &&
-		user1.email === user2.email &&
 		user1.gender === user2.gender &&
 		user1.DOB === user2.DOB &&
 		user1.username === user2.username &&

@@ -70,7 +70,7 @@
 			</span>
 			<div class="tag-container">
 				<span v-for="topic in postDetail.topicsList" :key="topic._id" class='post__tag aside-h'
-							:style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
+							:style="{'--color': topic.dcolor, '--bg': topic.lcolor}">\{{topic.title}}</span>
 			</div>
 		</div>
 		<div class='post__content' v-html="postDetail.content"></div>

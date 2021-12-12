@@ -11,14 +11,14 @@
         </div>
         <div class="tag-container">
           <span v-for="topic in item.topicsList" :key="topic._id" class='post__tag aside-h'
-                :style="{'--color': `rgb(${topic.color})`, '--bg': `rgba(${topic.color}, .3)`}">\{{topic.title}}</span>
+                :style="{'--color': topic.dcolor, '--bg': topic.lcolor}">\{{topic.title}}</span>
         </div>
       </div>
       <div class='post__content' :class="{omit: showMoreDetailIndex !== index}" v-html="item.content">
       </div>
     </article>
     <div class='post__operation-container flex'>
-      <el-button type="info" class="aside-h" size="mini" round @click="handleSeeMore(index, item._id)">
+      <el-button type="info" class="aside-h btn-see-more" size="mini" round @click="handleSeeMore(index, item._id)">
         \{{showMoreDetailIndex === index ? 'Hide' : 'See More'}}
       </el-button>
       <i v-if="auth" class="iconfont post__operation-like" :class="item.popularity ? 'icon-like-fill' : 'icon-like'"
@@ -26,9 +26,11 @@
     </div>
     <div class="form__comment flex">
       <el-input class="aside-h" label="comment" v-model="item.comment" placeholder="Add a comment"></el-input>
-      <el-button class="aside-h" type="primary" @click="handleSubmitComment(item._id, item.comment, index)" circle>
-        <i class="iconfont icon-send"></i>
-      </el-button>
+      <label class="aside-h">
+        <el-button id="btn-comment" type="primary" @click="handleSubmitComment(item._id, item.comment, index)" circle>
+          <i class="iconfont icon-send"></i>
+        </el-button>
+      </label>
     </div>
 
     <div class="post__comment-container">

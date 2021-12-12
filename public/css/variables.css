@@ -2,7 +2,7 @@
 
 :root {
 	/* color */
-	--font-color-grey: #909399;
+	--font-color-grey: #73777e;
 	--primary-color: #b30838;
 	--primary-color-deep: #9d1535;
 	--primary-color-light: #ca5273;
@@ -11,6 +11,7 @@
 	--demo: rgba(179, 8, 56, 0.8);
 
 	--el-color-primary: #b30838;
+	--el-text-color-secondary: #73777e;
 
 	/* font-size */
 	--font-xs: 12px;

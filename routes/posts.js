@@ -60,7 +60,7 @@ router.get('/getPosts', async (req, res) => {
  */
 router.get('/getMyPosts', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -77,7 +77,7 @@ router.get('/getMyPosts', async (req, res) => {
  */
 router.post('/add', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permission');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -102,7 +102,7 @@ router.post('/add', async (req, res) => {
  */
 router.delete('/', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -124,7 +124,7 @@ router.delete('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -162,7 +162,7 @@ router.put('/:id', async (req, res) => {
  */
 router.post('/like', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -187,7 +187,7 @@ router.post('/like', async (req, res) => {
  */
 router.post('/history', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -212,7 +212,7 @@ router.post('/history', async (req, res) => {
 //TODO: Finish Testing
 router.get('/getComments', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -237,7 +237,7 @@ router.get('/getComments', async (req, res) => {
  */
 router.post('/addComment', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -255,7 +255,7 @@ router.post('/addComment', async (req, res) => {
 
 router.get('/getMyLike', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -269,7 +269,7 @@ router.get('/getMyLike', async (req, res) => {
 
 router.post('/likeComment', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 
@@ -291,7 +291,7 @@ router.post('/likeComment', async (req, res) => {
 
 router.post('/archive', async (req, res) => {
 	if (!req.session.userid) {
-		res.status(403).send('No permisssion');
+		res.status(403).send('No permission, please login first');
 		return;
 	}
 

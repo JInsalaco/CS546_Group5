@@ -1,3 +1,49 @@
+const rules = {
+	email: [
+		{
+			required: true,
+			trigger: 'change',
+			message: 'Email is required!'
+		},
+		{
+			pattern: /[a-z0-9]+@stevens\.edu$/,
+			trigger: 'change',
+			message: 'Invalid email format!'
+		}
+	],
+	firstname: [
+		{
+			required: true,
+			trigger: 'change',
+			message: 'Firstname is required!'
+		}
+	],
+	lastname: [
+		{
+			required: true,
+			trigger: 'change',
+			message: 'Lastname is required!'
+		}
+	],
+	phoneNumber: [
+		{
+			required: true,
+			trigger: 'change',
+			message: 'PhoneNumber is required!'
+		},
+		{
+			len: 13,
+			trigger: 'change',
+			message: 'The phone number should be 10 digits!'
+		},
+		{
+			pattern: /[\(\)\-0-9]{10}/,
+			trigger: 'change',
+			message: 'The phone number should be number!'
+		}
+	]
+};
+
 Vue.createApp({
 	setup() {
 		const userAuth = reactive({
@@ -8,7 +54,7 @@ Vue.createApp({
 		const userFormRef = ref();
 
 		onMounted(() => {
-			const USER_INFO = sessionStorage['USER_INFO'];
+			const USER_INFO = localStorage['USER_INFO'];
 			if (USER_INFO) {
 				userAuth.auth = true;
 				userAuth.userInfo = JSON.parse(USER_INFO);
@@ -91,7 +137,7 @@ Vue.createApp({
 			});
 		};
 		const getHisory = () => {
-			const ids = JSON.parse(sessionStorage['HISTORY'] ?? '[]');
+			const ids = JSON.parse(localStorage['HISTORY'] ?? '[]');
 			if (!ids.length) return;
 
 			http.post('/posts/history', { ids }).then(res => {
@@ -180,7 +226,7 @@ Vue.createApp({
 		};
 		const handleProfileCancel = () => {
 			profileDialog.value = false;
-			userForm.value = JSON.parse(sessionStorage['USER_INFO']);
+			userForm.value = JSON.parse(localStorage['USER_INFO']);
 		};
 
 		const handlePhoneInput = value => {
@@ -226,7 +272,8 @@ Vue.createApp({
 			showPostDialog,
 			handlePostEdit,
 			selectedTopics,
-			handlePostArchive
+			handlePostArchive,
+			rules
 		};
 	}
 })

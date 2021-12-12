@@ -36,8 +36,7 @@
 </div>
 
 <el-dialog v-model='profileDialog' title='Edit Profile' destroy-on-close>
-  <el-form ref="userFormRef" :rules="rules" :model="userForm" label-width="80px" class="info__form"
-           :disabled="userFormDisable">
+  <el-form ref="userFormRef" :rules="rules" :model="userForm" label-width="80px" class="info__form">
     <el-form-item label="Username" prop='username'>
       <el-input v-model="userForm.username"></el-input>
     </el-form-item>
