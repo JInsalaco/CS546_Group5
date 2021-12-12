@@ -192,7 +192,9 @@ async function editUser(id, firstname, lastname, phoneNumber, gender, DOB, usern
 		throw 'Update failed';
 	}
 
-	return newUser;
+	const userInfo = await getUser(id);
+
+	return userInfo;
 }
 
 async function updateUser(user, userId) {
