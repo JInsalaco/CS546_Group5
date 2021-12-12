@@ -1,8 +1,10 @@
 # CS546_Group5
 CS546 Group 5 F21 Final Project
+
 Please follow the below steps to setup our Project: 
 
 Step 1: Install the required packages/libraries
+
 Command: 
 npm install
 
