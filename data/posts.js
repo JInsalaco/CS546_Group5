@@ -44,7 +44,7 @@ async function getMyPosts(id) {
 // Add a post to the Pond
 async function getPostsByTitle(title) {
 	const postCollection = await posts();
-	let postList = await postCollection.find({ title: RegExp(title) }).toArray();
+	let postList = await postCollection.find({ title: RegExp(title), 'metaData.archived': false }).toArray();
 	postList = await handlePost(postList);
 	return postList.map(item => ({ _id: item._id, title: item.title }));
 }

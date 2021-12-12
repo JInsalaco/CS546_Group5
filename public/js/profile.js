@@ -106,8 +106,6 @@ Vue.createApp({
 		const handleDeletePost = id => {
 			http.delete('/posts', { id }).then(msg => {
 				sysAlert(msg);
-				// const index = myPostList.value.findIndex(item => item._id === id);
-				// myPostList.value.splice(1, index);
 				getMyPosts();
 			});
 		};
