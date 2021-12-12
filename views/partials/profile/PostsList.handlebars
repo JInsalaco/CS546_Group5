@@ -57,7 +57,7 @@
           </span>
           <div class="tag-container">
             <span v-for="item in selectedTopics" :key="item" class='post__tag aside-h'
-                  :style="{'--color': `rgb(${item.color})`, '--bg': `rgba(${item.color}, .3)`}">\{{item.title}}</span>
+                  :style="{'--color': topic.dcolor, '--bg': topic.lcolor}">\{{item.title}}</span>
           </div>
         </div>
         <el-form-item prop='body' class="post__content">
