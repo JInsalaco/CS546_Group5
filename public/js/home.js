@@ -202,7 +202,8 @@ const composition = {
 			onBrforeFriendDialogClose,
 			handleConfirmAddFriend,
 			handleLikeComment,
-			myFriendsList
+			myFriendsList,
+			navTo
 		};
 	}
 };

@@ -101,7 +101,8 @@ Vue.createApp({
 			rules,
 			handleSubmit,
 			signUpForm,
-			handlePhoneInput
+			handlePhoneInput,
+			navTo
 		};
 	}
 })

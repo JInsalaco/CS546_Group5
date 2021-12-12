@@ -7,7 +7,5 @@
   {{> authorize/SignUpForm}}
   {{/if}}
 
-  <a class="btn-back" href="/">
-    <el-button type="primary">Back to Home</el-button>
-  </a>
+  <el-button type="primary" class="btn-back" @click="navTo('/')">Back to Home</el-button>
 </main>

@@ -58,7 +58,8 @@ Vue.createApp({
 			form,
 			rules,
 			handleSubmit,
-			signInForm
+			signInForm,
+			navTo
 		};
 	}
 })

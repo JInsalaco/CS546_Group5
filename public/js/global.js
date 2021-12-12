@@ -155,3 +155,7 @@ const formatPostDetail = postData => {
 		commentList: []
 	};
 };
+
+const navTo = url => {
+	location.href = url;
+};

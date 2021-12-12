@@ -32,12 +32,8 @@
 	</div>
 
 	<div v-else>
-		<a href='/authorize/signup' class='aside-h'>
-			<el-button type='primary'>Sign up</el-button>
-		</a>
-		<a href='/authorize/signin' class='aside-h'>
-			<el-button type='text'>Sign in</el-button>
-		</a>
+		<el-button type='primary' @click="navTo('/authorize/signup')"> Sign up </el-button>
+		<el-button type='text' @click="navTo('/authorize/signin')"> Sign in </el-button>
 	</div>
 </header>
 

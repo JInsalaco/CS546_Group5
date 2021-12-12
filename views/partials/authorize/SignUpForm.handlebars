@@ -1,27 +1,28 @@
 <el-form ref='signUpForm' :model='form' label-position='top' :rules='rules' @keyup.enter.native="handleSubmit">
 	<el-form-item label='Email' prop='email'>
-		<el-input v-model='form.email' placeholder='example@stevens.edu'></el-input>
+		<el-input id="email" v-model='form.email' placeholder='example@stevens.edu'></el-input>
 	</el-form-item>
 
 	<el-form-item label='Password' prop='password'>
-		<el-input v-model='form.password' type='password' placeholder='Input your password'></el-input>
+		<el-input id="password" v-model='form.password' type='password' placeholder='Input your password'></el-input>
 	</el-form-item>
 
 	<el-row :gutter='20'>
 		<el-col :span='12'>
 			<el-form-item label='Firstname' prop='firstname'>
-				<el-input v-model='form.firstname' placeholder='firstname'></el-input>
+				<el-input id="firstname" v-model='form.firstname' placeholder='firstname'></el-input>
 			</el-form-item>
 		</el-col>
 		<el-col :span='12'>
 			<el-form-item label='Lastname' prop='lastname'>
-				<el-input v-model='form.lastname' placeholder='lastname'></el-input>
+				<el-input id="lastname" v-model='form.lastname' placeholder='lastname'></el-input>
 			</el-form-item>
 		</el-col>
 	</el-row>
 
 	<el-form-item label='Phone' prop='phoneNumber'>
-		<el-input v-model='form.phoneNumber' placeholder='(xxx)xxx-xxxx' @input="handlePhoneInput"></el-input>
+		<el-input id="phoneNumber" v-model='form.phoneNumber' placeholder='(xxx)xxx-xxxx' @input="handlePhoneInput">
+		</el-input>
 	</el-form-item>
 
 	<el-form-item>

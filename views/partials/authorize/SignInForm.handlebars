@@ -1,10 +1,10 @@
 <el-form ref='signInForm' :model='form' label-position='top' :rules='rules' @keyup.enter.native="handleSubmit">
 	<el-form-item label='Email' prop='email'>
-		<el-input v-model='form.email' placeholder='example@stevens.edu'></el-input>
+		<el-input id="email" v-model='form.email' placeholder='example@stevens.edu'></el-input>
 	</el-form-item>
 
 	<el-form-item label='Password' prop='password'>
-		<el-input v-model='form.password' type='password' placeholder='Input your password'></el-input>
+		<el-input id="password" v-model='form.password' type='password' placeholder='Input your password'></el-input>
 	</el-form-item>
 
 	<el-form-item>

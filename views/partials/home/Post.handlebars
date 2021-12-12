@@ -1,4 +1,4 @@
-<section class='body__content flex-c'>
+<div class='body__content flex-c'>
 	<div v-if="auth" class='create__btn-container' @click='showPostDialog = true'>
 		<span class='create__text'>Create a new Post</span>
 		<button class='btn__create flex'>
@@ -7,7 +7,7 @@
 	</div>
 
 	{{> home/PostsList}}
-</section>
+</div>
 
 <el-dialog v-if="auth" v-model='showPostDialog' title='Create yout Post' destroy-on-close @open="openPostDialog">
 	<el-form ref='postsForm' :rules="postRules" :model='postForm' class="posts__form">
