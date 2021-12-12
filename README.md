@@ -2,16 +2,9 @@
 CS546 Group 5 F21 Final Project
 Please follow the below steps to setup our Project: 
 
-Step 1: Install the required packages
-Commands: 
-npm install bcrypt
-npm install express
-npm install express-handlebars
-npm install express-session
-npm install formidable
-npm install mockjs
-npm install mongodb
-npm install nodemon
+Step 1: Install the required packages/libraries
+Command: 
+npm install
 
 Step 2: Seed the Database	  
 Command: 
