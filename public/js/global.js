@@ -1,11 +1,6 @@
 const { ref, reactive, toRefs, computed, nextTick, onMounted, watch } = Vue;
 const { ElLoading, ElMessage, ElNotification } = ElementPlus;
 
-window.onload = () => {
-	// check is there is no cookies, clear the localStorage
-	!document.cookie && localStorage.clear();
-};
-
 class Posts {
 	constructor(obj = {}) {
 		const { title, body, topics } = obj;
