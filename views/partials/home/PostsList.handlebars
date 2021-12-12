@@ -24,7 +24,7 @@
       <i v-if="auth" class="iconfont post__operation-like" :class="item.popularity ? 'icon-like-fill' : 'icon-like'"
          @click="handleLikes(index, item._id)"></i>
     </div>
-    <div class="form__comment flex">
+    <div v-if="auth" class="form__comment flex">
       <el-input class="aside-h" label="comment" v-model="item.comment" placeholder="Add a comment"></el-input>
       <label class="aside-h">
         <el-button id="btn-comment" type="primary" @click="handleSubmitComment(item._id, item.comment, index)" circle>
